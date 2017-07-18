@@ -1,0 +1,30 @@
+{
+    "name": "awesomite/chariot",
+    "description": "Just another routing library",
+    "keywords": ["routing", "router"],
+    "type": "library",
+    "require": {
+        "php": "^7.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^6.2.3",
+        "satooshi/php-coveralls": "^1.0.1"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Bartłomiej Krukowski",
+            "email": "bartlomiej@krukowski.me"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Awesomite\\Chariot\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Awesomite\\Chariot\\": "tests/"
+        }
+    }
+}
