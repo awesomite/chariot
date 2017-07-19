@@ -233,4 +233,49 @@ class GeneralTest extends TestBase
             yield [$router, HttpMethods::METHOD_PATCH, '/category-books', HttpException::HTTP_NOT_FOUND];
         }
     }
+
+    public function testGetAllowedMethods()
+    {
+        foreach ($this->providerGetAllowedMethods() as $data) {
+            $this->checkAllowedMethods(...$data);
+        }
+    }
+
+    private function checkAllowedMethods(RouterInterface $router, string $path, array $allowedMethods)
+    {
+        $this->assertArraysWithSameElements($allowedMethods, $router->getAllowedMethods($path));
+    }
+
+    private function providerGetAllowedMethods()
+    {
+        foreach ([PatternRouter::STRATEGY_SEQUENTIALLY, PatternRouter::STRATEGY_TREE] as $strategy) {
+            $router = (new PatternRouter(Patterns::createDefault(), $strategy))
+                ->get('/', 'home')
+                ->get('/articles', 'articles')
+                ->put('/new-article', 'newArticle')
+                ->get('/ping', 'ping')
+                ->post('/ping', 'ping')
+                ->delete('/delete', 'deleteSomething')
+                ->patch('/patch', 'patchSomething')
+                ->any('/any', 'anythingHandler');
+
+            $data = [
+                [$router, '/', [HttpMethods::METHOD_GET, HttpMethods::METHOD_HEAD]],
+                [$router, '/articles', [HttpMethods::METHOD_GET, HttpMethods::METHOD_HEAD]],
+                [$router, '/ping', [HttpMethods::METHOD_GET, HttpMethods::METHOD_HEAD, HttpMethods::METHOD_POST]],
+                [$router, '/new-article', [HttpMethods::METHOD_PUT]],
+                [$router, '/patch', [HttpMethods::METHOD_PATCH]],
+                [$router, '/any', array_diff(HttpMethods::ALL_METHODS, [HttpMethods::METHOD_ANY])],
+            ];
+
+            foreach ($data as $row) {
+                yield $row;
+
+                $row[0] = eval('return ' . $router->exportToExecutable() . ';');
+                yield $row;
+
+                $row[0] = (new RouterCollector())->addRouter($router);
+            }
+        }
+    }
 }

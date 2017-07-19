@@ -69,5 +69,6 @@ class PatternLink implements LinkInterface
         usort($this->routes, function ($left, $right) {
             return count($right[1]) <=> count($left[1]);
         });
+        $this->sorted = true;
     }
 }

@@ -114,7 +114,7 @@ class PatternRouter implements RouterInterface
         return $this->addRoute(HttpMethods::METHOD_PUT, $pattern, $handler, $extraParams);
     }
 
-    public function patch(string $pattern, string $handler, array $extraParams): PatternRouter
+    public function patch(string $pattern, string $handler, array $extraParams = []): PatternRouter
     {
         return $this->addRoute(HttpMethods::METHOD_PATCH, $pattern, $handler, $extraParams);
     }
