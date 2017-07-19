@@ -28,11 +28,12 @@ class LinksCommand extends Command
         $globalTimer = new Timer();
         $globalTimer->start();
 
+        $numbers = [10, 100, 250, 500, 1000, 2000];
         $this->displaySameHandlerHeader($output);
-        $this->executeSameHandlerTests($output, [10, 100, 250, 500, 1000]);
+        $this->executeSameHandlerTests($output, $numbers);
         $output->writeln('');
         $this->displayDifferentHandlerHeader($output);
-        $this->executeDifferentHandlerTests($output, [10, 100, 250, 500, 1000, 5000]);
+        $this->executeDifferentHandlerTests($output, $numbers);
 
         $output->writeln('');
         $globalTimer->stop();
