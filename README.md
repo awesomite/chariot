@@ -98,7 +98,7 @@ use Awesomite\Chariot\HttpMethods;
 $router = PatternRouter::createDefault();
 $router->addRoute(HttpMethods::METHOD_GET, '/category-{{ category :int }}', 'showCategory');
 
-echo $router->linkTo('showCategory')->withParam('category', 5);
+echo $router->linkTo('showCategory')->withParam('category', 5), "\n";
 /*
  * Output:
  * /category-5 
@@ -291,7 +291,7 @@ try {
  * The following code displays "Cannot generate link"
  */
 try {
-    echo $router->linkTo('showCategory')->withParam('categoryId', 'books')->toString();
+    echo $router->linkTo('showCategory')->withParam('categoryId', 'books')->toString(), "\n";
 } catch (CannotGenerateLinkException $exception) {
     echo "Cannot generate link\n";
 }
