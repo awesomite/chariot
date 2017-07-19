@@ -5,6 +5,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/awesomite/chariot/badge.svg?branch=master)](https://coveralls.io/github/awesomite/chariot?branch=master)
 
 Just another routing library. Makes human-friendly URLs and programmer-friendly code.
+Uses trees for the best performance.
 
 ## Why?
 
