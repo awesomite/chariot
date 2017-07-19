@@ -67,7 +67,9 @@ TEMPLATE;
                 if (is_object($value) && $value instanceof PatternRoute) {
                     $result .= $this->exportRoute($value, $patternsName, $indent . '  ');
                 } else {
+                    // @codeCoverageIgnoreStart
                     $result .= var_export($value, true);
+                    // codeCoverageIgnoreEnd
                 }
             }
             $result .= ",\n";
