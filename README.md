@@ -116,7 +116,7 @@ Let's look at the following scenario:
 2. Path pattern to category page is equal to `/category-{{ id :uint }}`.
 3. Link to category page is generated in many places in your code. Let's say **100**.
 4. You want to change approach. Category's id in a link is not expected anymore. You want to have human-friendly links, e.g. `/books` instead of `/category-15`.
-5. Using *old school* way of generating links forced you to rewrite code in **100** places. You had to spend time to rewriting code. The risk of error is high.
+5. Using *old school* way of generating links forced you to rewrite code in **100** places. You have to spend time to rewriting code. The risk of error is high.
 
 Instead of monotonous rewriting code you can change only one thing in routing.
 This approuch helps you to save your time and protects your code from bugs.
