@@ -104,7 +104,7 @@ class PatternRoute
                 $pattern = $this->patterns[$pattern] ?? $pattern;
 
                 if (!(new RegexTester())->isRegex("#{$pattern}#")) {
-                    throw new InvalidArgumentException("Incorrect regex {$pattern} (source: {$originalPattern})");
+                    throw new InvalidArgumentException("Invalid regex: {$pattern} (source: {$originalPattern})");
                 }
 
                 return is_null($name) ? "({$pattern})" : "(?<{$name}>{$pattern})";

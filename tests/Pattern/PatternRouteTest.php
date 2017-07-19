@@ -245,4 +245,64 @@ class PatternRouteTest extends TestBase
             false,
         ];
     }
+
+    /**
+     * @dataProvider providerInvalidRegex
+     *
+     * @param string $pattern
+     */
+    public function testInvalidRegex(string $pattern)
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessageRegExp('/^Invalid regex:.+/');
+        new PatternRoute($pattern, Patterns::createDefault());
+    }
+
+    public function providerInvalidRegex()
+    {
+        return [
+            ['{{ name ++ }}'],
+            ['{{ name *+ }}'],
+        ];
+    }
+
+    /**
+     * @dataProvider providerInvalidParamName
+     *
+     * @param string $pattern
+     */
+    public function testInvalidParamName(string $pattern)
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessageRegExp('/^Invalid param name .+/');
+        new PatternRoute($pattern, Patterns::createDefault());
+    }
+
+    public function providerInvalidParamName()
+    {
+        return [
+            ['{{ :hello :int }}'],
+            ['{{ @ [a-z] }}'],
+        ];
+    }
+
+    /**
+     * @dataProvider providerTooManyArguments
+     *
+     * @param string $pattern
+     */
+    public function testTooManyArguments(string $pattern)
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid url pattern ' . $pattern);
+        new PatternRoute($pattern, Patterns::createDefault());
+    }
+
+    public function providerTooManyArguments()
+    {
+        return [
+            ['/category-{{ categoryId :uint 1 something }}'],
+            ['{{ a b c d e f }}'],
+        ];
+    }
 }
