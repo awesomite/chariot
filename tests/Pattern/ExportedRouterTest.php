@@ -20,7 +20,7 @@ class ExportedRouterTest extends TestBase
         $restoredRouter = eval('return ' . $router->exportToExecutable() . ';');
 
         $this->assertNotSame($router, $restoredRouter);
-        $link = (string)$restoredRouter->linkTo('handleBar');
+        $link = (string) $restoredRouter->linkTo('handleBar');
         $this->assertSame('/bar', $link);
     }
 }

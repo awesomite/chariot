@@ -100,7 +100,7 @@ class PatternRouteTest extends TestBase
      */
     public function testBindParams(PatternRoute $route, array $params, string $expected)
     {
-        $this->assertSame($expected, (string)$route->bindParams($params));
+        $this->assertSame($expected, (string) $route->bindParams($params));
     }
 
     public function providerBindParams()

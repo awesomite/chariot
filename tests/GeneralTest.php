@@ -122,7 +122,7 @@ class GeneralTest extends TestBase
      */
     public function testLinkTo(RouterInterface $router, string $handler, array $params, string $expected)
     {
-        $link = (string)$router->linkTo($handler)->withParams($params);
+        $link = (string) $router->linkTo($handler)->withParams($params);
         $this->assertSame($expected, $link);
     }
 
@@ -171,7 +171,7 @@ class GeneralTest extends TestBase
      */
     public function testCannotGenerateLink(RouterInterface $router)
     {
-        $this->assertSame(LinkInterface::ERROR_CANNOT_GENERATE_LINK, (string)$router->linkTo('foo'));
+        $this->assertSame(LinkInterface::ERROR_CANNOT_GENERATE_LINK, (string) $router->linkTo('foo'));
 
         $this->expectException(CannotGenerateLinkException::class);
         $router->linkTo('foo')->toString();

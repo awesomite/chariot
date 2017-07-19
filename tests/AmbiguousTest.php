@@ -7,22 +7,22 @@ use Awesomite\Chariot\Pattern\Patterns;
 
 /**
  * Examples of behavior in ambiguous cases, e.g.:
- * 
+ *
  * $router
  *   ->get('/page-{{ page :uint }}', 'showPage')
  *   ->get('/show-first-page', 'showPage', ['page' => 1]);
- * 
+ *
  * echo $router->linkTo('showPage')->withParam('page', 1);
- * 
+ *
  * @internal
  */
 class AmbiguousTest extends TestBase
 {
     /**
      * @dataProvider providerLinkTo
-     * 
+     *
      * @param PatternRouter $router
-     * @param bool $reverse
+     * @param bool          $reverse
      */
     public function testLinkTo(PatternRouter $router, bool $reverse)
     {
@@ -46,7 +46,7 @@ class AmbiguousTest extends TestBase
             (string) $router->linkTo('showPage')->withParam('page', $this->createStringable(1))
         );
     }
-    
+
     public function providerLinkTo()
     {
         foreach ($this->createEmptyPatternRouters() as $router) {
@@ -58,7 +58,7 @@ class AmbiguousTest extends TestBase
 
     /**
      * @dataProvider providerMatch
-     * 
+     *
      * @param RouterInterface $router
      * @param string $method
      * @param string $path
@@ -70,7 +70,7 @@ class AmbiguousTest extends TestBase
         $this->assertSame($expected->getHandler(), $route->getHandler());
         $this->assertSame($expected->getParams(), $route->getParams());
     }
-    
+
     public function providerMatch()
     {
         foreach ($this->createEmptyPatternRouters() as $router) {
@@ -80,7 +80,7 @@ class AmbiguousTest extends TestBase
             $router
                 ->get('/comment/{{ id :uint }}', 'getComment')
                 ->delete('/comment/{{ id :uint }}', 'deleteComment');
-            
+
             $path = '/comment/1';
             $params = ['id' => '1'];
             yield [$router, HttpMethods::METHOD_GET, $path, new InternalRoute('getComment', $params)];
@@ -105,7 +105,12 @@ class AmbiguousTest extends TestBase
                 ->get('/article-{{ title [a-zA-Z0-9-]+ }}', 'showArticleByTitle');
             yield [$router, HttpMethods::METHOD_GET, '/item-5', new InternalRoute('showItemByName', ['name' => '5'])];
             yield [$router, HttpMethods::METHOD_GET, '/article-5', new InternalRoute('showArticleById', ['id' => '5'])];
-            yield [$router, HttpMethods::METHOD_GET, '/article-hello-world', new InternalRoute('showArticleByTitle', ['title' => 'hello-world'])];
+            yield [
+                $router,
+                HttpMethods::METHOD_GET,
+                '/article-hello-world',
+                new InternalRoute('showArticleByTitle', ['title' => 'hello-world']),
+            ];
         }
     }
 
@@ -119,18 +124,18 @@ class AmbiguousTest extends TestBase
             new PatternRouter(Patterns::createDefault(), PatternRouter::STRATEGY_TREE),
         ];
     }
-    
+
     private function createStringable($value)
     {
         return new class ($value)
         {
             private $value;
-            
+
             public function __construct($value)
             {
                 $this->value = $value;
             }
-            
+
             public function __toString()
             {
                 return (string) $this->value;

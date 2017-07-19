@@ -40,26 +40,30 @@ class PatternRouterTest extends TestBase
 
     /**
      * @dataProvider providerMatch
-     * 
+     *
      * @param PatternRouter $router
      * @param array $methods
      * @param string $path
      * @param InternalRouteInterface $expectedRoute
      */
-    public function testMatch(PatternRouter $router, array $methods, string $path, InternalRouteInterface $expectedRoute)
-    {
+    public function testMatch(
+        PatternRouter $router,
+        array $methods,
+        string $path,
+        InternalRouteInterface $expectedRoute
+    ) {
         foreach ($methods as $method) {
             $route = $router->match($method, $path);
             $this->assertSame($expectedRoute->getHandler(), $route->getHandler());
             $this->assertSame($expectedRoute->getParams(), $route->getParams());
         }
     }
-    
+
     public function providerMatch()
     {
         foreach ($this->getEmptyRouters() as $router) {
             $this->decorateRouter($router);
-            
+
             yield [
                 $router,
                 [HttpMethods::METHOD_GET, HttpMethods::METHOD_POST, HttpMethods::METHOD_HEAD],
@@ -71,46 +75,51 @@ class PatternRouterTest extends TestBase
                 $router,
                 [HttpMethods::METHOD_GET, HttpMethods::METHOD_PUT, HttpMethods::METHOD_DELETE],
                 '/show-first-page',
-                new InternalRoute('showPage', ['page' => 1])
+                new InternalRoute('showPage', ['page' => 1]),
             ];
 
             yield [
                 $router,
                 [HttpMethods::METHOD_GET, HttpMethods::METHOD_PUT, HttpMethods::METHOD_DELETE],
                 '/show-page-15',
-                new InternalRoute('showPage', ['page' => '15'])
+                new InternalRoute('showPage', ['page' => '15']),
             ];
         }
     }
 
     /**
      * @dataProvider providerMethodNotAllowed
-     * 
+     *
      * @param PatternRouter $router
-     * @param string $method
-     * @param string $path
-     * @param array $allowedMethods
+     * @param string        $method
+     * @param string        $path
+     * @param array         $allowedMethods
      */
     public function testMethodNotAllowed(PatternRouter $router, string $method, string $path, array $allowedMethods)
     {
         $this->assertArraysWithSameElements($allowedMethods, $router->getAllowedMethods($path));
-        
+
         $this->expectException(HttpException::class);
         $this->expectExceptionMessage(sprintf('405 Method Not Allowed: %s %s', $method, $path));
         $this->expectExceptionCode(HttpException::HTTP_METHOD_NOT_ALLOWED);
         $router->match($method, $path);
     }
-    
+
     public function providerMethodNotAllowed()
     {
         foreach ($this->getEmptyRouters() as $router) {
             $this->decorateRouter($router);
-            
+
             yield [
                 $router,
                 HttpMethods::METHOD_PUT,
                 '/comment/15',
-                [HttpMethods::METHOD_GET, HttpMethods::METHOD_HEAD, HttpMethods::METHOD_POST, HttpMethods::METHOD_DELETE],
+                [
+                    HttpMethods::METHOD_GET,
+                    HttpMethods::METHOD_HEAD,
+                    HttpMethods::METHOD_POST,
+                    HttpMethods::METHOD_DELETE,
+                ],
             ];
 
             yield [
@@ -124,10 +133,10 @@ class PatternRouterTest extends TestBase
 
     /**
      * @dataProvider providerNotFound
-     * 
+     *
      * @param PatternRouter $router
-     * @param string $method
-     * @param string $path
+     * @param string        $method
+     * @param string        $path
      */
     public function testNotFound(PatternRouter $router, string $method, string $path)
     {
@@ -136,7 +145,7 @@ class PatternRouterTest extends TestBase
         $this->expectExceptionMessage(sprintf('404 Not Found: %s %s', $method, $path));
         $router->match($method, $path);
     }
-    
+
     public function providerNotFound()
     {
         foreach ($this->getEmptyRouters() as $router) {
@@ -145,23 +154,23 @@ class PatternRouterTest extends TestBase
                 yield [
                     $router,
                     $method,
-                    '/not-found'
+                    '/not-found',
                 ];
 
                 yield [
                     $router,
                     $method,
-                    '/comment/first'
+                    '/comment/first',
                 ];
-            }   
+            }
         }
     }
 
     /**
      * @dataProvider providerAllAllowedMethods
-     * 
+     *
      * @param PatternRouter $router
-     * @param $path
+     * @param               $path
      */
     public function testAllAllowedMethods(PatternRouter $router, $path)
     {
@@ -170,12 +179,12 @@ class PatternRouterTest extends TestBase
             $router->getAllowedMethods($path)
         );
     }
-    
+
     public function providerAllAllowedMethods()
     {
         foreach ($this->getEmptyRouters() as $router) {
             $this->decorateRouter($router);
-            
+
             yield [$router, '/show-first-page'];
             yield [$router, '/show-page-75'];
             yield [$router, '/any'];
@@ -184,16 +193,16 @@ class PatternRouterTest extends TestBase
 
     /**
      * @dataProvider providerLinkTo
-     * 
+     *
      * @param PatternRouter $router
-     * @param string|null $method
-     * @param string $handler
-     * @param array $params
-     * @param string $expectedLink
+     * @param string|null   $method
+     * @param string        $handler
+     * @param array         $params
+     * @param string        $expectedLink
      */
     public function testLinkTo(PatternRouter $router, $method, string $handler, array $params, string $expectedLink)
     {
-        $link = is_null($method) 
+        $link = is_null($method)
             ? $router->linkTo($handler)
             : $router->linkTo($handler, $method);
         $this->assertInstanceOf(LinkInterface::class, $link);
@@ -201,20 +210,20 @@ class PatternRouterTest extends TestBase
         $this->assertInstanceOf(LinkInterface::class, $link);
         $generatedLink = (string) $link;
         $this->assertSame($expectedLink, $generatedLink);
-        
+
         if ($generatedLink === LinkInterface::ERROR_CANNOT_GENERATE_LINK) {
             $this->expectException(CannotGenerateLinkException::class);
             $this->expectExceptionMessageRegExp('#^' . preg_quote('Cannot generate link for ', '.*#') . '#');
         }
-        
+
         $this->assertSame($expectedLink, $link->toString());
     }
-    
+
     public function providerLinkTo()
     {
         foreach ($this->getEmptyRouters() as $router) {
             $this->decorateRouter($router);
-            
+
             yield [$router, null, 'showPage', ['page' => 1], '/show-first-page'];
             yield [$router, HttpMethods::METHOD_GET, 'showPage', ['page' => 1], '/show-first-page'];
             yield [$router, HttpMethods::METHOD_GET, 'getPostArticle', ['id' => 1], '/article-1'];
@@ -223,14 +232,14 @@ class PatternRouterTest extends TestBase
             yield [$router, null, 'getPostArticle', ['id' => 1], '/article-1'];
             yield [
                 $router,
-                HttpMethods::METHOD_PUT, 
+                HttpMethods::METHOD_PUT,
                 'getPostArticle',
-                ['id' => 1], 
-                LinkInterface::ERROR_CANNOT_GENERATE_LINK
+                ['id' => 1],
+                LinkInterface::ERROR_CANNOT_GENERATE_LINK,
             ];
             yield [$router, HttpMethods::METHOD_HEAD, 'invalidHandler', [], LinkInterface::ERROR_CANNOT_GENERATE_LINK];
         }
-        
+
         $router = PatternRouter::createDefault();
         $router
             ->get('/page/{{page \d+ 1}}', 'showPage');
@@ -239,7 +248,7 @@ class PatternRouterTest extends TestBase
             null,
             'showPage',
             ['page' => 1],
-            '/page/1'
+            '/page/1',
         ];
     }
 
@@ -250,7 +259,7 @@ class PatternRouterTest extends TestBase
             new PatternRouter(Patterns::createDefault(), PatternRouter::STRATEGY_TREE),
         ];
     }
-    
+
     private function decorateRouter(PatternRouter $router)
     {
         $router

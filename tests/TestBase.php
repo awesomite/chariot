@@ -13,7 +13,7 @@ class TestBase extends TestCase
     {
         $this->expectOutputString('');
     }
-    
+
     protected function assertArraysWithSameElements(array $expected, array $actual, string $message = '')
     {
         sort($expected);

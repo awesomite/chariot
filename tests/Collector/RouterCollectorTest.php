@@ -7,7 +7,6 @@ use Awesomite\Chariot\Exceptions\HttpException;
 use Awesomite\Chariot\HttpMethods;
 use Awesomite\Chariot\LinkInterface;
 use Awesomite\Chariot\Pattern\PatternRouter;
-use Awesomite\Chariot\RouterFactory;
 use Awesomite\Chariot\TestBase;
 
 class RouterCollectorTest extends TestBase
@@ -34,11 +33,11 @@ class RouterCollectorTest extends TestBase
         $this->assertSame('admin', $admin->getHandler());
         $this->assertSame(['page' => 1], $admin->getParams());
 
-        $this->assertSame('/', (string)$routerCollector->linkTo('home'));
+        $this->assertSame('/', (string) $routerCollector->linkTo('home'));
         $this->assertSame('/', $routerCollector->linkTo('home')->toString());
-        $this->assertSame('/admin', (string)$routerCollector->linkTo('admin')->withParam('page', '1'));
+        $this->assertSame('/admin', (string) $routerCollector->linkTo('admin')->withParam('page', '1'));
         $this->assertSame('/admin', $routerCollector->linkTo('admin')->withParam('page', '1')->toString());
-        $this->assertSame(LinkInterface::ERROR_CANNOT_GENERATE_LINK, (string)$routerCollector->linkTo('admin'));
+        $this->assertSame(LinkInterface::ERROR_CANNOT_GENERATE_LINK, (string) $routerCollector->linkTo('admin'));
         $executed = false;
         try {
             $routerCollector->linkTo('admin')->toString();
