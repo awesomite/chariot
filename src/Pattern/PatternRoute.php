@@ -142,7 +142,9 @@ class PatternRoute
                         break;
 
                     default:
+                        // @codeCoverageIgnoreStart
                         throw new InvalidArgumentException("Invalid url pattern {$inputPattern}");
+                        // @codeCoverageIgnoreEnd
                 }
 
                 $pattern = $this->patterns[$pattern] ?? $pattern;

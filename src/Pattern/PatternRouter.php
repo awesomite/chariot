@@ -143,7 +143,9 @@ class PatternRouter implements RouterInterface
             case static::STRATEGY_TREE:
                 return $this->matchTree($method, $path);
         }
+        // @codeCoverageIgnoreStart
     }
+        // @codeCoverageIgnoreEnd
 
     public function getAllowedMethods(string $path): array
     {
