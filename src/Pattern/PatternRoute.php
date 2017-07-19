@@ -191,7 +191,7 @@ class PatternRoute
     public function bindParams(array $params): LinkInterface
     {
         $result = $this->simplePattern;
-        foreach ($this->explodedParams as $name => list($default, $pattern)) {
+        foreach ($this->explodedParams as $name => list($default)) {
             $value = $params[$name] ?? $default;
             $result = str_replace('{{' . $name . '}}', $value, $result);
             unset($params[$name]);
