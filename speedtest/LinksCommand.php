@@ -23,18 +23,27 @@ class LinksCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->checkXdebug();
+
         $globalTimer = new Timer();
         $globalTimer->start();
 
         $this->displaySameHandlerHeader($output);
-        $this->executeSameHandlerTests($output, [10, 100, 250, 500]);
+        $this->executeSameHandlerTests($output, [10, 100, 250, 500, 1000]);
         $output->writeln('');
         $this->displayDifferentHandlerHeader($output);
-        $this->executeDifferentHandlerTests($output, [10, 100, 250, 500, 5000]);
+        $this->executeDifferentHandlerTests($output, [10, 100, 250, 500, 1000, 5000]);
 
         $output->writeln('');
         $globalTimer->stop();
         $output->writeln(sprintf('Executed in %.2fs', $globalTimer->getTime()));
+    }
+
+    private function checkXdebug()
+    {
+        if (extension_loaded('xdebug')) {
+            throw new \RuntimeException('Do not execute performance tests with enabled xdebug');
+        }
     }
 
     /**
