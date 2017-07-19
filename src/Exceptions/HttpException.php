@@ -7,10 +7,10 @@ class HttpException extends \Exception implements ChariotException
     const HTTP_NOT_FOUND = 404;
     const HTTP_METHOD_NOT_ALLOWED = 405;
 
-    public function __construct(string $message, int $code, \Throwable $previous = null)
+    public function __construct(string $method, string $path, int $code, \Throwable $previous = null)
     {
         parent::__construct(
-            $this->translateCode($code) . ': ' . $message,
+            $this->translateCode($code) . ": {$method} {$path}",
             $code,
             $previous
         );

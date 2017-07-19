@@ -24,9 +24,10 @@ interface LinkInterface
 
     /**
      * PHP does not allow to throw an exception from within __toString() method.
-     * Because of this fact __toString() method returns XXX in case of error.
+     * Because of this fact __toString() method returns LinkInterface::ERROR_CANNOT_GENERATE_LINK in case of error.
      *
      * @see http://php.net/manual/en/language.oop5.magic.php#object.tostring
+     * @see LinkInterface::ERROR_CANNOT_GENERATE_LINK
      *
      * @return string
      */

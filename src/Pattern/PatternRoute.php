@@ -24,7 +24,7 @@ class PatternRoute
     private $pattern;
 
     /**
-     * Regex, i.e. "#^/(?<controller>[^\/]*)$#"
+     * Regex, e.g. "#^/(?<controller>[^\/]*)$#"
      *
      * @var string
      */
@@ -39,7 +39,7 @@ class PatternRoute
 
     /**
      * [$name = [$default, $pattern], ...]
-     * i.e. ['id' => [null, '#^-?[0-9]+$#'], ...]
+     * e.g. ['id' => [null, '#^-?[0-9]+$#'], ...]
      *
      * @var array
      */
@@ -94,17 +94,17 @@ class PatternRoute
                         break;
 
                     default:
-                        throw new InvalidArgumentException("Invalid url pattern {$originalPattern}!");
+                        throw new InvalidArgumentException("Invalid url pattern {$originalPattern}");
                 }
 
                 if (!preg_match('/^[a-zA-Z0-9_]+$/', $name)) {
-                    throw new InvalidArgumentException("Invalid param name “{$name}” (source: {$originalPattern}).");
+                    throw new InvalidArgumentException("Invalid param name “{$name}” (source: {$originalPattern})");
                 }
 
                 $pattern = $this->patterns[$pattern] ?? $pattern;
 
                 if (!(new RegexTester())->isRegex("#{$pattern}#")) {
-                    throw new InvalidArgumentException("Incorrect regex {$pattern} (source: {$originalPattern}).");
+                    throw new InvalidArgumentException("Incorrect regex {$pattern} (source: {$originalPattern})");
                 }
 
                 return is_null($name) ? "({$pattern})" : "(?<{$name}>{$pattern})";
@@ -142,7 +142,7 @@ class PatternRoute
                         break;
 
                     default:
-                        throw new InvalidArgumentException("Invalid url pattern {$inputPattern}!");
+                        throw new InvalidArgumentException("Invalid url pattern {$inputPattern}");
                 }
 
                 $pattern = $this->patterns[$pattern] ?? $pattern;
@@ -157,7 +157,7 @@ class PatternRoute
 
     public function match(string $path, &$params): bool
     {
-        if ($result = (bool)preg_match($this->compiledPattern, $path, $matches)) {
+        if ($result = (bool) preg_match($this->compiledPattern, $path, $matches)) {
             $params = array_filter(
                 $matches,
                 function ($key) {

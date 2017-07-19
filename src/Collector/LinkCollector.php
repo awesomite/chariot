@@ -18,19 +18,23 @@ class LinkCollector implements LinkInterface
      */
     private $getters;
 
+    private $handler;
+
     /**
+     * @param string     $handler
      * @param callable[] $getters
      */
-    public function __construct(array $getters)
+    public function __construct(string $handler, array $getters)
     {
+        $this->handler = $handler;
         $this->getters = $getters;
     }
 
     public function toString(): string
     {
-        $result = (string)$this;
+        $result = (string) $this;
         if ($result === static::ERROR_CANNOT_GENERATE_LINK) {
-            throw new CannotGenerateLinkException();
+            throw new CannotGenerateLinkException($this->handler, $this->params);
         }
 
         return $result;
@@ -43,7 +47,7 @@ class LinkCollector implements LinkInterface
             $link = $getter();
             $link->withParams($this->params);
             $link->withPrefix($this->prefix);
-            $result = (string)$link;
+            $result = (string) $link;
             if ($result !== static::ERROR_CANNOT_GENERATE_LINK) {
                 return $result;
             }

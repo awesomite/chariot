@@ -13,6 +13,8 @@ class PatternLink implements LinkInterface
 {
     use LinkParamsTrait;
 
+    private $handler;
+
     /**
      * [[$patternRoute, $extraParams], ...]
      *
@@ -20,8 +22,11 @@ class PatternLink implements LinkInterface
      */
     private $routes;
 
-    public function __construct(array $routes)
+    private $sorted = false;
+
+    public function __construct(string $handler, array $routes)
     {
+        $this->handler = $handler;
         $this->routes = $routes;
     }
 
@@ -36,6 +41,7 @@ class PatternLink implements LinkInterface
 
     public function toString(): string
     {
+        $this->sortIfNeed();
         foreach ($this->routes as list($route, $extraParams)) {
             $currentParams = $this->params;
             /** @var PatternRoute $route */
@@ -47,10 +53,21 @@ class PatternLink implements LinkInterface
                 unset($currentParams[$key]);
             }
             if ($route->matchParams($currentParams)) {
-                return $this->prefix . (string)$route->bindParams($currentParams);
+                return $this->prefix . (string) $route->bindParams($currentParams);
             }
         }
 
-        throw new CannotGenerateLinkException();
+        throw new CannotGenerateLinkException($this->handler, $this->params);
+    }
+
+    private function sortIfNeed()
+    {
+        if ($this->sorted) {
+            return;
+        }
+
+        usort($this->routes, function ($left, $right) {
+            return count($right[1]) <=> count($left[1]);
+        });
     }
 }

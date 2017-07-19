@@ -17,6 +17,13 @@ interface RouterInterface
     public function match(string $method, string $path): InternalRouteInterface;
 
     /**
+     * @param string $path
+     *
+     * @return array e.g. ['GET', 'POST']
+     */
+    public function getAllowedMethods(string $path): array;
+
+    /**
      * @param string $handler
      * @param string $method
      *

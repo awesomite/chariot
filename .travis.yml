@@ -22,6 +22,7 @@ before_script:
 
 script:
   - php ${PHP_ARGS} vendor/bin/phpunit
+  - php ${PHP_ARGS} speedtest/console.php test-links
 
 after_script:
   - travis_retry bin/coveralls.sh

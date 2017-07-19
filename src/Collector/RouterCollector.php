@@ -35,7 +35,17 @@ class RouterCollector implements RouterInterface
             }
         }
 
-        throw new HttpException("{$method} {$path}", $errorCode);
+        throw new HttpException($method, $path, $errorCode);
+    }
+
+    public function getAllowedMethods(string $path): array
+    {
+        $result = [];
+        foreach ($this->routers as $router) {
+            $result = array_merge($result, $router->getAllowedMethods($path));
+        }
+
+        return array_unique($result);
     }
 
     public function linkTo(string $handler, string $method = HttpMethods::METHOD_ANY): LinkInterface
@@ -47,6 +57,6 @@ class RouterCollector implements RouterInterface
             };
         }
 
-        return new LinkCollector($getters);
+        return new LinkCollector($handler, $getters);
     }
 }

@@ -14,7 +14,8 @@ class RegexTester
 
     public function isRegex(string $regex): bool
     {
-        set_error_handler(function () {}, E_ALL);
+        set_error_handler(function () {
+        }, E_ALL);
         $test = @preg_match($regex, '');
         restore_error_handler();
 

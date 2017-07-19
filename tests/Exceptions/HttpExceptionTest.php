@@ -12,6 +12,6 @@ class HttpExceptionTest extends TestBase
     public function testInvalidConstructor()
     {
         $this->expectException(InvalidArgumentException::class);
-        new HttpException("GET /", 200);
+        new HttpException('GET', '/', 200);
     }
 }

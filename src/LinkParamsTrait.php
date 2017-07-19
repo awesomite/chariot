@@ -30,7 +30,7 @@ trait LinkParamsTrait
     public function withParam(string $key, $value): LinkInterface
     {
         if (is_object($value) && method_exists($value, '__toString')) {
-            $value = (string)$value;
+            $value = (string) $value;
         }
 
         $this->params[$key] = $value;

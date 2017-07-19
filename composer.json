@@ -8,7 +8,8 @@
     },
     "require-dev": {
         "phpunit/phpunit": "^6.2.3",
-        "satooshi/php-coveralls": "^1.0.1"
+        "satooshi/php-coveralls": "^1.0.1",
+        "symfony/console": "^3.3.5"
     },
     "license": "MIT",
     "authors": [
@@ -24,7 +25,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Awesomite\\Chariot\\": "tests/"
+            "Awesomite\\Chariot\\": "tests/",
+            "Awesomite\\Chariot\\Speedtest\\": "speedtest/"
         }
     }
 }

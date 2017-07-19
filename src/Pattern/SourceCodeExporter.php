@@ -58,7 +58,7 @@ TEMPLATE;
         $result .= "{$indent}array(\n";
         foreach ($routes as $key => $value) {
             $result .= "{$indent}  ";
-            $result .= is_int($key) ? $key : var_export((string)$key, true);
+            $result .= is_int($key) ? $key : var_export((string) $key, true);
             $result .= ' => ';
             if (is_array($value)) {
                 $result .= "\n";
@@ -90,14 +90,10 @@ TEMPLATE;
         $template = str_replace("\n", "\n{$indent}", $template);
 
         $data = [
-            '[[pattern]]'         => $this->varExportFromObject($route,
-                'pattern'),
-            '[[compiledPattern]]' => $this->varExportFromObject($route,
-                'compiledPattern'),
-            '[[simplePattern]]'   => $this->varExportFromObject($route,
-                'simplePattern'),
-            '[[explodedParams]]'  => $this->varExportFromObject($route,
-                'explodedParams'),
+            '[[pattern]]'         => $this->varExportFromObject($route, 'pattern'),
+            '[[compiledPattern]]' => $this->varExportFromObject($route, 'compiledPattern'),
+            '[[simplePattern]]'   => $this->varExportFromObject($route, 'simplePattern'),
+            '[[explodedParams]]'  => $this->varExportFromObject($route, 'explodedParams'),
             '[[patterns]]'        => $patternsName,
         ];
 

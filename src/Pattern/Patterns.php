@@ -13,11 +13,12 @@ class Patterns implements PatternsInterface
     const REGEX_ALPHANUM = '[a-zA-Z0-9]+';
     const REGEX_DEFAULT = '[^\\/]+';
 
-    const STANDARD_PATTERNS = [
-        ':int'      => self::REGEX_INT,
-        ':uint'     => self::REGEX_UINT,
-        ':alphanum' => self::REGEX_ALPHANUM,
-    ];
+    const STANDARD_PATTERNS
+        = [
+            ':int'      => self::REGEX_INT,
+            ':uint'     => self::REGEX_UINT,
+            ':alphanum' => self::REGEX_ALPHANUM,
+        ];
 
     use ExportableTrait;
 

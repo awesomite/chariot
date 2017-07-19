@@ -66,8 +66,11 @@ class PatternRouter implements RouterInterface
     {
         if (!in_array($method, HttpMethods::ALL_METHODS, true)) {
             throw new InvalidArgumentException(
-                sprintf('Method is equal to %s, but must be equal to one of the following: %s', $method,
-                    implode(', ', HttpMethods::ALL_METHODS))
+                sprintf(
+                    'Method is equal to %s, but must be equal to one of the following: %s',
+                    $method,
+                    implode(', ', HttpMethods::ALL_METHODS)
+                )
             );
         }
 
@@ -139,10 +142,52 @@ class PatternRouter implements RouterInterface
 
             case static::STRATEGY_TREE:
                 return $this->matchTree($method, $path);
-
-            default:
-                throw new \RuntimeException("Invalid strategy: {$this->strategy}");
         }
+    }
+
+    public function getAllowedMethods(string $path): array
+    {
+        $allRealMethods = array_diff(HttpMethods::ALL_METHODS, [HttpMethods::METHOD_ANY]);
+
+
+        switch ($this->strategy) {
+            case static::STRATEGY_SEQUENTIALLY:
+                if ($this->matchSequentiallyForMethods([HttpMethods::METHOD_ANY], $path)) {
+                    return $allRealMethods;
+                }
+                break;
+
+            case static::STRATEGY_TREE:
+                if ($this->matchTreeForMethods([HttpMethods::METHOD_ANY], $path)) {
+                    return $allRealMethods;
+                }
+                break;
+        }
+
+        $result = [];
+        foreach (array_diff($allRealMethods, [HttpMethods::METHOD_HEAD]) as $method) {
+            switch ($this->strategy) {
+                case static::STRATEGY_SEQUENTIALLY:
+                    if ($this->matchSequentiallyForMethods([$method], $path)) {
+                        $result[] = $method;
+                        if ($method === HttpMethods::METHOD_GET) {
+                            $result[] = HttpMethods::METHOD_HEAD;
+                        }
+                    }
+                    break;
+
+                case static::STRATEGY_TREE:
+                    if ($this->matchTreeForMethods([$method], $path)) {
+                        $result[] = $method;
+                        if ($method === HttpMethods::METHOD_GET) {
+                            $result[] = HttpMethods::METHOD_HEAD;
+                        }
+                    }
+                    break;
+            }
+        }
+
+        return $result;
     }
 
     /**
@@ -192,10 +237,10 @@ class PatternRouter implements RouterInterface
         }
 
         if ($this->matchSequentiallyForMethods(array_diff(HttpMethods::ALL_METHODS, $methods), $path)) {
-            throw new HttpException("{$method} {$path}", HttpException::HTTP_METHOD_NOT_ALLOWED);
+            throw new HttpException($method, $path, HttpException::HTTP_METHOD_NOT_ALLOWED);
         }
 
-        throw new HttpException("{$method} {$path}", HttpException::HTTP_NOT_FOUND);
+        throw new HttpException($method, $path, HttpException::HTTP_NOT_FOUND);
     }
 
     /**
@@ -234,10 +279,10 @@ class PatternRouter implements RouterInterface
         }
 
         if ($this->matchTreeForMethods(array_diff(HttpMethods::ALL_METHODS, $methods), $path)) {
-            throw new HttpException("{$method} {$path}", HttpException::HTTP_METHOD_NOT_ALLOWED);
+            throw new HttpException($method, $path, HttpException::HTTP_METHOD_NOT_ALLOWED);
         }
 
-        throw new HttpException("{$method} {$path}", HttpException::HTTP_NOT_FOUND);
+        throw new HttpException($method, $path, HttpException::HTTP_NOT_FOUND);
     }
 
     /**
@@ -289,7 +334,7 @@ class PatternRouter implements RouterInterface
             $routes = array_merge($routes, $this->routes[$currentMethod][$handler] ?? []);
         }
 
-        return new PatternLink($routes);
+        return new PatternLink($handler, $routes);
     }
 
     /**
