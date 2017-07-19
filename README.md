@@ -18,19 +18,19 @@ echo $router->linkTo('showArticle')->withParam('id', 5);
 ```
 
 ## Table of contents
-* How does it work?
-    * Patterns
-      * Parameters
-      * Examples
-    * Routing
-    * Generating links
-    * Hidden parameters
-    * Caching
-    * Defining custom patterns
-    * Validation
-    * Default parameters
- * License
- * Versioning
+* [How does it work?](#how-does-it-work)
+    * [Patterns](#patterns)
+      * [Parameters](#parameters)
+      * [Examples](#examples)
+    * [Routing](#routing)
+    * [Generating links](#generating-links)
+    * [Hidden parameters](#hidden-parameters)
+    * [Caching](#caching)
+    * [Defining custom patterns](#defining-custom-patterns)
+    * [Validation](#validation)
+    * [Default parameters](#default-parameters)
+ * [License](#license)
+ * [Versioning](#versioning)
 
 ## How does it work?
 
