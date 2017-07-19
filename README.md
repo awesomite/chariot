@@ -1,5 +1,6 @@
 # Chariot
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/ca2c76b33b5042d49658105bc5b63075)](https://www.codacy.com/app/awesomite/chariot?utm_source=github.com&utm_medium=referral&utm_content=awesomite/chariot&utm_campaign=badger)
 [![Build Status](https://travis-ci.org/awesomite/chariot.svg?branch=master)](https://travis-ci.org/awesomite/chariot)
 [![Coverage Status](https://coveralls.io/repos/github/awesomite/chariot/badge.svg?branch=master)](https://coveralls.io/github/awesomite/chariot?branch=master)
 
