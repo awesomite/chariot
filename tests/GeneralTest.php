@@ -275,6 +275,7 @@ class GeneralTest extends TestBase
                 yield $row;
 
                 $row[0] = (new RouterCollector())->addRouter($router);
+                yield $row;
             }
         }
     }
