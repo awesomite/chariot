@@ -316,10 +316,14 @@ echo $router->linkTo('articles')->withParam('page', 2), "\n";
  */
 ```
 
+## More examples
+
+* [Months](examples/months.php)
+* [Symfony integration](examples/symfony.php)
+
 ## License
 
 MIT - [read license](LICENSE)
-
 
 ## Versioning
 
