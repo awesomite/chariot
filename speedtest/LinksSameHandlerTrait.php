@@ -52,7 +52,6 @@ DESCRIPTION;
             $timer->stop();
         }
 
-
         return $timer;
     }
 }
