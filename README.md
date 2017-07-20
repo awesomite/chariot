@@ -30,6 +30,7 @@ echo $router->linkTo('showArticle')->withParam('id', 5);
     * [Defining custom patterns](#defining-custom-patterns)
     * [Validation](#validation)
     * [Default parameters](#default-parameters)
+ * [More examples](#more-examples)
  * [License](#license)
  * [Versioning](#versioning)
 
