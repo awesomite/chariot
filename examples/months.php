@@ -44,7 +44,7 @@ foreach ($paths as $path) {
     $year = $route->getParams()['year'];
     $month = $route->getParams()['month'];
     $output->writeln(sprintf(
-        '<info>%-20s</info>    year: <info>%d</info> month: <info>%2d</info>',
+        '<info>%-20s</info>     => year: <info>%d</info> month: <info>%2d</info>',
         $path,
         $year,
         $month
@@ -61,7 +61,7 @@ $output->writeln('<bg=yellow;fg=black>  Building URLs  </>');
 $output->writeln('<bg=yellow;fg=black>                 </>');
 foreach ($paramsData as $params) {
     $output->writeln(sprintf(
-        'year: <info>%d</info>, month: <info>%2d</info>    url: <info>%s</info>',
+        'year: <info>%d</info>, month: <info>%2d</info>    => <info>%s</info>',
         $params['year'],
         $params['month'],
         (string) $router->linkTo('showMonth')->withParams($params)
@@ -72,13 +72,13 @@ foreach ($paramsData as $params) {
  * Output:
  *
  * Parsing URLs
- * /calendar/2018-july     year: 2018 month:  7
- * /calendar/2017-aug      year: 2017 month:  8
- * /calendar/2015-oct      year: 2015 month: 10
- * /calendar/2019-dec      year: 2019 month: 12
+ * /calendar/2018-july      => year: 2018 month:  7
+ * /calendar/2017-aug       => year: 2017 month:  8
+ * /calendar/2015-oct       => year: 2015 month: 10
+ * /calendar/2019-dec       => year: 2019 month: 12
  *
  * Building URLs
- * year: 2014, month: 10    url: /calendar/2014-oct
- * year: 2016, month: 12    url: /calendar/2016-dec
- * year: 2019, month:  7    url: /calendar/2019-july
+ * year: 2014, month: 10    => /calendar/2014-oct
+ * year: 2016, month: 12    => /calendar/2016-dec
+ * year: 2019, month:  7    => /calendar/2019-july
  */
