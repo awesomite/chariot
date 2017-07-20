@@ -228,33 +228,24 @@ $router = $factory->getRouter();
 
 use Awesomite\Chariot\Pattern\PatternRouter;
 
-$months = [
-    'jan',
-    'feb',
-    'mar',
-    'apr',
-    'may',
-    'june',
-    'july',
-    'aug',
-    'sept',
-    'oct',
-    'nov',
-    'dec',
+$categories = [
+    'action',
+    'adventure',
+    'comedy',
 ];
 
 $router = PatternRouter::createDefault();
 $router->getPatterns()
     ->addPattern(':date', '[0-9]{4}-[0-9]{2}-[0-9]{2}')
-    ->addEnumPattern(':month', $months);
+    ->addEnumPattern(':category', $categories);
 
 $router->get('/day-{{ date :date }}', 'showDay');
 $route = $router->match('GET', '/day-2017-01-01');
 echo $route->getParams()['date'], "\n"; // 2017-01-01
 
-$router->get('/month-{{ month :month }}', 'showMonth');
-$route = $router->match('GET', '/month-sept');
-echo $route->getParams()['month'], "\n"; // sept
+$router->get('/category-{{ category :category }}', 'showCategory');
+$route = $router->match('GET', '/category-comedy');
+echo $route->getParams()['category'], "\n"; // comedy
 ```
 
 ### Validation
