@@ -61,7 +61,7 @@ $output->writeln('<bg=yellow;fg=black>  Building URLs  </>');
 $output->writeln('<bg=yellow;fg=black>                 </>');
 foreach ($paramsData as $params) {
     $output->writeln(sprintf(
-        'year: <info>%d</info>, month: <info>%2d</info>    => <info>%s</info>',
+        'year: <info>%d</info> month: <info>%2d</info>     => <info>%s</info>',
         $params['year'],
         $params['month'],
         (string) $router->linkTo('showMonth')->withParams($params)
@@ -78,7 +78,7 @@ foreach ($paramsData as $params) {
  * /calendar/2019-dec       => year: 2019 month: 12
  *
  * Building URLs
- * year: 2014, month: 10    => /calendar/2014-oct
- * year: 2016, month: 12    => /calendar/2016-dec
- * year: 2019, month:  7    => /calendar/2019-july
+ * year: 2014 month: 10     => /calendar/2014-oct
+ * year: 2016 month: 12     => /calendar/2016-dec
+ * year: 2019 month:  7     => /calendar/2019-july
  */
