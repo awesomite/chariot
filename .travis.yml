@@ -23,6 +23,8 @@ before_script:
 script:
   - php ${PHP_ARGS} vendor/bin/phpunit
   - php -n ${PHP_ARGS} speedtest/console.php test-links
+  - php examples/months.php
+  - php examples/symfony.php
 
 after_script:
   - travis_retry bin/coveralls.sh

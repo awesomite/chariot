@@ -1,4 +1,5 @@
 /bin export-ignore
+/examples export-ignore
 /speedtest export-ignore
 /tests export-ignore
 /.coveralls.yml export-ignore
