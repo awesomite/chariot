@@ -52,8 +52,9 @@ class PatternLink implements LinkInterface
                 }
                 unset($currentParams[$key]);
             }
-            if ($route->matchParams($currentParams)) {
-                return $this->prefix . (string) $route->bindParams($currentParams);
+            $convertedParams = $route->matchParams($currentParams);
+            if (is_array($convertedParams)) {
+                return $this->prefix . (string) $route->bindParams(array_replace($currentParams, $convertedParams));
             }
         }
 

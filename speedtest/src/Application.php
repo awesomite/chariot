@@ -2,6 +2,7 @@
 
 namespace Awesomite\Chariot\Speedtest;
 
+use Awesomite\Chariot\Speedtest\Commands\LinksCommand;
 use Symfony\Component\Console\Application as SymfonyApplication;
 
 /**

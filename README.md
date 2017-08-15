@@ -47,7 +47,7 @@ Parameters contains three values separated by one or more white characters.
 Second and third values are optional.
 First value is just a name.
 Second value is a regular expression or name of registered regular expression,
-default value is equal to `[^\/]+`.
+default value is equal to `[^/]+`.
 Third value contains default value of parameter (used for generating links).
 
 #### Examples
@@ -82,8 +82,14 @@ try {
     echo $exception->getMessage(), "\n";
     
     // code can be equal to 404 or 405
-    if ($exception->getCode() === HttpException::HTTP_METHOD_NOT_ALLOWED) {
-        echo 'Allow: ', implode(', ', $router->getAllowedMethods($path)), "\n";
+    switch ($exception->getCode()) {
+        case HttpException::HTTP_NOT_FOUND:
+            echo "Not found\n";
+            break;
+            
+        case HttpException::HTTP_METHOD_NOT_ALLOWED:
+            echo 'Allow: ', implode(', ', $router->getAllowedMethods($path)), "\n";
+            break;
     }
 }
 ```

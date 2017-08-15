@@ -9,6 +9,8 @@ use Awesomite\Chariot\HttpMethods;
 use Awesomite\Chariot\InternalRoute;
 use Awesomite\Chariot\InternalRouteInterface;
 use Awesomite\Chariot\LinkInterface;
+use Awesomite\Chariot\Pattern\StdPatterns\IntPattern;
+use Awesomite\Chariot\Pattern\StdPatterns\PatternDate;
 use Awesomite\Chariot\TestBase;
 
 /**
@@ -250,6 +252,57 @@ class PatternRouterTest extends TestBase
             ['page' => 1],
             '/page/1',
         ];
+    }
+
+    /**
+     * @dataProvider providerEmptyRouters
+     *
+     * @param PatternRouter $router
+     */
+    public function testDatePattern(PatternRouter $router)
+    {
+        $router->getPatterns()->addPattern(':date', new PatternDate());
+        $router->get('/day/{{ day :date }}', 'showDay');
+        $route = $router->match(HttpMethods::METHOD_GET, '/day/2017-01-01');
+        $this->assertSame('showDay', $route->getHandler());
+        $this->assertTrue(isset($route->getParams()['day']));
+        /** @var \DateTimeInterface $day */
+        $day = $route->getParams()['day'];
+        $this->assertInstanceOf(\DateTimeInterface::class, $day);
+        $this->assertSame('2017-01-01', $day->format('Y-m-d'));
+
+        $dates = [
+            strtotime('2017-01-01'),
+            '2017-01-01',
+            new \DateTime('2017-01-01'),
+            new \DateTimeImmutable('2017-01-01')
+        ];
+        foreach ($dates as $date) {
+            $currentLink = (string) $router->linkTo('showDay')->withParam('day', $date);
+            $this->assertSame('/day/2017-01-01', $currentLink);
+        }
+    }
+
+    /**
+     * @dataProvider providerEmptyRouters
+     *
+     * @param PatternRouter $router
+     */
+    public function testIntPattern(PatternRouter $router)
+    {
+        $router->getPatterns()->addPattern(':integer', new IntPattern());
+        $router->get('/article-{{ id :integer }}', 'showArticle');
+        $route = $router->match(HttpMethods::METHOD_GET, '/article-15');
+        $this->assertSame('showArticle', $route->getHandler());
+        $this->assertSame(['id' => 15], $route->getParams());
+        $this->assertSame('/article-150', (string) $router->linkTo('showArticle')->withParam('id', 150));
+    }
+
+    public function providerEmptyRouters()
+    {
+        foreach ($this->getEmptyRouters() as $router) {
+            yield [$router];
+        }
     }
 
     private function getEmptyRouters()

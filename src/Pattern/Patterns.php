@@ -4,14 +4,14 @@ namespace Awesomite\Chariot\Pattern;
 
 use Awesomite\Chariot\Exceptions\InvalidArgumentException;
 use Awesomite\Chariot\Exceptions\LogicException;
-use Awesomite\Chariot\ExportableTrait;
+use Awesomite\Chariot\Pattern\StdPatterns\RegexPattern;
 
 class Patterns implements PatternsInterface
 {
     const REGEX_INT = '(-?[1-9][0-9]*)|0';
     const REGEX_UINT = '([1-9][0-9]*)|0';
     const REGEX_ALPHANUM = '[a-zA-Z0-9]+';
-    const REGEX_DEFAULT = '[^\\/]+';
+    const REGEX_DEFAULT = '[^/]+';
 
     const STANDARD_PATTERNS
         = [
@@ -20,8 +20,6 @@ class Patterns implements PatternsInterface
             ':alphanum' => self::REGEX_ALPHANUM,
         ];
 
-    use ExportableTrait;
-
     private $patterns = [];
 
     private $defaultPattern;
@@ -29,23 +27,34 @@ class Patterns implements PatternsInterface
     public function __construct(array $patterns = [], string $defaultPattern = null)
     {
         foreach ($patterns as $name => $pattern) {
-            $this->addPattern($name, $pattern);
+            if (is_array($pattern)) {
+                $this->addEnumPattern($name, $pattern);
+            } else {
+                $this->addPattern($name, $pattern);
+            }
         }
 
         $this->setDefaultPattern(is_null($defaultPattern) ? static::REGEX_DEFAULT : $defaultPattern);
     }
 
-    public function addPattern(string $name, string $regex): PatternsInterface
+    public function addPattern(string $name, $pattern): PatternsInterface
     {
         if (isset($this[$name])) {
             throw new LogicException(sprintf('Pattern %s is already added', $name));
         }
 
-        if (!(new RegexTester())->isSubregex($regex)) {
-            throw new InvalidArgumentException('Invalid regex: ' . $regex);
+        if (is_string($pattern)) {
+            $this->patterns[$name] = new RegexPattern($pattern);
+        } elseif (is_object($pattern) && $pattern instanceof PatternInterface) {
+            $this->patterns[$name] = $pattern;
+        } else {
+            throw new InvalidArgumentException(sprintf(
+                'Method %s expects string or %s, %s given',
+                __METHOD__,
+                PatternInterface::class,
+                is_object($pattern) ? get_class($pattern) : gettype($pattern)
+            ));
         }
-
-        $this->patterns[$name] = $regex;
 
         return $this;
     }
@@ -70,7 +79,7 @@ class Patterns implements PatternsInterface
         return $this->defaultPattern;
     }
 
-    public function setDefaultPattern(string $pattern): PatternsInterface
+    public function setDefaultPattern($pattern): PatternsInterface
     {
         if (!(new RegexTester())->isSubregex($pattern)) {
             throw new InvalidArgumentException('Invalid regex: ' . $pattern);
@@ -98,5 +107,20 @@ class Patterns implements PatternsInterface
     public function offsetUnset($offset)
     {
         throw new LogicException('Operation forbidden');
+    }
+
+    public function serialize()
+    {
+        return serialize([
+            'patterns' => $this->patterns,
+            'defaultPattern' => $this->defaultPattern,
+        ]);
+    }
+
+    public function unserialize($serialized)
+    {
+        $data = unserialize($serialized);
+        $this->patterns = $data['patterns'];
+        $this->defaultPattern = $data['defaultPattern'];
     }
 }

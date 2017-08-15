@@ -1,7 +1,8 @@
 <?php
 
-namespace Awesomite\Chariot\Speedtest;
+namespace Awesomite\Chariot\Speedtest\Commands;
 
+use Awesomite\Chariot\Speedtest\Timer;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
@@ -74,17 +75,5 @@ class LinksCommand extends Command
             $rowAvg,
         ]);
         $table->render();
-    }
-
-    private function randomString(int $length)
-    {
-        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $charactersLength = strlen($characters);
-        $randomString = '';
-        for ($i = 0; $i < $length; $i++) {
-            $randomString .= $characters[rand(0, $charactersLength - 1)];
-        }
-
-        return $randomString;
     }
 }

@@ -15,7 +15,7 @@ require __DIR__ . DIRECTORY_SEPARATOR . 'init.php';
  */
 function handleSymfonyRequest(Request $request, RouterInterface $router)
 {
-    //removes part after ?
+    // removes part after "?"
     $path = explode('?', $request->getUri())[0];
 
     $route = $router->match($request->getMethod(), $path);

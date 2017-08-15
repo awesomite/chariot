@@ -214,6 +214,9 @@ class GeneralTest extends TestBase
 
             $data[0] = (new RouterCollector())->addRouter($router);
             yield $data;
+
+            $data[0] = unserialize(serialize($router));
+            yield $data;
         }
     }
 
@@ -246,6 +249,27 @@ class GeneralTest extends TestBase
         $this->assertArraysWithSameElements($allowedMethods, $router->getAllowedMethods($path));
     }
 
+    /**
+     * @expectedException \Awesomite\Chariot\Exceptions\HttpException
+     * @expectedExceptionCode 404
+     * @expectedExceptionMessage 404 Not Found: GET /article/title-cannot-contain/slash/
+     */
+    public function testDefaultParam()
+    {
+        $router = PatternRouter::createDefault()
+            ->get('/article/{{ title }}/', 'showArticle');
+
+        $routeA = $router->match(HttpMethods::METHOD_GET, '/article/hello-world/');
+        $this->assertSame('showArticle', $routeA->getHandler());
+        $this->assertSame(['title' => 'hello-world'], $routeA->getParams());
+
+        $routeB = $router->match(HttpMethods::METHOD_GET, '/article/hello\\world/');
+        $this->assertSame('showArticle', $routeB->getHandler());
+        $this->assertSame(['title' => 'hello\\world'], $routeB->getParams());
+
+        $router->match(HttpMethods::METHOD_GET, '/article/title-cannot-contain/slash/');
+    }
+
     private function providerGetAllowedMethods()
     {
         foreach ([PatternRouter::STRATEGY_SEQUENTIALLY, PatternRouter::STRATEGY_TREE] as $strategy) {
@@ -275,6 +299,9 @@ class GeneralTest extends TestBase
                 yield $row;
 
                 $row[0] = (new RouterCollector())->addRouter($router);
+                yield $row;
+
+                $row[0] = unserialize(serialize($router));
                 yield $row;
             }
         }

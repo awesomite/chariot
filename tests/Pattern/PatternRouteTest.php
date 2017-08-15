@@ -215,7 +215,7 @@ class PatternRouteTest extends TestBase
      */
     public function testMatchParams(PatternRoute $route, array $params, bool $expected)
     {
-        $this->assertSame($expected, $route->matchParams($params));
+        $this->assertSame($expected, (bool) $route->matchParams($params));
     }
 
     public function providerMatchParams()

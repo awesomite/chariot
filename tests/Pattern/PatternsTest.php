@@ -45,7 +45,7 @@ class PatternsTest extends TestBase
     {
         $patterns = new Patterns();
         $patterns->addPattern($name, $pattern);
-        $this->assertSame($pattern, $patterns[$name]);
+        $this->assertSame($pattern, $patterns[$name]->getRegex());
     }
 
     /**
@@ -58,7 +58,7 @@ class PatternsTest extends TestBase
     {
         $patterns = new Patterns();
         $patterns[$name] = $pattern;
-        $this->assertSame($pattern, $patterns[$name]);
+        $this->assertSame($pattern, $patterns[$name]->getRegex());
     }
 
     public function providerSetPattern()
@@ -100,7 +100,7 @@ class PatternsTest extends TestBase
     {
         $patterns = new Patterns();
         $patterns->addEnumPattern(':enum', $enum);
-        $this->assertSame($expected, $patterns[':enum']);
+        $this->assertSame($expected, $patterns[':enum']->getRegex());
     }
 
     public function providerEnumPattern()
