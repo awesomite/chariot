@@ -37,6 +37,8 @@ echo '  using object: ', $router->linkTo('showDay')->withParam('day', new \DateT
 echo '  using string: ', $router->linkTo('showDay')->withParam('day', '2017-02-01'), "\n";
 echo '  using int:    ', $router->linkTo('showDay')->withParam('day', strtotime('2017-03-01')), "\n";
 /*
+ * Output:
+ *
  * Generating URLs:
  *   using object: /day/2017-01-01
  *   using string: /day/2017-02-01
