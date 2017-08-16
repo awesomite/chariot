@@ -43,7 +43,7 @@ class Patterns implements PatternsInterface
             throw new LogicException(sprintf('Pattern %s is already added', $name));
         }
 
-        if (':' !== $name[0] ?? null) {
+        if (':' !== ($name[0] ?? null)) {
             throw new LogicException(sprintf(
                 'Method %s() requires first parameter prefixed by ":", "%s" given',
                 __METHOD__,

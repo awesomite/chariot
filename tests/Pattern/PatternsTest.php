@@ -21,16 +21,30 @@ class PatternsTest extends TestBase
         }
     }
 
-    public function testInvalidName()
+    /**
+     * @dataProvider providerInvalidName
+     *
+     * @param string $paramName
+     */
+    public function testInvalidName(string $paramName)
     {
         $this->expectException(LogicException::class);
         $message = sprintf(
-            'Method %s::addPattern() requires first parameter prefixed by ":", "name" given',
-            Patterns::class
+            'Method %s::addPattern() requires first parameter prefixed by ":", "%s" given',
+            Patterns::class,
+            $paramName
         );
         $this->expectExceptionMessage($message);
         $patterns = new Patterns();
-        $patterns->addPattern('name', Patterns::REGEX_INT);
+        $patterns->addPattern($paramName, Patterns::REGEX_INT);
+    }
+
+    public function providerInvalidName()
+    {
+        return [
+            ['name'],
+            [''],
+        ];
     }
 
     public function testInvalidPattern()
