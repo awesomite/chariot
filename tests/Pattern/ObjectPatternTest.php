@@ -3,8 +3,10 @@
 namespace Awesomite\Chariot\Pattern;
 
 use Awesomite\Chariot\Exceptions\HttpException;
+use Awesomite\Chariot\Exceptions\PatternException;
 use Awesomite\Chariot\HttpMethods;
 use Awesomite\Chariot\LinkInterface;
+use Awesomite\Chariot\Pattern\StdPatterns\AbstractPattern;
 use Awesomite\Chariot\Pattern\StdPatterns\IntPattern;
 use Awesomite\Chariot\Pattern\StdPatterns\PatternDate;
 use Awesomite\Chariot\RouterInterface;
@@ -103,5 +105,59 @@ class ObjectPatternTest extends TestBase
         $route = $router->match('GET', '/page/5');
         $this->assertSame(['number' => 5], $route->getParams());
         $this->assertSame('showPage', $route->getHandler());
+    }
+
+    /**
+     * @dataProvider providerInvalidToUrl
+     *
+     * @param PatternInterface $pattern
+     * @param                  $param
+     * @param string           $type
+     */
+    public function testInvalidToUrl(PatternInterface $pattern, $param, string $type)
+    {
+        $this->expectException(PatternException::class);
+        $class = get_class($pattern);
+        if (mb_strpos($class, 'class@') === 0) {
+            $class = 'class@';
+        }
+        $this->expectExceptionMessage(sprintf(
+            'Value %s cannot be converted to url param (%s)',
+            $type,
+            $class
+        ));
+        $pattern->toUrl($param);
+    }
+
+    public function providerInvalidToUrl()
+    {
+        $pattern = new class extends AbstractPattern {
+            public function getRegex(): string
+            {
+                return 'foo';
+            }
+
+            public function toUrl($data): string
+            {
+                throw $this->newInvalidToUrl($data);
+            }
+
+            public function fromUrl(string $param)
+            {
+            }
+
+            public function serialize()
+            {
+            }
+
+            public function unserialize($serialized)
+            {
+            }
+        };
+
+        return [
+            [$pattern, tmpfile(), 'resource'],
+            [$pattern, .1, 'double']
+        ];
     }
 }

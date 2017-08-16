@@ -33,11 +33,11 @@ class RegexPattern extends AbstractPattern
             && !is_null($data)
             && !(is_object($data) && method_exists($data, '__toString'))
         ) {
-            $this->throwInvalidToUrl($data);
+            throw $this->newInvalidToUrl($data);
         }
 
         if (!$this->match((string) $data)) {
-            $this->throwInvalidToUrl($data);
+            throw $this->newInvalidToUrl($data);
         }
 
         return (string) $data;

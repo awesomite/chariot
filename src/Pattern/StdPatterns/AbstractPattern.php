@@ -22,9 +22,9 @@ abstract class AbstractPattern implements PatternInterface
     /**
      * @param $data
      *
-     * @throws PatternException
+     * @return PatternException
      */
-    protected function throwInvalidToUrl($data)
+    protected function newInvalidToUrl($data)
     {
         switch (gettype($data)) {
             case 'string':
@@ -46,17 +46,17 @@ abstract class AbstractPattern implements PatternInterface
                 break;
         }
 
-        throw new PatternException(sprintf('Value %s cannot be converted to url param (%s)', $type, static::class));
+        return new PatternException(sprintf('Value %s cannot be converted to url param (%s)', $type, static::class));
     }
 
     /**
      * @param string $param
      *
-     * @throws PatternException
+     * @return PatternException
      */
-    protected function throwInvalidFromUrl(string $param)
+    protected function newInvalidFromUrl(string $param)
     {
-        throw new PatternException(sprintf('Value %s is invalid (%s)', $param, static::class));
+        return new PatternException(sprintf('Value %s is invalid (%s)', $param, static::class));
     }
 
     protected function match(string $data) : bool

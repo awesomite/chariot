@@ -14,7 +14,7 @@ class IntPattern extends AbstractPattern
     public function toUrl($data): string
     {
         if (!$this->match((string) $data)) {
-            $this->throwInvalidToUrl($data);
+            throw $this->newInvalidToUrl($data);
         }
 
         return (string) $data;

@@ -40,7 +40,7 @@ class PatternDate extends AbstractPattern
             }
         }
 
-        $this->throwInvalidToUrl($data);
+        throw $this->newInvalidToUrl($data);
     }
 
     /**
@@ -56,7 +56,7 @@ class PatternDate extends AbstractPattern
             return new \DateTimeImmutable($param);
         }
 
-        $this->throwInvalidFromUrl($param);
+        throw $this->newInvalidFromUrl($param);
     }
 
     private function checkDate(string &$input): bool
