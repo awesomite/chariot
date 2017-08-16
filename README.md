@@ -30,6 +30,7 @@ echo $router->linkTo('showArticle')->withParam('id', 5);
     * [Defining custom patterns](#defining-custom-patterns)
     * [Validation](#validation)
     * [Default parameters](#default-parameters)
+    * [Transforming parameters](#transforming-parameters)
  * [More examples](#more-examples)
  * [License](#license)
  * [Versioning](#versioning)
@@ -82,14 +83,8 @@ try {
     echo $exception->getMessage(), "\n";
     
     // code can be equal to 404 or 405
-    switch ($exception->getCode()) {
-        case HttpException::HTTP_NOT_FOUND:
-            echo "Not found\n";
-            break;
-            
-        case HttpException::HTTP_METHOD_NOT_ALLOWED:
-            echo 'Allow: ', implode(', ', $router->getAllowedMethods($path)), "\n";
-            break;
+    if ($exception->getCode() === HttpException::HTTP_METHOD_NOT_ALLOWED) {
+        echo 'Allow: ', implode(', ', $router->getAllowedMethods($path)), "\n";   
     }
 }
 ```
@@ -314,10 +309,38 @@ echo $router->linkTo('articles')->withParam('page', 2), "\n";
  */
 ```
 
+### Transforming parameters
+
+Router can transform parameter extracted from URL (and parameter passed to URL).
+Passed object to method addPattern() must implements interface PatternInterface.
+@See [PatternInterface](src/Pattern/PatternInterface.php).
+
+```php
+<?php
+
+use Awesomite\Chariot\Pattern\PatternInterface;
+use Awesomite\Chariot\Pattern\PatternRouter;
+use Awesomite\Chariot\Pattern\StdPatterns\PatternDate;
+
+$router = PatternRouter::createDefault();
+/*
+ * Passed object to method addPattern() must implement interface PatternInterface
+ */
+$router->getPatterns()->addPattern(':date', new PatternDate());
+$router->get('/day/{{ day :date }}', 'showDay');
+echo $router->linkTo('showDay')->withParam('day', new \DateTime('2017-07-07')), "\n";
+
+/*
+ * Output:
+ * /day/2017-07-07
+ */
+```
+
 ## More examples
 
 * [Months](examples/months.php)
 * [Symfony integration](examples/symfony.php)
+* [Transforming parameters](examples/transform-params.php)
 
 ## License
 
