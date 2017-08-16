@@ -157,7 +157,7 @@ class ObjectPatternTest extends TestBase
 
         return [
             [$pattern, tmpfile(), 'resource'],
-            [$pattern, .1, '(double) 0.1']
+            [$pattern, 0, '(integer) 0']
         ];
     }
 }
