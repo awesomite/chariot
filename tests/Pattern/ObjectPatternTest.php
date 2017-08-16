@@ -122,7 +122,7 @@ class ObjectPatternTest extends TestBase
             $class = 'class@';
         }
         $this->expectExceptionMessage(sprintf(
-            'Value %s cannot be converted to url param (%s)',
+            'Value %s cannot be converted to url param (%s',
             $type,
             $class
         ));
@@ -157,7 +157,7 @@ class ObjectPatternTest extends TestBase
 
         return [
             [$pattern, tmpfile(), 'resource'],
-            [$pattern, .1, 'double']
+            [$pattern, .1, '(double) 0.1']
         ];
     }
 }
