@@ -17,12 +17,17 @@ class CoreContext implements Context
     /**
      * @var PatternRouter
      */
-    protected $patternRouter;
+    private $patternRouter;
     
     /**
      * @var RouterInterface
      */
-    protected $testedRouter;
+    private $testedRouter;
+
+    /**
+     * @var string|null
+     */
+    private $cache;
 
     /**
      * @Given there is an empty router
@@ -136,5 +141,21 @@ class CoreContext implements Context
         sort($expected);
         sort($actual);
         Assert::assertSame($expected, $actual, $message);
+    }
+
+    /**
+     * @When I save router to cache
+     */
+    public function iSaveRouterToCache()
+    {
+        $this->cache = $this->patternRouter->exportToExecutable();
+    }
+
+    /**
+     * @When I restore router from cache
+     */
+    public function iRestoreRouterFromCache()
+    {
+        $this->testedRouter = eval('return ' . $this->cache . ';');
     }
 }
