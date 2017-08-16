@@ -1,5 +1,6 @@
 <?php
 
+use Awesomite\Chariot\Exceptions\HttpException;
 use Awesomite\Chariot\Pattern\PatternInterface;
 use Awesomite\Chariot\Pattern\PatternRouter;
 use Awesomite\Chariot\Pattern\StdPatterns\PatternDate;
@@ -30,6 +31,22 @@ echo 'Day from URL: ', $day->format('Y-m-d'), "\n\n";
  * Output:
  *
  * Day from URL: 2017-01-01
+ */
+
+/*
+ * Invalid date in URL
+ * URL matches to regex, but validator of pattern does not allow for invalid date
+ */
+$invalidUrl = '/day/2018-01-32';
+try {
+    $router->match('GET', $invalidUrl);
+} catch (HttpException $exception) {
+    echo $exception->getMessage(), "\n\n";
+}
+/*
+ * Output:
+ *
+ * 404 Not Found: GET /day/2018-01-32
  */
 
 echo "Generating URLs:\n";
