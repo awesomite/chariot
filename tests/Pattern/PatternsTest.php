@@ -47,6 +47,34 @@ class PatternsTest extends TestBase
         ];
     }
 
+    /**
+     * @dataProvider providerInvalidPatternArgument
+     *
+     * @param        $invalidPattern
+     * @param string $typeOfPattern
+     */
+    public function testInvalidPatternArgument($invalidPattern, string $typeOfPattern)
+    {
+        $this->expectExceptionMessage(InvalidArgumentException::class);
+        $message = sprintf(
+            'Method %s::addPattern() expects string or %s, %s given',
+            Patterns::class,
+            PatternInterface::class,
+            $typeOfPattern
+        );
+        $this->expectExceptionMessage($message);
+        (new Patterns())->addPattern(':foo', $invalidPattern);
+    }
+
+    public function providerInvalidPatternArgument()
+    {
+        return [
+            [new \stdClass(), 'stdClass'],
+            [null, 'NULL'],
+            [tmpfile(), 'resource'],
+        ];
+    }
+
     public function testInvalidPattern()
     {
         $this->expectException(InvalidArgumentException::class);
@@ -143,5 +171,14 @@ class PatternsTest extends TestBase
         $this->expectExceptionMessage('Operation forbidden');
         $patterns = new Patterns();
         unset($patterns[':pattern']);
+    }
+
+    public function testAddEnumInConstructor()
+    {
+        $data = [
+            ':enum' => ['hello', 'world'],
+        ];
+        $patterns = new Patterns($data);
+        $this->assertSame('hello|world', $patterns[':enum']->getRegex());
     }
 }

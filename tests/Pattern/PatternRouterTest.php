@@ -33,6 +33,35 @@ class PatternRouterTest extends TestBase
         $router->addRoute('NEW_METHOD', '/', 'home');
     }
 
+    public function testUnnamedCannotMatch()
+    {
+        $this->expectException(HttpException::class);
+        $this->expectExceptionMessage('404 Not Found: GET /category-books');
+        $this->expectExceptionCode(404);
+
+        $router = PatternRouter::createDefault();
+        $router->get('/category-{{ id \\d+ }}', 'showCategory');
+        $router->match('GET', '/category-books');
+    }
+
+    public function testUnnamedLinkTo()
+    {
+        $router = PatternRouter::createDefault();
+        $router->get('/category-{{ id \\d+ 1 }}', 'showCategory');
+
+        $invalidLink = (string) $router->linkTo('showCategory')->withParam('id', 'books');
+        $this->assertSame(LinkInterface::ERROR_CANNOT_GENERATE_LINK, $invalidLink);
+
+        $invalidLink2 = (string) $router->linkTo('showCategory')->withParam('id', new \stdClass());
+        $this->assertSame(LinkInterface::ERROR_CANNOT_GENERATE_LINK, $invalidLink2);
+
+        $validLink = (string) $router->linkTo('showCategory');
+        $this->assertSame('/category-1', $validLink);
+
+        $validLink2 = (string) $router->linkTo('showCategory')->withParam('id', 2);
+        $this->assertSame('/category-2', $validLink2);
+    }
+
     public function testGetPatterns()
     {
         $patterns = new Patterns();
@@ -271,6 +300,16 @@ class PatternRouterTest extends TestBase
         $this->assertInstanceOf(\DateTimeInterface::class, $day);
         $this->assertSame('2017-01-01', $day->format('Y-m-d'));
 
+        $thrown = false;
+        try {
+            $router->match(HttpMethods::METHOD_GET, '/day/2018-02-31');
+        } catch (HttpException $exception) {
+            $thrown = true;
+            $this->assertSame(404, $exception->getCode());
+            $this->assertSame([], $router->getAllowedMethods('/day/2018-02-31'));
+        }
+        $this->assertTrue($thrown);
+
         $dates = [
             strtotime('2017-01-01'),
             '2017-01-01',
@@ -281,6 +320,11 @@ class PatternRouterTest extends TestBase
             $currentLink = (string) $router->linkTo('showDay')->withParam('day', $date);
             $this->assertSame('/day/2017-01-01', $currentLink);
         }
+
+        $this->assertSame(
+            LinkInterface::ERROR_CANNOT_GENERATE_LINK,
+            (string) $router->linkTo('showDay')->withParam('day', new \stdClass())
+        );
     }
 
     /**

@@ -5,6 +5,9 @@ namespace Awesomite\Chariot\Pattern\StdPatterns;
 use Awesomite\Chariot\Exceptions\InvalidArgumentException;
 use Awesomite\Chariot\Pattern\RegexTester;
 
+/**
+ * @internal
+ */
 class RegexPattern extends AbstractPattern
 {
     protected $regex = '';
@@ -42,10 +45,6 @@ class RegexPattern extends AbstractPattern
 
     public function fromUrl(string $param)
     {
-        if (!$this->match($param)) {
-            $this->throwInvalidFromUrl($param);
-        }
-
         return $param;
     }
 

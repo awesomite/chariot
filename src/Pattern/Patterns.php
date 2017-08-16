@@ -57,7 +57,7 @@ class Patterns implements PatternsInterface
             $this->patterns[$name] = $pattern;
         } else {
             throw new InvalidArgumentException(sprintf(
-                'Method %s expects string or %s, %s given',
+                'Method %s() expects string or %s, %s given',
                 __METHOD__,
                 PatternInterface::class,
                 is_object($pattern) ? get_class($pattern) : gettype($pattern)
