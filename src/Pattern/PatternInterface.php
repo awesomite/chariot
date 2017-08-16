@@ -7,6 +7,8 @@ use Awesomite\Chariot\Exceptions\PatternException;
 interface PatternInterface extends \Serializable
 {
     /**
+     * Returns regex without delimiters
+     *
      * @return string
      */
     public function getRegex(): string;
