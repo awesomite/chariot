@@ -22,10 +22,6 @@ class IntPattern extends AbstractPattern
 
     public function fromUrl(string $param)
     {
-        if (!$this->match($param)) {
-            $this->throwInvalidFromUrl($param);
-        }
-
         return (int) $param;
     }
 }
