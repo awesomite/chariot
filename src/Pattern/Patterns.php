@@ -43,6 +43,14 @@ class Patterns implements PatternsInterface
             throw new LogicException(sprintf('Pattern %s is already added', $name));
         }
 
+        if (':' !== $name[0] ?? null) {
+            throw new LogicException(sprintf(
+                'Method %s() requires first parameter prefixed by ":", "%s" given',
+                __METHOD__,
+                $name
+            ));
+        }
+
         if (is_string($pattern)) {
             $this->patterns[$name] = new RegexPattern($pattern);
         } elseif (is_object($pattern) && $pattern instanceof PatternInterface) {
