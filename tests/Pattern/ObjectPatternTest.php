@@ -50,7 +50,10 @@ class ObjectPatternTest extends TestBase
             strtotime('2017-01-01'),
             '2017-01-01',
             new \DateTime('2017-01-01'),
-            new \DateTimeImmutable('2017-01-01')
+            new \DateTimeImmutable('2017-01-01'),
+            $this->createStringable('2017-01-01'),
+            $this->createStringable(strtotime('2017-01-01')),
+            $this->createStringable(strtotime('2017-01-01')),
         ];
         foreach ($dates as $date) {
             $currentLink = (string) $router->linkTo('showDay')->withParam('day', $date);
@@ -159,5 +162,23 @@ class ObjectPatternTest extends TestBase
             [$pattern, tmpfile(), 'resource'],
             [$pattern, 0, '(integer) 0']
         ];
+    }
+
+    private function createStringable(string $data)
+    {
+        return new class($data)
+        {
+            private $data;
+
+            public function __construct(string $data)
+            {
+                $this->data = $data;
+            }
+
+            public function __toString()
+            {
+                return $this->data;
+            }
+        };
     }
 }

@@ -3,6 +3,7 @@
 namespace Awesomite\Chariot\Pattern\StdPatterns;
 
 use Awesomite\Chariot\Exceptions\PatternException;
+use Awesomite\Chariot\Pattern\Patterns;
 
 class PatternDate extends AbstractPattern
 {
@@ -14,26 +15,27 @@ class PatternDate extends AbstractPattern
     }
 
     /**
-     * @param int|string|\DateTimeInterface $data
+     * Convert passed argument to date in format YYYY-mm-dd
+     *
+     * @param int|string|\DateTimeInterface $rawData
      *
      * @return string
      *
      * @throws PatternException
      */
-    public function toUrl($data): string
+    public function toUrl($rawData): string
     {
-        if (is_int($data)) {
-            return (new \DateTime())->setTimestamp($data)->format(static::DATE_FORMAT);
-        }
+        $data = $this->processRawData($rawData);
 
         if (is_object($data) && $data instanceof \DateTimeInterface) {
             return $data->format(static::DATE_FORMAT);
         }
 
-        if (
-            (is_string($data) || (is_object($data) && method_exists($data, '__toString')))
-            && preg_match('#^' . $this->getRegex() . '$#', $data)
-        ) {
+        if (is_int($data)) {
+            return (new \DateTime())->setTimestamp($data)->format(static::DATE_FORMAT);
+        }
+
+        if (is_string($data) && preg_match('#^' . $this->getRegex() . '$#', $data)) {
             $sData = (string) $data;
             if ($this->checkDate($sData)) {
                 return $sData;
@@ -43,7 +45,28 @@ class PatternDate extends AbstractPattern
         throw $this->newInvalidToUrl($data);
     }
 
+    private function processRawData($data)
+    {
+        if (is_object($data)) {
+            if ($data instanceof  \DateTimeInterface) {
+                return $data;
+            }
+
+            if (method_exists($data, '__toString')) {
+                $data = (string) $data;
+            }
+        }
+
+        if (is_string($data) && preg_match('#^(' . Patterns::REGEX_INT . ')$#', $data)) {
+            return (int) $data;
+        }
+
+        return $data;
+    }
+
     /**
+     * Convert date in format YYYY-mm-dd to \DateTimeImmutable object
+     *
      * @param string $param
      *
      * @return \DateTimeImmutable

@@ -230,6 +230,9 @@ class PatternRoute
                     return false;
                 }
             } else {
+                if (is_object($currentParam) && method_exists($currentParam, '__toString')) {
+                    $currentParam = (string) $currentParam;
+                }
                 if (!$this->pregMatchMultiType($pattern, $currentParam)) {
                     return false;
                 }
@@ -279,7 +282,6 @@ class PatternRoute
             is_string($subject)
             || is_scalar($subject)
             || is_null($subject)
-            || (is_object($subject) && method_exists($subject, '__toString'))
         ) {
             return preg_match($pattern, (string) $subject);
         }

@@ -64,6 +64,8 @@ class PatternRouter implements RouterInterface
 
     public function addRoute(string $method, string $pattern, string $handler, array $extraParams = []): PatternRouter
     {
+        $this->processExtraParams($extraParams);
+
         if (!in_array($method, HttpMethods::ALL_METHODS, true)) {
             throw new InvalidArgumentException(
                 sprintf(
@@ -351,5 +353,33 @@ class PatternRouter implements RouterInterface
     public function exportToExecutable(): string
     {
         return (new SourceCodeExporter())->exportPatternRouter($this);
+    }
+
+    private function processExtraParams(array &$data)
+    {
+        array_walk_recursive($data, function (&$element) {
+            if (is_scalar($element) || is_null($element)) {
+                return;
+            }
+
+            if (is_object($element)) {
+                if ($element instanceof \ArrayObject) {
+                    $element = $element->getArrayCopy();
+                    return;
+                }
+
+                if (method_exists($element, '__toString')) {
+                    $element = (string) $element;
+                    return;
+                }
+            }
+
+            $message = sprintf(
+                'Additional parameters can contain only scalar or null values, "%s" given',
+                is_object($element) ? get_class($element) : gettype($element)
+            );
+
+            throw new InvalidArgumentException($message);
+        });
     }
 }

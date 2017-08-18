@@ -283,6 +283,31 @@ class PatternRouterTest extends TestBase
         ];
     }
 
+    /**
+     * @dataProvider providerInvalidExtraParams
+     *
+     * @param $param
+     */
+    public function testInvalidExtraParams($param)
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessageRegExp(
+            '#Additional parameters can contain only scalar or null values, ".*" given#'
+        );
+        $this->expectExceptionCode(0);
+
+        $router = PatternRouter::createDefault();
+        $router->get('/', 'home', [$param]);
+    }
+
+    public function providerInvalidExtraParams()
+    {
+        return [
+            [tmpfile()],
+            [new \stdClass()],
+        ];
+    }
+
     private function decorateRouter(PatternRouter $router)
     {
         $router
