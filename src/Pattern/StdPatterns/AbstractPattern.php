@@ -3,13 +3,10 @@
 namespace Awesomite\Chariot\Pattern\StdPatterns;
 
 use Awesomite\Chariot\Exceptions\PatternException;
-use Awesomite\Chariot\ExportableTrait;
 use Awesomite\Chariot\Pattern\PatternInterface;
 
 abstract class AbstractPattern implements PatternInterface
 {
-    use ExportableTrait;
-
     public function serialize()
     {
         return '';
