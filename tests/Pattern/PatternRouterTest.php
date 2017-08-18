@@ -269,6 +269,24 @@ class PatternRouterTest extends TestBase
                 LinkInterface::ERROR_CANNOT_GENERATE_LINK,
             ];
             yield [$router, HttpMethods::METHOD_HEAD, 'invalidHandler', [], LinkInterface::ERROR_CANNOT_GENERATE_LINK];
+
+            $router->get('/test-array-object', 'arrayObject', ['array' => new \ArrayObject(['foo' => 'bar'])]);
+            yield [
+                $router,
+                HttpMethods::METHOD_GET,
+                'arrayObject',
+                ['array' => new \ArrayObject(['foo' => 'bar'])],
+                '/test-array-object',
+            ];
+
+            $router->get('/test-stringable', 'stringable', ['text' => new StringableObject('my-string')]);
+            yield [
+                $router,
+                HttpMethods::METHOD_GET,
+                'stringable',
+                ['text' => new StringableObject('my-string')],
+                '/test-stringable',
+            ];
         }
 
         $router = PatternRouter::createDefault();

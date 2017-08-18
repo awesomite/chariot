@@ -14,6 +14,9 @@ trait ProviderEmptyRouterTrait
         }
     }
 
+    /**
+     * @return PatternRouter[]
+     */
     private function getEmptyRouters()
     {
         return [
