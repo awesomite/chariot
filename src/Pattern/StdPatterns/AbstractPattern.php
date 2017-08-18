@@ -58,6 +58,6 @@ abstract class AbstractPattern implements PatternInterface
 
     protected function match(string $data) : bool
     {
-        return (bool) preg_match('#^' . $this->getRegex() . '$#', $data);
+        return (bool) preg_match('#^(' . $this->getRegex() . ')$#', $data);
     }
 }
