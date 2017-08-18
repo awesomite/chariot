@@ -5,7 +5,7 @@ namespace Awesomite\Chariot\Pattern\StdPatterns;
 use Awesomite\Chariot\Exceptions\PatternException;
 use Awesomite\Chariot\Pattern\Patterns;
 
-class PatternDate extends AbstractPattern
+class DatePattern extends AbstractPattern
 {
     const DATE_FORMAT = 'Y-m-d';
 

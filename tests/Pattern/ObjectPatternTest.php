@@ -7,8 +7,8 @@ use Awesomite\Chariot\Exceptions\PatternException;
 use Awesomite\Chariot\HttpMethods;
 use Awesomite\Chariot\LinkInterface;
 use Awesomite\Chariot\Pattern\StdPatterns\AbstractPattern;
+use Awesomite\Chariot\Pattern\StdPatterns\DatePattern;
 use Awesomite\Chariot\Pattern\StdPatterns\IntPattern;
-use Awesomite\Chariot\Pattern\StdPatterns\PatternDate;
 use Awesomite\Chariot\RouterInterface;
 use Awesomite\Chariot\TestBase;
 
@@ -26,7 +26,7 @@ class ObjectPatternTest extends TestBase
      */
     public function testDatePattern(PatternRouter $router)
     {
-        $router->getPatterns()->addPattern(':date', new PatternDate());
+        $router->getPatterns()->addPattern(':date', new DatePattern());
         $router->get('/day/{{ day :date }}', 'showDay');
         $route = $router->match(HttpMethods::METHOD_GET, '/day/2017-01-01');
         $this->assertSame('showDay', $route->getHandler());
@@ -134,7 +134,8 @@ class ObjectPatternTest extends TestBase
 
     public function providerInvalidToUrl()
     {
-        $pattern = new class extends AbstractPattern {
+        $pattern = new class extends AbstractPattern
+        {
             public function getRegex(): string
             {
                 return 'foo';
@@ -160,7 +161,7 @@ class ObjectPatternTest extends TestBase
 
         return [
             [$pattern, tmpfile(), 'resource'],
-            [$pattern, 0, '(integer) 0']
+            [$pattern, 0, '(integer) 0'],
         ];
     }
 

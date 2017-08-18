@@ -320,13 +320,13 @@ Passed object to method addPattern() must implements interface PatternInterface.
 
 use Awesomite\Chariot\Pattern\PatternInterface;
 use Awesomite\Chariot\Pattern\PatternRouter;
-use Awesomite\Chariot\Pattern\StdPatterns\PatternDate;
+use Awesomite\Chariot\Pattern\StdPatterns\DatePattern;
 
 $router = PatternRouter::createDefault();
 /*
  * Passed object to method addPattern() must implement interface PatternInterface
  */
-$router->getPatterns()->addPattern(':date', new PatternDate());
+$router->getPatterns()->addPattern(':date', new DatePattern());
 $router->get('/day/{{ day :date }}', 'showDay');
 echo $router->linkTo('showDay')->withParam('day', new \DateTime('2017-07-07')), "\n";
 

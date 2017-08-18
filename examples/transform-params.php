@@ -3,7 +3,7 @@
 use Awesomite\Chariot\Exceptions\HttpException;
 use Awesomite\Chariot\Pattern\PatternInterface;
 use Awesomite\Chariot\Pattern\PatternRouter;
-use Awesomite\Chariot\Pattern\StdPatterns\PatternDate;
+use Awesomite\Chariot\Pattern\StdPatterns\DatePattern;
 
 /**
  * @see PatternInterface
@@ -16,7 +16,7 @@ $router = PatternRouter::createDefault();
 /*
  * Add object pattern which will allow transforming params
  */
-$router->getPatterns()->addPattern(':date', new PatternDate());
+$router->getPatterns()->addPattern(':date', new DatePattern());
 
 /*
  * Add new route
