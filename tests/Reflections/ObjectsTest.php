@@ -4,6 +4,9 @@ namespace Awesomite\Chariot\Reflections;
 
 use Awesomite\Chariot\TestBase;
 
+/**
+ * @internal
+ */
 class ObjectsTest extends TestBase
 {
     public function testGetProperty()
