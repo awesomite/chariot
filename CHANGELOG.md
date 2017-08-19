@@ -2,7 +2,7 @@
 
 ### [0.2.0] ????-??-??
 
-* Added `Awesomite\Chariot\Pattern\PatternInterface` - possibility to conversions url params, e.g. date in format YYYY-mm-dd to \DateTime object
+* Added `Awesomite\Chariot\Pattern\PatternInterface` - possibility to conversions url params, e.g. date in format `YYYY-mm-dd` to `DateTime` object
 * Added [behat] tests
 * Force pattern names prefixed by ":"
 
