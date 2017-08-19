@@ -129,6 +129,7 @@ class ObjectPatternTest extends TestBase
             $type,
             $class
         ));
+        $this->expectExceptionCode(PatternException::CODE_TO_URL);
         $pattern->toUrl($param);
     }
 

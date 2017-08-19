@@ -43,7 +43,10 @@ abstract class AbstractPattern implements PatternInterface
                 break;
         }
 
-        return new PatternException(sprintf('Value %s cannot be converted to url param (%s)', $type, static::class));
+        return new PatternException(
+            sprintf('Value %s cannot be converted to url param (%s)', $type, static::class),
+            PatternException::CODE_TO_URL
+        );
     }
 
     /**
@@ -53,7 +56,10 @@ abstract class AbstractPattern implements PatternInterface
      */
     protected function newInvalidFromUrl(string $param)
     {
-        return new PatternException(sprintf('Value %s is invalid (%s)', $param, static::class));
+        return new PatternException(
+            sprintf('Value %s is invalid (%s)', $param, static::class),
+            PatternException::CODE_FROM_URL
+        );
     }
 
     protected function match(string $data) : bool
