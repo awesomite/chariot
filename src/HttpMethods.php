@@ -11,6 +11,10 @@ class HttpMethods
     const METHOD_PUT = 'PUT';
     const METHOD_DELETE = 'DELETE';
     const METHOD_PATCH = 'PATCH';
+    const METHOD_CONNECT = 'CONNECT';
+    const METHOD_OPTIONS = 'OPTIONS';
+    const METHOD_TRACE = 'TRACE';
+    const METHOD_PURGE = 'PURGE';
 
     const ALL_METHODS
         = [
@@ -21,5 +25,9 @@ class HttpMethods
             self::METHOD_PUT,
             self::METHOD_DELETE,
             self::METHOD_PATCH,
+            self::METHOD_CONNECT,
+            self::METHOD_OPTIONS,
+            self::METHOD_TRACE,
+            self::METHOD_PURGE,
         ];
 }
