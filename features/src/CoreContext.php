@@ -1,7 +1,5 @@
 <?php
 
-namespace Awesomite\Behat;
-
 use Awesomite\Chariot\Exceptions\CannotGenerateLinkException;
 use Awesomite\Chariot\Exceptions\HttpException;
 use Awesomite\Chariot\Pattern\PatternRouter;

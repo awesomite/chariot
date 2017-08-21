@@ -4,4 +4,4 @@ default:
             paths:
                 - %paths.base%/features/core
             contexts:
-                - Awesomite\Behat\CoreContext
+                - CoreContext

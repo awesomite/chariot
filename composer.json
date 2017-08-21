@@ -28,7 +28,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Awesomite\\Behat\\": "features/src",
+            "": "features/src/",
             "Awesomite\\Chariot\\": "tests/",
             "Awesomite\\Chariot\\Speedtest\\": "speedtest/src/"
         }
