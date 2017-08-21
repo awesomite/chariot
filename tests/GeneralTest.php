@@ -7,6 +7,7 @@ use Awesomite\Chariot\Exceptions\CannotGenerateLinkException;
 use Awesomite\Chariot\Exceptions\HttpException;
 use Awesomite\Chariot\Pattern\PatternRouter;
 use Awesomite\Chariot\Pattern\Patterns;
+use Awesomite\Chariot\Pattern\StringableObject;
 
 /**
  * @internal
@@ -149,8 +150,12 @@ class GeneralTest extends TestBase
 
         $router->addRoute(HttpMethods::METHOD_GET, '/', 'home', ['lang' => 'en']);
         $router->addRoute(HttpMethods::METHOD_GET, '/pl', 'home', ['lang' => 'pl']);
+        $router->addRoute(HttpMethods::METHOD_GET, '/category-{{ categoryId \\d+ }}', 'showCategory');
         yield [$router, 'home', ['lang' => 'en'], '/'];
         yield [$router, 'home', ['lang' => 'pl'], '/pl'];
+        yield [$router, 'showCategory', ['categoryId' => new StringableObject('15')], '/category-15'];
+        yield [$router, 'showCategory', ['categoryId' => '15'], '/category-15'];
+        yield [$router, 'showCategory', ['categoryId' => 15], '/category-15'];
     }
 
     /**
