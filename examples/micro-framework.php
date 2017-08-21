@@ -6,9 +6,9 @@
  */
 declare(strict_types=1);
 
+use Awesomite\Chariot\Exceptions\HttpException;
 use Awesomite\Chariot\InternalRouteInterface;
 use Awesomite\Chariot\Pattern\PatternRouter;
-use Awesomite\Chariot\Exceptions\HttpException;
 
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'init.php';
 
@@ -48,6 +48,7 @@ class MyController
 
             case 'showItem':
                 $params = $route->getParams();
+
                 return $this->showItem($params['id'], $params['name']);
 
             case 'showCategories':

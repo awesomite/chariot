@@ -28,6 +28,7 @@ class UnsignedIntPatternTest extends IntPatternTest
             [-5],
             ['-5'],
         ];
+
         return array_merge($result, parent::providerInvalidToUrl());
     }
 }

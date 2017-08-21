@@ -256,7 +256,7 @@ class GeneralTest extends TestBase
 
     /**
      * @expectedException \Awesomite\Chariot\Exceptions\HttpException
-     * @expectedExceptionCode 404
+     * @expectedExceptionCode    404
      * @expectedExceptionMessage 404 Not Found: GET /article/title-cannot-contain/slash/
      */
     public function testDefaultParam()

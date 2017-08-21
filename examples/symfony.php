@@ -11,6 +11,7 @@ require __DIR__ . DIRECTORY_SEPARATOR . 'init.php';
  *
  * @param Request         $request
  * @param RouterInterface $router
+ *
  * @return string
  */
 function handleSymfonyRequest(Request $request, RouterInterface $router)

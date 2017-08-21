@@ -59,9 +59,9 @@ class AmbiguousTest extends TestBase
     /**
      * @dataProvider providerMatch
      *
-     * @param RouterInterface $router
-     * @param string $method
-     * @param string $path
+     * @param RouterInterface        $router
+     * @param string                 $method
+     * @param string                 $path
      * @param InternalRouteInterface $expected
      */
     public function testMatch(RouterInterface $router, string $method, string $path, InternalRouteInterface $expected)

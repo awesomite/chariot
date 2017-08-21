@@ -33,11 +33,13 @@ class Link implements LinkInterface
             if (is_object($value)) {
                 if (method_exists($value, '__toString')) {
                     $value = (string) $value;
+
                     return;
                 }
 
                 if ($value instanceof \Traversable) {
                     $value = $this->normalizeParams(iterator_to_array($value));
+
                     return;
                 }
             }

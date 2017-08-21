@@ -161,7 +161,7 @@ class PatternRoute
                 $params[$name] = [
                     $default,
                     '#^(' . $pattern . ')$#',
-                    $patternName
+                    $patternName,
                 ];
 
                 return '{{' . $name . '}}';

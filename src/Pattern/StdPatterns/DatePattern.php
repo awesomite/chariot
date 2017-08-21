@@ -48,7 +48,7 @@ class DatePattern extends AbstractPattern
     private function processRawData($data)
     {
         if (is_object($data)) {
-            if ($data instanceof  \DateTimeInterface) {
+            if ($data instanceof \DateTimeInterface) {
                 return $data;
             }
 

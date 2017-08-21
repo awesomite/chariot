@@ -32,17 +32,17 @@ class ListPatternTest extends TestBase
     public function providerInvalidToUrl()
     {
         return [
-            'int' => [1, false],
-            \stdClass::class => [new \stdClass(), true],
-            'resource' => [tmpfile(), true],
-            'emptyArray' => [[], true],
-            'emptyTraversable' => [new \ArrayObject(), true],
-            'array' => [['foo'], false],
-            'traversable' => [new \ArrayObject(['foo']), false],
+            'int'               => [1, false],
+            \stdClass::class    => [new \stdClass(), true],
+            'resource'          => [tmpfile(), true],
+            'emptyArray'        => [[], true],
+            'emptyTraversable'  => [new \ArrayObject(), true],
+            'array'             => [['foo'], false],
+            'traversable'       => [new \ArrayObject(['foo']), false],
             'invalidStringable' => [new StringableObject(''), true],
-            'stringable' => [new StringableObject('x,y,z'), false],
-            'invalidString' => ['', true],
-            'string' => ['foo', false],
+            'stringable'        => [new StringableObject('x,y,z'), false],
+            'invalidString'     => ['', true],
+            'string'            => ['foo', false],
         ];
     }
 
@@ -61,7 +61,7 @@ class ListPatternTest extends TestBase
     {
         yield [['foo', 'bar'], 'foo,bar'];
         yield [['foo'], 'foo'];
-        yield [['a','b','c'], 'a,b,c'];
+        yield [['a', 'b', 'c'], 'a,b,c'];
         yield [new \ArrayObject(['x', 'y', 'z']), 'x,y,z'];
         yield ['foo', 'foo'];
         yield [5, '5'];

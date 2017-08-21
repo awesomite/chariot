@@ -147,7 +147,8 @@ class PatternRouter implements RouterInterface
         }
         // @codeCoverageIgnoreStart
     }
-        // @codeCoverageIgnoreEnd
+
+    // @codeCoverageIgnoreEnd
 
     public function getAllowedMethods(string $url): array
     {
@@ -366,11 +367,13 @@ class PatternRouter implements RouterInterface
                 if ($element instanceof \Traversable) {
                     $element = iterator_to_array($element);
                     $this->processExtraParams($element);
+
                     return;
                 }
 
                 if (method_exists($element, '__toString')) {
                     $element = (string) $element;
+
                     return;
                 }
             }

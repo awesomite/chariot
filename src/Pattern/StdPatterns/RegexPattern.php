@@ -2,9 +2,6 @@
 
 namespace Awesomite\Chariot\Pattern\StdPatterns;
 
-use Awesomite\Chariot\Exceptions\InvalidArgumentException;
-use Awesomite\Chariot\Pattern\RegexTester;
-
 /**
  * @internal
  */

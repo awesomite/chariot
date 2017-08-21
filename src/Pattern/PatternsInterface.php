@@ -7,7 +7,7 @@ use Awesomite\Chariot\Exceptions\InvalidArgumentException;
 interface PatternsInterface extends \ArrayAccess, \Serializable
 {
     /**
-     * @param string $name
+     * @param string                  $name
      * @param string|PatternInterface $pattern
      *
      * @return PatternsInterface
