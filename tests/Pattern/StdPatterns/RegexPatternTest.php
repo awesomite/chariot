@@ -5,8 +5,8 @@ namespace Awesomite\Chariot\Pattern\StdPatterns;
 use Awesomite\Chariot\LinkInterface;
 use Awesomite\Chariot\Pattern\PatternRouter;
 use Awesomite\Chariot\Pattern\Patterns;
-use Awesomite\Chariot\Pattern\StringableObject;
 use Awesomite\Chariot\RouterInterface;
+use Awesomite\Chariot\StringableObject;
 use Awesomite\Chariot\TestBase;
 
 /**

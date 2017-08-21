@@ -1,6 +1,6 @@
 <?php
 
-namespace Awesomite\Chariot\Pattern;
+namespace Awesomite\Chariot;
 
 /**
  * @internal

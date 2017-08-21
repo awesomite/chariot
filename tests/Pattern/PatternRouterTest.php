@@ -9,6 +9,7 @@ use Awesomite\Chariot\HttpMethods;
 use Awesomite\Chariot\InternalRoute;
 use Awesomite\Chariot\InternalRouteInterface;
 use Awesomite\Chariot\LinkInterface;
+use Awesomite\Chariot\StringableObject;
 use Awesomite\Chariot\TestBase;
 
 /**

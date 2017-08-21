@@ -2,7 +2,7 @@
 
 namespace Awesomite\Chariot\Pattern\StdPatterns;
 
-use Awesomite\Chariot\Pattern\StringableObject;
+use Awesomite\Chariot\StringableObject;
 
 class UnsignedIntPatternTest extends IntPatternTest
 {

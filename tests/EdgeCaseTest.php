@@ -4,7 +4,6 @@ namespace Awesomite\Chariot;
 
 use Awesomite\Chariot\Exceptions\CannotGenerateLinkException;
 use Awesomite\Chariot\Pattern\PatternRouter;
-use Awesomite\Chariot\Pattern\StringableObject;
 
 /**
  * @intrnal

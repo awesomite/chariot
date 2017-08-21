@@ -3,7 +3,7 @@
 namespace Awesomite\Chariot\Pattern\StdPatterns;
 
 use Awesomite\Chariot\Exceptions\PatternException;
-use Awesomite\Chariot\Pattern\StringableObject;
+use Awesomite\Chariot\StringableObject;
 use Awesomite\Chariot\TestBase;
 
 /**

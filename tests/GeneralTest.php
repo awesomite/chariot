@@ -7,7 +7,6 @@ use Awesomite\Chariot\Exceptions\CannotGenerateLinkException;
 use Awesomite\Chariot\Exceptions\HttpException;
 use Awesomite\Chariot\Pattern\PatternRouter;
 use Awesomite\Chariot\Pattern\Patterns;
-use Awesomite\Chariot\Pattern\StringableObject;
 
 /**
  * @internal
