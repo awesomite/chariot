@@ -353,8 +353,8 @@ with set of standard patterns:
 
 ## More examples
 
-* [Months](examples/months.php)
 * [Own micro framework](examples/micro-framework.php)
+* [Months](examples/months.php)
 * [Symfony integration](examples/symfony.php)
 * [Transforming parameters](examples/transform-params.php)
 
