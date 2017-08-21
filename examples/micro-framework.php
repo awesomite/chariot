@@ -1,5 +1,11 @@
 <?php
 
+/*
+ * Our router automatically converts :int and :uint to integer type,
+ * so we can use declare(strict_types=1)
+ */
+declare(strict_types=1);
+
 use Awesomite\Chariot\InternalRouteInterface;
 use Awesomite\Chariot\Pattern\PatternRouter;
 use Awesomite\Chariot\Exceptions\HttpException;
@@ -10,17 +16,25 @@ class MyController
 {
     private function home()
     {
-        echo 'Welcome on homepage';
+        echo "Welcome on homepage\n";
     }
 
     private function showCategory(string $name)
     {
-        echo 'Show category: ', $name;
+        echo 'Show category: ', $name, "\n";
+    }
+
+    private function showCategories(string ...$categories)
+    {
+        echo "Show few categories:\n";
+        foreach ($categories as $category) {
+            echo "  * {$category}\n";
+        }
     }
 
     private function showItem(int $itemId, string $itemName)
     {
-        echo sprintf('Show item (%d) «%s»', $itemId, $itemName);
+        echo sprintf('Show item (%d) «%s»', $itemId, $itemName), "\n";
     }
 
     public function dispatch(InternalRouteInterface $route)
@@ -36,6 +50,9 @@ class MyController
                 $params = $route->getParams();
                 return $this->showItem($params['id'], $params['name']);
 
+            case 'showCategories':
+                return $this->showCategories(...$route->getParams()['names']);
+
             default:
                 throw new \RuntimeException(sprintf('Invalid handler «%s»', $route->getHandler()));
         }
@@ -46,15 +63,17 @@ class MyController
  * Prepare routing
  */
 $router = PatternRouter::createDefault();
-$router->get('/', 'home');
-$router->get('/category-{{ name }}', 'showCategory');
-$router->get('/item/{{ id :uint }}/{{ name }}', 'showItem');
+$router
+    ->get('/', 'home')
+    ->get('/category-{{ name }}', 'showCategory')
+    ->get('/item/{{ id :uint }}/{{ name }}', 'showItem')
+    ->get('/categories/{{ names :list }}', 'showCategories');
 
 /*
  * Prepare input data
  */
 $method = 'GET';
-$url = '/item/15/general-theory-of-relativity';
+$url = '/categories/fantasy,thriller,comedy';
 
 /*
  * Voilà!
@@ -67,7 +86,5 @@ try {
     if ($exception->getCode() === HttpException::HTTP_METHOD_NOT_ALLOWED) {
         header('Allow: ' . implode(', ', $router->getAllowedMethods($url)));
     }
-    echo $exception->getMessage();
+    echo $exception->getMessage(), "\n";
 }
-
-echo "\n";
