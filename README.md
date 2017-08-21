@@ -346,9 +346,9 @@ returns instance of `Awesomite\Chariot\Pattern\Patterns`
 with set of standard patterns:
 
 * `:int` - [IntPattern](src/Pattern/StdPatterns/IntPattern.php)
-* `:uint` - [IntPattern](src/Pattern/StdPatterns/UnsignedIntPattern.php)
-* `:date` - [IntPattern](src/Pattern/StdPatterns/DatePattern.php)
-* `:list` - [IntPattern](src/Pattern/StdPatterns/ListPattern.php)
+* `:uint` - [UnsignedIntPattern](src/Pattern/StdPatterns/UnsignedIntPattern.php)
+* `:date` - [DatePattern](src/Pattern/StdPatterns/DatePattern.php)
+* `:list` - [ListPattern](src/Pattern/StdPatterns/ListPattern.php)
 * `:alphanum` - `[a-zA-Z0-9]+`
 
 ## More examples
