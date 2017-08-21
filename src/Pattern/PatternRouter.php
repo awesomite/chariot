@@ -365,6 +365,7 @@ class PatternRouter implements RouterInterface
             if (is_object($element)) {
                 if ($element instanceof \Traversable) {
                     $element = iterator_to_array($element);
+                    $this->processExtraParams($element);
                     return;
                 }
 

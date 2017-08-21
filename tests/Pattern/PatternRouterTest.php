@@ -339,4 +339,19 @@ class PatternRouterTest extends TestBase
             ->post('/article-{{ id :uint }}', 'getPostArticle')
             ->any('/any', 'showAny');
     }
+
+    public function testRegisterRouteWithObjects()
+    {
+        $router = PatternRouter::createDefault();
+        $extraParamsBooks = [
+            'data' => new \ArrayObject(['categoryId' => new StringableObject('15')]),
+        ];
+        $router->get('/category-books', 'showCategory', $extraParamsBooks);
+        foreach (['15', 15, new StringableObject('15')] as $categoryId) {
+            $this->assertSame(
+                '/category-books',
+                (string) $router->linkTo('showCategory')->withParam('data', ['categoryId' => $categoryId])
+            );
+        }
+    }
 }

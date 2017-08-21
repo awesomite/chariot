@@ -21,12 +21,12 @@ class EdgeCaseTest extends TestBase
     }
 
     /**
-     * @dataProvider providerArrayObjectAndStringable
+     * @dataProvider providerTraversableAndStringable
      *
      * @param array  $params
      * @param string $expectedLink
      */
-    public function testArrayObjectAndStringable(array $params, string $expectedLink)
+    public function testTraversableAndStringable(array $params, string $expectedLink)
     {
         $router = PatternRouter::createDefault();
         $router->get('/', 'home');
@@ -37,7 +37,7 @@ class EdgeCaseTest extends TestBase
 
     }
 
-    public function providerArrayObjectAndStringable()
+    public function providerTraversableAndStringable()
     {
         yield [['params' => new \ArrayObject(['foo' => 'bar'])], '/?params[foo]=bar'];
         yield [['params' => new \ArrayObject(['foo' => new StringableObject('bar')])], '/?params[foo]=bar'];
