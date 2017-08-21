@@ -31,6 +31,7 @@ echo $router->linkTo('showArticle')->withParam('id', 5);
     * [Validation](#validation)
     * [Default parameters](#default-parameters)
     * [Transforming parameters](#transforming-parameters)
+    * [Default patterns](#default-patterns)
  * [More examples](#more-examples)
  * [License](#license)
  * [Versioning](#versioning)
@@ -337,6 +338,18 @@ echo $router->linkTo('showDay')->withParam('day', new \DateTime('2017-07-07')), 
  * /day/2017-07-07
  */
 ```
+
+### Default patterns
+
+Method `Awesomite\Chariot\Pattern\Patterns::createDefault()`
+returns instance of `Awesomite\Chariot\Pattern\Patterns`
+with set of standard patterns:
+
+* `:int` - [IntPattern](src/Pattern/StdPatterns/IntPattern.php)
+* `:uint` - [IntPattern](src/Pattern/StdPatterns/UnsignedIntPattern.php)
+* `:date` - [IntPattern](src/Pattern/StdPatterns/DatePattern.php)
+* `:list` - [IntPattern](src/Pattern/StdPatterns/ListPattern.php)
+* `:alphanum` - `[a-zA-Z0-9]+`
 
 ## More examples
 
