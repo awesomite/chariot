@@ -64,8 +64,8 @@ class PatternLink implements LinkInterface
     private function normalizeVar($var)
     {
         if (is_object($var)) {
-            if ($var instanceof \ArrayObject) {
-                return $this->normalizeVar($var->getArrayCopy());
+            if ($var instanceof \Traversable) {
+                return $this->normalizeVar(iterator_to_array($var));
             }
 
             if (method_exists($var, '__toString')) {

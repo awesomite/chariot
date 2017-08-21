@@ -363,8 +363,8 @@ class PatternRouter implements RouterInterface
             }
 
             if (is_object($element)) {
-                if ($element instanceof \ArrayObject) {
-                    $element = $element->getArrayCopy();
+                if ($element instanceof \Traversable) {
+                    $element = iterator_to_array($element);
                     return;
                 }
 
