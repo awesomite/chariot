@@ -5,6 +5,12 @@
 * Added `Awesomite\Chariot\Pattern\PatternInterface` - possibility to conversions url params, e.g. date in format `YYYY-mm-dd` to `DateTime` object
 * Added [behat] tests
 * Force pattern names prefixed by ":"
+* Changed `Awesomite\Chariot\Pattern\Patterns::createDefault()`, result is set of patterns:
+  * `:int` - `Awesomite\Chariot\Pattern\StdPatterns\IntPattern`
+  * `:uint` - `Awesomite\Chariot\Pattern\StdPatterns\UnsignedIntPattern`
+  * `:date` - `Awesomite\Chariot\Pattern\StdPatterns\DatePattern`
+  * `:list` - `Awesomite\Chariot\Pattern\StdPatterns\ListPattern`
+  * `:alphanum` - `[a-zA-Z0-9]+`
 
 ### [0.1.0] 2017-07-20
     
