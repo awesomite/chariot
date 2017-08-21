@@ -43,6 +43,7 @@ class ListPatternTest extends TestBase
             'stringable'        => [new StringableObject('x,y,z'), false],
             'invalidString'     => ['', true],
             'string'            => ['foo', false],
+            'invalidCharacters' => [['foo/', 'bar'], true],
         ];
     }
 

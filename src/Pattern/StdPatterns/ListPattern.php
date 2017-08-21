@@ -22,7 +22,10 @@ class ListPattern extends AbstractPattern
         }
 
         if (is_array($normalized) && !empty($normalized)) {
-            return implode(',', $normalized);
+            $result = implode(',', $normalized);
+            if ($this->match($result)) {
+                return $result;
+            }
         }
 
         throw $this->newInvalidToUrl($data);
