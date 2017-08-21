@@ -52,8 +52,13 @@ class Patterns implements PatternsInterface
         }
 
         if (is_string($pattern)) {
-            $this->patterns[$name] = new RegexPattern($pattern);
-        } elseif (is_object($pattern) && $pattern instanceof PatternInterface) {
+            $pattern = new RegexPattern((string) $pattern);
+        }
+
+        if (is_object($pattern) && $pattern instanceof PatternInterface) {
+            if (!(new RegexTester())->isSubregex($pattern->getRegex())) {
+                throw new InvalidArgumentException('Invalid regex: ' . $pattern->getRegex());
+            }
             $this->patterns[$name] = $pattern;
         } else {
             throw new InvalidArgumentException(sprintf(

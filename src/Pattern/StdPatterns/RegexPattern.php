@@ -14,10 +14,6 @@ class RegexPattern extends AbstractPattern
 
     public function __construct(string $regex)
     {
-        if (!(new RegexTester())->isSubregex($regex)) {
-            throw new InvalidArgumentException('Invalid regex: ' . $regex);
-        }
-
         $this->regex = $regex;
     }
 
