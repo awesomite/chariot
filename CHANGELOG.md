@@ -6,11 +6,11 @@
 * Added [behat] tests
 * Force pattern names prefixed by ":"
 * Changed `Awesomite\Chariot\Pattern\Patterns::createDefault()`, result is set of patterns:
-  * `:int` - `Awesomite\Chariot\Pattern\StdPatterns\IntPattern`
-  * `:uint` - `Awesomite\Chariot\Pattern\StdPatterns\UnsignedIntPattern`
-  * `:date` - `Awesomite\Chariot\Pattern\StdPatterns\DatePattern`
-  * `:list` - `Awesomite\Chariot\Pattern\StdPatterns\ListPattern`
-  * `:alphanum` - `[a-zA-Z0-9]+`
+  * `:int` - `Awesomite\Chariot\Pattern\StdPatterns\IntPattern` (changed)
+  * `:uint` - `Awesomite\Chariot\Pattern\StdPatterns\UnsignedIntPattern` (changed)
+  * `:date` - `Awesomite\Chariot\Pattern\StdPatterns\DatePattern` (added)
+  * `:list` - `Awesomite\Chariot\Pattern\StdPatterns\ListPattern` (added)
+  * `:alphanum` - `[a-zA-Z0-9]+` (same as earlier)
 
 ### [0.1.0] 2017-07-20
     
