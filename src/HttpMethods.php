@@ -14,7 +14,6 @@ class HttpMethods
     const METHOD_CONNECT = 'CONNECT';
     const METHOD_OPTIONS = 'OPTIONS';
     const METHOD_TRACE = 'TRACE';
-    const METHOD_PURGE = 'PURGE';
 
     const ALL_METHODS
         = [
@@ -28,6 +27,5 @@ class HttpMethods
             self::METHOD_CONNECT,
             self::METHOD_OPTIONS,
             self::METHOD_TRACE,
-            self::METHOD_PURGE,
         ];
 }
