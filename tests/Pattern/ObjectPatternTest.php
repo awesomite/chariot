@@ -7,7 +7,6 @@ use Awesomite\Chariot\Exceptions\PatternException;
 use Awesomite\Chariot\HttpMethods;
 use Awesomite\Chariot\LinkInterface;
 use Awesomite\Chariot\Pattern\StdPatterns\AbstractPattern;
-use Awesomite\Chariot\Pattern\StdPatterns\DatePattern;
 use Awesomite\Chariot\Pattern\StdPatterns\IntPattern;
 use Awesomite\Chariot\RouterInterface;
 use Awesomite\Chariot\TestBase;
@@ -26,7 +25,6 @@ class ObjectPatternTest extends TestBase
      */
     public function testDatePattern(PatternRouter $router)
     {
-        $router->getPatterns()->addPattern(':date', new DatePattern());
         $router->get('/day/{{ day :date }}', 'showDay');
         $route = $router->match(HttpMethods::METHOD_GET, '/day/2017-01-01');
         $this->assertSame('showDay', $route->getHandler());

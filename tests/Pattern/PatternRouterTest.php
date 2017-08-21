@@ -99,7 +99,7 @@ class PatternRouterTest extends TestBase
                 $router,
                 [HttpMethods::METHOD_GET, HttpMethods::METHOD_POST, HttpMethods::METHOD_HEAD],
                 '/article-7',
-                new InternalRoute('getPostArticle', ['id' => '7']),
+                new InternalRoute('getPostArticle', ['id' => 7]),
             ];
 
             yield [
@@ -113,7 +113,7 @@ class PatternRouterTest extends TestBase
                 $router,
                 [HttpMethods::METHOD_GET, HttpMethods::METHOD_PUT, HttpMethods::METHOD_DELETE],
                 '/show-page-15',
-                new InternalRoute('showPage', ['page' => '15']),
+                new InternalRoute('showPage', ['page' => 15]),
             ];
         }
     }

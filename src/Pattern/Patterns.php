@@ -4,19 +4,24 @@ namespace Awesomite\Chariot\Pattern;
 
 use Awesomite\Chariot\Exceptions\InvalidArgumentException;
 use Awesomite\Chariot\Exceptions\LogicException;
+use Awesomite\Chariot\Pattern\StdPatterns\DatePattern;
+use Awesomite\Chariot\Pattern\StdPatterns\IntPattern;
 use Awesomite\Chariot\Pattern\StdPatterns\RegexPattern;
+use Awesomite\Chariot\Pattern\StdPatterns\UnsignedIntPattern;
 
 class Patterns implements PatternsInterface
 {
     const REGEX_INT = '(-?[1-9][0-9]*)|0';
     const REGEX_UINT = '([1-9][0-9]*)|0';
     const REGEX_ALPHANUM = '[a-zA-Z0-9]+';
+    const REGEX_DATE = '[0-9]{4}-[0-9]{2}-[0-9]{2}';
     const REGEX_DEFAULT = '[^/]+';
 
     const STANDARD_PATTERNS
         = [
-            ':int'      => self::REGEX_INT,
-            ':uint'     => self::REGEX_UINT,
+            ':int'      => IntPattern::class,
+            ':uint'     => UnsignedIntPattern::class,
+            ':date'     => DatePattern::class,
             ':alphanum' => self::REGEX_ALPHANUM,
         ];
 
@@ -74,7 +79,15 @@ class Patterns implements PatternsInterface
 
     public static function createDefault(): Patterns
     {
-        return new self(static::STANDARD_PATTERNS, static::REGEX_DEFAULT);
+        $result = new self();
+        foreach (self::STANDARD_PATTERNS as $name => $pattern) {
+            if (class_exists($pattern)) {
+                $pattern = new $pattern();
+            }
+            $result->addPattern($name, $pattern);
+        }
+
+        return $result;
     }
 
     public function addEnumPattern(string $name, array $values): PatternsInterface
@@ -125,7 +138,7 @@ class Patterns implements PatternsInterface
     public function serialize()
     {
         return serialize([
-            'patterns' => $this->patterns,
+            'patterns'       => $this->patterns,
             'defaultPattern' => $this->defaultPattern,
         ]);
     }

@@ -229,6 +229,7 @@ $router = $factory->getRouter();
 <?php
 
 use Awesomite\Chariot\Pattern\PatternRouter;
+use Awesomite\Chariot\Pattern\Patterns;
 
 $categories = [
     'action',
@@ -236,7 +237,7 @@ $categories = [
     'comedy',
 ];
 
-$router = PatternRouter::createDefault();
+$router = new PatternRouter(new Patterns());
 $router->getPatterns()
     ->addPattern(':date', '[0-9]{4}-[0-9]{2}-[0-9]{2}')
     ->addEnumPattern(':category', $categories);
@@ -320,9 +321,10 @@ Passed object to method addPattern() must implements interface PatternInterface.
 
 use Awesomite\Chariot\Pattern\PatternInterface;
 use Awesomite\Chariot\Pattern\PatternRouter;
+use Awesomite\Chariot\Pattern\Patterns;
 use Awesomite\Chariot\Pattern\StdPatterns\DatePattern;
 
-$router = PatternRouter::createDefault();
+$router = new PatternRouter(new Patterns());
 /*
  * Passed object to method addPattern() must implement interface PatternInterface
  */

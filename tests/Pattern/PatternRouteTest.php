@@ -86,8 +86,8 @@ class PatternRouteTest extends TestBase
         yield [$route, '/', true, []];
 
         $route = new PatternRoute('/article/{{ id :uint }}', $patterns);
-        yield [$route, '/article/123', true, ['id' => '123']];
-        yield [$route, '/article/300', true, ['id' => '300']];
+        yield [$route, '/article/123', true, ['id' => 123]];
+        yield [$route, '/article/300', true, ['id' => 300]];
         yield [$route, '/article/-2', false];
     }
 

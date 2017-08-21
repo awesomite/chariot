@@ -3,6 +3,7 @@
 use Awesomite\Chariot\Exceptions\HttpException;
 use Awesomite\Chariot\Pattern\PatternInterface;
 use Awesomite\Chariot\Pattern\PatternRouter;
+use Awesomite\Chariot\Pattern\Patterns;
 use Awesomite\Chariot\Pattern\StdPatterns\DatePattern;
 
 /**
@@ -11,7 +12,7 @@ use Awesomite\Chariot\Pattern\StdPatterns\DatePattern;
 
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'init.php';
 
-$router = PatternRouter::createDefault();
+$router = new PatternRouter(new Patterns());
 
 /*
  * Add object pattern which will allow transforming params

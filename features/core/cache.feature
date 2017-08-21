@@ -10,5 +10,5 @@ Feature: Cache
       And I restore router from cache
 
     Then router should allow for methods "HEAD, GET" for URL "/"
-      And router should return showArticle '{"id": "5"}' for HEAD "/article-5"
-      And router should return showArticle '{"id": "6"}' for GET "/article-6"
+      And router should return showArticle '{"id": 5}' for HEAD "/article-5"
+      And router should return showArticle '{"id": 6}' for GET "/article-6"

@@ -11,7 +11,7 @@ class DatePattern extends AbstractPattern
 
     public function getRegex(): string
     {
-        return '[0-9]{4}-[0-9]{2}-[0-9]{2}';
+        return Patterns::REGEX_DATE;
     }
 
     /**

@@ -8,9 +8,9 @@ Feature: Ambiguous cases
       And I add URL "/article-{{ id :uint }}" with method DELETE for route deleteArticle
     
     Then router should allow for methods "HEAD, GET, DELETE" for URL "/article-5"
-      And router should return showArticle '{"id": "5"}' for HEAD "/article-5"
-      And router should return showArticle '{"id": "6"}' for GET "/article-6"
-      And router should return deleteArticle '{"id": "7"}' for DELETE "/article-7"
+      And router should return showArticle '{"id": 5}' for HEAD "/article-5"
+      And router should return showArticle '{"id": 6}' for GET "/article-6"
+      And router should return deleteArticle '{"id": 7}' for DELETE "/article-7"
     
   Scenario: Two matching routes (first contains regex, second does not contain regex)
     Given there is an empty router
