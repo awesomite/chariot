@@ -16,5 +16,6 @@
     
 * Initial public release
 
+[0.2.0]: https://github.com/awesomite/chariot/compare/v0.1.0...0.2
 [0.1.0]: https://github.com/awesomite/chariot/tree/v0.1.0
 [behat]: http://behat.org
