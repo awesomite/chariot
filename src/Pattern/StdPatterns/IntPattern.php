@@ -13,11 +13,14 @@ class IntPattern extends AbstractPattern
 
     public function toUrl($data): string
     {
-        if (!$this->match((string) $data)) {
-            throw $this->newInvalidToUrl($data);
+        if (is_scalar($data) || (is_object($data) && method_exists($data, '__toString'))) {
+            $result = (string) $data;
+            if ($this->match($result)) {
+                return $result;
+            }
         }
 
-        return (string) $data;
+        throw $this->newInvalidToUrl($data);
     }
 
     public function fromUrl(string $param)
