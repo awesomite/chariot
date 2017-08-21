@@ -23,11 +23,15 @@ interface PatternInterface extends \Serializable
     public function toUrl($data): string;
 
     /**
+     * Passed argument must be validated by regex earlier
+     *
      * @param string $param
      *
      * @return mixed
      *
      * @throws PatternException
+     *
+     * @see PatternInterface::getRegex()
      */
     public function fromUrl(string $param);
 }
