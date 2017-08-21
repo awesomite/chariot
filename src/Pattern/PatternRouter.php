@@ -149,20 +149,20 @@ class PatternRouter implements RouterInterface
     }
         // @codeCoverageIgnoreEnd
 
-    public function getAllowedMethods(string $path): array
+    public function getAllowedMethods(string $url): array
     {
         $allRealMethods = array_diff(HttpMethods::ALL_METHODS, [HttpMethods::METHOD_ANY]);
 
 
         switch ($this->strategy) {
             case static::STRATEGY_SEQUENTIALLY:
-                if ($this->matchSequentiallyForMethods([HttpMethods::METHOD_ANY], $path)) {
+                if ($this->matchSequentiallyForMethods([HttpMethods::METHOD_ANY], $url)) {
                     return $allRealMethods;
                 }
                 break;
 
             case static::STRATEGY_TREE:
-                if ($this->matchTreeForMethods([HttpMethods::METHOD_ANY], $path)) {
+                if ($this->matchTreeForMethods([HttpMethods::METHOD_ANY], $url)) {
                     return $allRealMethods;
                 }
                 break;
@@ -172,7 +172,7 @@ class PatternRouter implements RouterInterface
         foreach (array_diff($allRealMethods, [HttpMethods::METHOD_HEAD]) as $method) {
             switch ($this->strategy) {
                 case static::STRATEGY_SEQUENTIALLY:
-                    if ($this->matchSequentiallyForMethods([$method], $path)) {
+                    if ($this->matchSequentiallyForMethods([$method], $url)) {
                         $result[] = $method;
                         if ($method === HttpMethods::METHOD_GET) {
                             $result[] = HttpMethods::METHOD_HEAD;
@@ -181,7 +181,7 @@ class PatternRouter implements RouterInterface
                     break;
 
                 case static::STRATEGY_TREE:
-                    if ($this->matchTreeForMethods([$method], $path)) {
+                    if ($this->matchTreeForMethods([$method], $url)) {
                         $result[] = $method;
                         if ($method === HttpMethods::METHOD_GET) {
                             $result[] = HttpMethods::METHOD_HEAD;

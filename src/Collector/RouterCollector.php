@@ -38,11 +38,11 @@ class RouterCollector implements RouterInterface
         throw new HttpException($method, $path, $errorCode);
     }
 
-    public function getAllowedMethods(string $path): array
+    public function getAllowedMethods(string $url): array
     {
         $result = [];
         foreach ($this->routers as $router) {
-            $result = array_merge($result, $router->getAllowedMethods($path));
+            $result = array_merge($result, $router->getAllowedMethods($url));
         }
 
         return array_unique($result);

@@ -341,6 +341,7 @@ echo $router->linkTo('showDay')->withParam('day', new \DateTime('2017-07-07')), 
 ## More examples
 
 * [Months](examples/months.php)
+* [Own micro framework](examples/micro-framework.php)
 * [Symfony integration](examples/symfony.php)
 * [Transforming parameters](examples/transform-params.php)
 

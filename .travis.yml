@@ -25,6 +25,7 @@ script:
   - php ${PHP_ARGS} vendor/bin/phpunit
   - php ${PHP_ARGS} vendor/bin/behat
   - php -n ${PHP_ARGS} speedtest/console.php test-links
+  - php examples/micro-framework.php
   - php examples/months.php
   - php examples/symfony.php
   - php examples/transform-params.php
