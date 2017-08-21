@@ -1,6 +1,6 @@
 /bin export-ignore
 /examples export-ignore
-/features esport-ignore
+/features export-ignore
 /speedtest export-ignore
 /tests export-ignore
 /.coveralls.yml export-ignore
