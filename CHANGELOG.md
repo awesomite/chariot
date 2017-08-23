@@ -10,6 +10,7 @@
   * `:uint` - `Awesomite\Chariot\Pattern\StdPatterns\UnsignedIntPattern` (changed)
   * `:date` - `Awesomite\Chariot\Pattern\StdPatterns\DatePattern` (added)
   * `:list` - `Awesomite\Chariot\Pattern\StdPatterns\ListPattern` (added)
+  * `:ip4` - `Awesomite\Chariot\Pattern\StdPatterns\Ip4Pattern` (added)
   * `:alphanum` - `[a-zA-Z0-9]+` (same as earlier)
 
 ### [0.1.0] 2017-07-20
