@@ -35,7 +35,7 @@ class DatePattern extends AbstractPattern
             return (new \DateTime())->setTimestamp($data)->format(static::DATE_FORMAT);
         }
 
-        if (is_string($data) && preg_match('#^' . $this->getRegex() . '$#', $data)) {
+        if (is_string($data) && preg_match('#^(' . $this->getRegex() . ')$#', $data)) {
             $sData = (string) $data;
             if ($this->checkDate($sData)) {
                 return $sData;
