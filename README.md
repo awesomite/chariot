@@ -1,10 +1,10 @@
 # Chariot
 
-[github.com/awesomite/chariot](https://github.com/awesomite/chariot)
-
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/ca2c76b33b5042d49658105bc5b63075)](https://www.codacy.com/app/awesomite/chariot?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=awesomite/chariot&amp;utm_campaign=Badge_Grade)
 [![Build Status](https://travis-ci.org/awesomite/chariot.svg?branch=master)](https://travis-ci.org/awesomite/chariot)
 [![Coverage Status](https://coveralls.io/repos/github/awesomite/chariot/badge.svg?branch=master)](https://coveralls.io/github/awesomite/chariot?branch=master)
+
+[github.com/awesomite/chariot](https://github.com/awesomite/chariot)
 
 Just another routing library. Makes human-friendly URLs and programmer-friendly code.
 Uses trees for the best performance.
