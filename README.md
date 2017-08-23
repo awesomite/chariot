@@ -347,12 +347,14 @@ Method `Awesomite\Chariot\Pattern\Patterns::createDefault()`
 returns instance of `Awesomite\Chariot\Pattern\Patterns`
 with set of standard patterns:
 
-* `:int` - e.g. `-5` [IntPattern](src/Pattern/StdPatterns/IntPattern.php)
-* `:uint` - e.g. `5` [UnsignedIntPattern](src/Pattern/StdPatterns/UnsignedIntPattern.php)
-* `:date` - e.g. `2017-01-01` [DatePattern](src/Pattern/StdPatterns/DatePattern.php)
-* `:list` - e.g. `red,green,blue` [ListPattern](src/Pattern/StdPatterns/ListPattern.php)
-* `:ip4` - e.g. `8.8.8.8` [Ip4Pattern](src/Pattern/StdPatterns/Ip4Pattern.php)
-* `:alphanum` - e.g. `nickname2000` `[a-zA-Z0-9]+`
+| name      | exemplary input  | class/regex          |
+|-----------|------------------|----------------------|
+| :int      | `-5`             | [IntPattern]         |
+| :uint     | `5`              | [UnsignedIntPattern] |
+| :date     | `2017-01-01`     | [DatePattern]        |
+| :list     | `red,green,blue` | [ListPattern]        |
+| :ip4      | `8.8.8.8`        | [Ip4Pattern]         |
+| :alphanum | `nickname2000`   | `[a-zA-Z0-9]+`       |
 
 ## More examples
 
@@ -368,3 +370,9 @@ MIT - [read license](LICENSE)
 ## Versioning
 
 The version numbers follow the [Semantic Versioning 2.0.0](http://semver.org/) scheme.
+
+[IntPattern](src/Pattern/StdPatterns/IntPattern.php)
+[UnsignedIntPattern](src/Pattern/StdPatterns/UnsignedIntPattern.php)
+[DatePattern](src/Pattern/StdPatterns/DatePattern.php)
+[ListPattern](src/Pattern/StdPatterns/ListPattern.php)
+[Ip4Pattern](src/Pattern/StdPatterns/Ip4Pattern.php)
