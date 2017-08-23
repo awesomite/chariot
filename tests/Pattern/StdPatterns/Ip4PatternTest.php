@@ -21,6 +21,11 @@ class Ip4PatternTest extends AbstractPatternTest
         ];
     }
 
+    public function providerFromUrl()
+    {
+        yield ['127.0.0.1', '127.0.0.1'];
+    }
+
     public function providerInvalidToUrl()
     {
         if (PHP_INT_SIZE > 4294967295) {

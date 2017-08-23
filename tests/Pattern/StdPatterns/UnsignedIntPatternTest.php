@@ -32,4 +32,9 @@ class UnsignedIntPatternTest extends IntPatternTest
 
         return array_merge($result, parent::providerInvalidToUrl());
     }
+
+    public function providerFromUrl()
+    {
+        yield ['10', 10];
+    }
 }

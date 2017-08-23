@@ -35,4 +35,12 @@ class IntPatternTest extends AbstractPatternTest
             [new \stdClass()],
         ];
     }
+
+    public function providerFromUrl()
+    {
+        return [
+            ['5', 5],
+            ['-5', -5],
+        ];
+    }
 }

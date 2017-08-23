@@ -2,6 +2,7 @@
 
 namespace Awesomite\Chariot\Pattern\StdPatterns;
 
+use Awesomite\Chariot\Exceptions\PatternException;
 use Awesomite\Chariot\Pattern\PatternInterface;
 
 /**
@@ -29,5 +30,27 @@ class Ip4PatternNoPrivTest extends AbstractPatternTest
             ['0.0.0.0', '0.0.0.0'],
             ['192.169.0.0', '192.169.0.0'],
         ];
+    }
+
+    public function providerFromUrl()
+    {
+        return $this->providerToUrl();
+    }
+
+    /**
+     * @dataProvider providerInvalidFromUrl
+     *
+     * @param string $param
+     */
+    public function testInvalidFromUrl(string $param)
+    {
+        $this->expectException(PatternException::class);
+        $this->expectExceptionCode(PatternException::CODE_FROM_URL);
+        $this->getPattern()->fromUrl($param);
+    }
+
+    public function providerInvalidFromUrl()
+    {
+        return $this->providerInvalidToUrl();
     }
 }

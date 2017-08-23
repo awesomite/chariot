@@ -38,6 +38,25 @@ abstract class AbstractPatternTest extends TestBase
     }
 
     /**
+     * @dataProvider providerFromUrl
+     *
+     * @param string $param
+     * @param        $expected
+     */
+    public function testFromUrl(string $param, $expected)
+    {
+        $this->assertSame(
+            $expected,
+            $this->getPattern()->fromUrl($param)
+        );
+    }
+
+    /**
+     * @return array|\Traversable [[$param, $expected], ...]
+     */
+    abstract public function providerFromUrl();
+
+    /**
      * @return array|\Traversable [[$input, $expected], ...]
      */
     abstract public function providerToUrl();
