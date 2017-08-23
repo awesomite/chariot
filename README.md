@@ -354,7 +354,7 @@ with set of standard patterns:
 | :date     | `2017-01-01`     | `(string) "2017-01-01"`            | [DatePattern]        |
 | :list     | `red,green,blue` | `(array) ["red", "green", "blue"]` | [ListPattern]        |
 | :ip4      | `8.8.8.8`        | `(string) "8.8.8.8"`               | [Ip4Pattern]         |
-| :alphanum | `nickname2000`   | `(string) "nickname2000"`          | [a-zA-Z0-9]+`        |
+| :alphanum | `nickname2000`   | `(string) "nickname2000"           | `[a-zA-Z0-9]+`       |
 
 ## More examples
 
