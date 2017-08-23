@@ -4,7 +4,7 @@ namespace Awesomite\Chariot\Exceptions;
 
 class HttpException extends \Exception implements ChariotException
 {
-    const HTTP_NOT_FOUND = 404;
+    const HTTP_NOT_FOUND          = 404;
     const HTTP_METHOD_NOT_ALLOWED = 405;
 
     private static $translations

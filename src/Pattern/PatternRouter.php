@@ -14,7 +14,7 @@ use Awesomite\Chariot\RouterInterface;
 class PatternRouter implements RouterInterface
 {
     const STRATEGY_SEQUENTIALLY = 1;
-    const STRATEGY_TREE = 2;
+    const STRATEGY_TREE         = 2;
 
     use ExportableTrait;
 

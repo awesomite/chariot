@@ -14,6 +14,6 @@ use Awesomite\Chariot\Pattern\PatternInterface;
  */
 class PatternException extends InvalidArgumentException
 {
-    const CODE_TO_URL = 1;
+    const CODE_TO_URL   = 1;
     const CODE_FROM_URL = 2;
 }
