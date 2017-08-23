@@ -349,6 +349,7 @@ with set of standard patterns:
 * `:uint` - e.g. `5` [UnsignedIntPattern](src/Pattern/StdPatterns/UnsignedIntPattern.php)
 * `:date` - e.g. `2017-01-01` [DatePattern](src/Pattern/StdPatterns/DatePattern.php)
 * `:list` - e.g. `red,greenblue` [ListPattern](src/Pattern/StdPatterns/ListPattern.php)
+* `:ip4` - e.g. `8.8.8.8` [Ip4Pattern](src/Pattern/StdPatterns/Ip4Pattern.php)
 * `:alphanum` - e.g. `nickname2000` `[a-zA-Z0-9]+`
 
 ## More examples

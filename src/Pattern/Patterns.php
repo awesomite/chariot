@@ -6,6 +6,7 @@ use Awesomite\Chariot\Exceptions\InvalidArgumentException;
 use Awesomite\Chariot\Exceptions\LogicException;
 use Awesomite\Chariot\Pattern\StdPatterns\DatePattern;
 use Awesomite\Chariot\Pattern\StdPatterns\IntPattern;
+use Awesomite\Chariot\Pattern\StdPatterns\Ip4Pattern;
 use Awesomite\Chariot\Pattern\StdPatterns\ListPattern;
 use Awesomite\Chariot\Pattern\StdPatterns\RegexPattern;
 use Awesomite\Chariot\Pattern\StdPatterns\UnsignedIntPattern;
@@ -24,6 +25,7 @@ class Patterns implements PatternsInterface
             ':uint'     => UnsignedIntPattern::class,
             ':date'     => DatePattern::class,
             ':list'     => ListPattern::class,
+            ':ip4'      => Ip4Pattern::class,
             ':alphanum' => self::REGEX_ALPHANUM,
         ];
 

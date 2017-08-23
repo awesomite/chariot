@@ -2,11 +2,12 @@
 
 namespace Awesomite\Chariot\Pattern\StdPatterns;
 
+use Awesomite\Chariot\Pattern\PatternInterface;
 use Awesomite\Chariot\StringableObject;
 
 class UnsignedIntPatternTest extends IntPatternTest
 {
-    protected function getPattern()
+    public function getPattern(): PatternInterface
     {
         return new UnsignedIntPattern();
     }
