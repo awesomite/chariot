@@ -371,8 +371,8 @@ MIT - [read license](LICENSE)
 
 The version numbers follow the [Semantic Versioning 2.0.0](http://semver.org/) scheme.
 
-[IntPattern](src/Pattern/StdPatterns/IntPattern.php)
-[UnsignedIntPattern](src/Pattern/StdPatterns/UnsignedIntPattern.php)
-[DatePattern](src/Pattern/StdPatterns/DatePattern.php)
-[ListPattern](src/Pattern/StdPatterns/ListPattern.php)
-[Ip4Pattern](src/Pattern/StdPatterns/Ip4Pattern.php)
+[IntPattern]:         src/Pattern/StdPatterns/IntPattern.php
+[UnsignedIntPattern]: src/Pattern/StdPatterns/UnsignedIntPattern.php
+[DatePattern]:        src/Pattern/StdPatterns/DatePattern.php
+[ListPattern]:        src/Pattern/StdPatterns/ListPattern.php
+[Ip4Pattern]:         src/Pattern/StdPatterns/Ip4Pattern.php
