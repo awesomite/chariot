@@ -17,6 +17,7 @@ class Patterns implements PatternsInterface
     const REGEX_UINT = '([1-9][0-9]*)|0';
     const REGEX_ALPHANUM = '[a-zA-Z0-9]+';
     const REGEX_DATE = '[0-9]{4}-[0-9]{2}-[0-9]{2}';
+    const REGEX_IP = '((25[0-5])|(2[0-4][0-9])|(1[0-9][0-9])|([1-9]?[0-9]))(\.((25[0-5])|(2[0-4][0-9])|(1[0-9][0-9])|([1-9]?[0-9]))){3}';
     const REGEX_DEFAULT = '[^/]+';
 
     const STANDARD_PATTERNS
