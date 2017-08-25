@@ -88,7 +88,7 @@ class AmbiguousTest extends TestBase
             yield [$router, HttpMethods::METHOD_DELETE, $path, new InternalRoute('deleteComment', $params)];
 
             /*
-             * Two matched routes, route without regex has bigger priority 
+             * Two matched routes, route without regex has bigger priority
              */
             $router
                 ->get('/pages/contact', 'showContact')
@@ -127,8 +127,7 @@ class AmbiguousTest extends TestBase
 
     private function createStringable($value)
     {
-        return new class ($value)
-        {
+        return new class($value) {
             private $value;
 
             public function __construct($value)

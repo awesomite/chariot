@@ -33,7 +33,6 @@ class EdgeCaseTest extends TestBase
             $expectedLink,
             (string) $router->linkTo('home')->withParams($params)
         );
-
     }
 
     public function providerTraversableAndStringable()

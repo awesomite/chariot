@@ -20,8 +20,7 @@ class ObjectsTest extends TestBase
 
     private function createClass($privateValue)
     {
-        return new class ($privateValue)
-        {
+        return new class($privateValue) {
             private $privateValue;
 
             public function __construct($privateValue)
