@@ -9,6 +9,26 @@ class DatePattern extends AbstractPattern
 {
     const DATE_FORMAT = 'Y-m-d';
 
+    /**
+     * @var \DateTimeZone|null
+     */
+    private $timezone;
+
+    public function __construct(\DateTimeZone $timezone = null)
+    {
+        $this->timezone = $timezone;
+    }
+
+    public function serialize()
+    {
+        return serialize($this->timezone);
+    }
+
+    public function unserialize($serialized)
+    {
+        $this->timezone = unserialize($serialized);
+    }
+
     public function getRegex(): string
     {
         return Patterns::REGEX_DATE;
@@ -76,7 +96,7 @@ class DatePattern extends AbstractPattern
     public function fromUrl(string $param)
     {
         if ($this->checkDate($param)) {
-            return new \DateTimeImmutable($param);
+            return new \DateTimeImmutable($param, $this->timezone);
         }
 
         throw $this->newInvalidFromUrl($param);
