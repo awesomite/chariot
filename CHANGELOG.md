@@ -29,6 +29,7 @@
 [IntPattern]:           src/Pattern/StdPatterns/IntPattern.php
 [UnsignedIntPattern]:   src/Pattern/StdPatterns/UnsignedIntPattern.php
 [FloatPattern]:         src/Pattern/StdPatterns/FloatPattern.php
-[DatePattern]:          src/Pattern/StdPatterns/UnsignedFloatPattern.php
+[UnsignedFloatPattern]: src/Pattern/StdPatterns/UnsignedFloatPattern.php
+[DatePattern]:          src/Pattern/StdPatterns/DatePattern.php
 [ListPattern]:          src/Pattern/StdPatterns/ListPattern.php
 [Ip4Pattern]:           src/Pattern/StdPatterns/Ip4Pattern.php
