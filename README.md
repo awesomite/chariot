@@ -347,14 +347,16 @@ Method `Awesomite\Chariot\Pattern\Patterns::createDefault()`
 returns instance of `Awesomite\Chariot\Pattern\Patterns`
 with set of standard patterns:
 
-| name      | input            | output                                | class/regex          |
-|-----------|------------------|---------------------------------------|----------------------|
-| :int      | `-5`             | `(int) -5`                            | [IntPattern]         |
-| :uint     | `5`              | `(int) 5`                             | [UnsignedIntPattern] |
-| :date     | `2017-01-01`     | `new DateTimeImmutable("2017-01-01")` | [DatePattern]        |
-| :list     | `red,green,blue` | `(array) ["red", "green", "blue"]`    | [ListPattern]        |
-| :ip4      | `8.8.8.8`        | `(string) "8.8.8.8"`                  | [Ip4Pattern]         |
-| :alphanum | `nickname2000`   | `(string) "nickname2000"`             | `[a-zA-Z0-9]+`       |
+| name      | input            | output                                | class/regex            |
+|-----------|------------------|---------------------------------------|------------------------|
+| :int      | `-5`             | `(int) -5`                            | [IntPattern]           |
+| :uint     | `5`              | `(int) 5`                             | [UnsignedIntPattern]   |
+| :float    | `-5.05`          | `(float) -5.05`                       | [FloatPattern]         |
+| :ufloat   | `5.05`           | `(float) 5.05`                        | [UnsignedFloatPattern] |
+| :date     | `2017-01-01`     | `new DateTimeImmutable("2017-01-01")` | [DatePattern]          |
+| :list     | `red,green,blue` | `(array) ["red", "green", "blue"]`    | [ListPattern]          |
+| :ip4      | `8.8.8.8`        | `(string) "8.8.8.8"`                  | [Ip4Pattern]           |
+| :alphanum | `nickname2000`   | `(string) "nickname2000"`             | `[a-zA-Z0-9]+`         |
 
 ## More examples
 
@@ -371,8 +373,10 @@ MIT - [read license](LICENSE)
 
 The version numbers follow the [Semantic Versioning 2.0.0](http://semver.org/) scheme.
 
-[IntPattern]:         src/Pattern/StdPatterns/IntPattern.php
-[UnsignedIntPattern]: src/Pattern/StdPatterns/UnsignedIntPattern.php
-[DatePattern]:        src/Pattern/StdPatterns/DatePattern.php
-[ListPattern]:        src/Pattern/StdPatterns/ListPattern.php
-[Ip4Pattern]:         src/Pattern/StdPatterns/Ip4Pattern.php
+[IntPattern]:           src/Pattern/StdPatterns/IntPattern.php
+[UnsignedIntPattern]:   src/Pattern/StdPatterns/UnsignedIntPattern.php
+[FloatPattern]:         src/Pattern/StdPatterns/FloatPattern.php.php
+[UnsignedFloatPattern]: src/Pattern/StdPatterns/Un\.php.php
+[DatePattern]:          src/Pattern/StdPatterns/DatePattern.php
+[ListPattern]:          src/Pattern/StdPatterns/ListPattern.php
+[Ip4Pattern]:           src/Pattern/StdPatterns/Ip4Pattern.php
