@@ -375,8 +375,8 @@ The version numbers follow the [Semantic Versioning 2.0.0](http://semver.org/) s
 
 [IntPattern]:           src/Pattern/StdPatterns/IntPattern.php
 [UnsignedIntPattern]:   src/Pattern/StdPatterns/UnsignedIntPattern.php
-[FloatPattern]:         src/Pattern/StdPatterns/FloatPattern.php.php
-[UnsignedFloatPattern]: src/Pattern/StdPatterns/Un\.php.php
+[FloatPattern]:         src/Pattern/StdPatterns/FloatPattern.php
+[UnsignedFloatPattern]: src/Pattern/StdPatterns/UnsignedFloatPattern.php
 [DatePattern]:          src/Pattern/StdPatterns/DatePattern.php
 [ListPattern]:          src/Pattern/StdPatterns/ListPattern.php
 [Ip4Pattern]:           src/Pattern/StdPatterns/Ip4Pattern.php
