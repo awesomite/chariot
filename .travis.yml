@@ -19,7 +19,7 @@ install:
   - if [[ "$DEPENDENCIES" = 'low' ]]; then travis_retry composer update --no-interaction --prefer-stable --prefer-lowest; fi
   - composer show
   - composer global require friendsofphp/php-cs-fixer:@stable
-  - export PHP_CS_FIXER="~/.composer/vendor/bin/php-cs-fixer"
+  - export PHP_CS_FIXER="${HOME}/.composer/vendor/bin/php-cs-fixer"
 
 before_script:
   - if [[ "$DEPENDENCIES" = 'low' ]]; then export PHP_ARGS=$(php -r "echo '-d error_reporting=', E_ALL ^ (E_DEPRECATED | E_USER_DEPRECATED);"); else export PHP_ARGS=''; fi
