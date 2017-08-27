@@ -116,6 +116,27 @@ class PatternRouterTest extends TestBase
                 '/show-page-15',
                 new InternalRoute('showPage', ['page' => 15]),
             ];
+
+            yield [
+                $router,
+                [HttpMethods::METHOD_OPTIONS],
+                '/options',
+                new InternalRoute('showOptions', []),
+            ];
+
+            yield [
+                $router,
+                [HttpMethods::METHOD_CONNECT],
+                '/connect',
+                new InternalRoute('connect', []),
+            ];
+
+            yield [
+                $router,
+                [HttpMethods::METHOD_TRACE],
+                '/trace',
+                new InternalRoute('trace', []),
+            ];
         }
     }
 
@@ -338,7 +359,10 @@ class PatternRouterTest extends TestBase
             ->delete('/comment/{{ id :int }}', 'editComment')
             ->get('/article-{{ id :uint }}', 'getPostArticle')
             ->post('/article-{{ id :uint }}', 'getPostArticle')
-            ->any('/any', 'showAny');
+            ->any('/any', 'showAny')
+            ->options('/options', 'showOptions')
+            ->trace('/trace', 'trace')
+            ->connect('/connect', 'connect');
     }
 
     public function testRegisterRouteWithObjects()
