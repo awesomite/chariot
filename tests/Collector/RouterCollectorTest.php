@@ -9,6 +9,9 @@ use Awesomite\Chariot\LinkInterface;
 use Awesomite\Chariot\Pattern\PatternRouter;
 use Awesomite\Chariot\TestBase;
 
+/**
+ * @internal
+ */
 class RouterCollectorTest extends TestBase
 {
     public function testAll()

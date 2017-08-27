@@ -9,6 +9,7 @@ use Awesomite\Chariot\HttpMethods;
 use Awesomite\Chariot\InternalRoute;
 use Awesomite\Chariot\InternalRouteInterface;
 use Awesomite\Chariot\LinkInterface;
+use Awesomite\Chariot\StringableObject;
 use Awesomite\Chariot\TestBase;
 
 /**
@@ -16,6 +17,8 @@ use Awesomite\Chariot\TestBase;
  */
 class PatternRouterTest extends TestBase
 {
+    use ProviderEmptyRouterTrait;
+
     public function testInvalidConstructor()
     {
         $this->expectException(InvalidArgumentException::class);
@@ -31,6 +34,35 @@ class PatternRouterTest extends TestBase
         $router->addRoute('NEW_METHOD', '/', 'home');
     }
 
+    public function testUnnamedCannotMatch()
+    {
+        $this->expectException(HttpException::class);
+        $this->expectExceptionMessage('404 Not Found: GET /category-books');
+        $this->expectExceptionCode(404);
+
+        $router = PatternRouter::createDefault();
+        $router->get('/category-{{ id \\d+ }}', 'showCategory');
+        $router->match('GET', '/category-books');
+    }
+
+    public function testUnnamedLinkTo()
+    {
+        $router = PatternRouter::createDefault();
+        $router->get('/category-{{ id \\d+ 1 }}', 'showCategory');
+
+        $invalidLink = (string) $router->linkTo('showCategory')->withParam('id', 'books');
+        $this->assertSame(LinkInterface::ERROR_CANNOT_GENERATE_LINK, $invalidLink);
+
+        $invalidLink2 = (string) $router->linkTo('showCategory')->withParam('id', new \stdClass());
+        $this->assertSame(LinkInterface::ERROR_CANNOT_GENERATE_LINK, $invalidLink2);
+
+        $validLink = (string) $router->linkTo('showCategory');
+        $this->assertSame('/category-1', $validLink);
+
+        $validLink2 = (string) $router->linkTo('showCategory')->withParam('id', 2);
+        $this->assertSame('/category-2', $validLink2);
+    }
+
     public function testGetPatterns()
     {
         $patterns = new Patterns();
@@ -41,9 +73,9 @@ class PatternRouterTest extends TestBase
     /**
      * @dataProvider providerMatch
      *
-     * @param PatternRouter $router
-     * @param array $methods
-     * @param string $path
+     * @param PatternRouter          $router
+     * @param array                  $methods
+     * @param string                 $path
      * @param InternalRouteInterface $expectedRoute
      */
     public function testMatch(
@@ -68,7 +100,7 @@ class PatternRouterTest extends TestBase
                 $router,
                 [HttpMethods::METHOD_GET, HttpMethods::METHOD_POST, HttpMethods::METHOD_HEAD],
                 '/article-7',
-                new InternalRoute('getPostArticle', ['id' => '7']),
+                new InternalRoute('getPostArticle', ['id' => 7]),
             ];
 
             yield [
@@ -82,7 +114,7 @@ class PatternRouterTest extends TestBase
                 $router,
                 [HttpMethods::METHOD_GET, HttpMethods::METHOD_PUT, HttpMethods::METHOD_DELETE],
                 '/show-page-15',
-                new InternalRoute('showPage', ['page' => '15']),
+                new InternalRoute('showPage', ['page' => 15]),
             ];
         }
     }
@@ -238,6 +270,24 @@ class PatternRouterTest extends TestBase
                 LinkInterface::ERROR_CANNOT_GENERATE_LINK,
             ];
             yield [$router, HttpMethods::METHOD_HEAD, 'invalidHandler', [], LinkInterface::ERROR_CANNOT_GENERATE_LINK];
+
+            $router->get('/test-array-object', 'arrayObject', ['array' => new \ArrayObject(['foo' => 'bar'])]);
+            yield [
+                $router,
+                HttpMethods::METHOD_GET,
+                'arrayObject',
+                ['array' => new \ArrayObject(['foo' => 'bar'])],
+                '/test-array-object',
+            ];
+
+            $router->get('/test-stringable', 'stringable', ['text' => new StringableObject('my-string')]);
+            yield [
+                $router,
+                HttpMethods::METHOD_GET,
+                'stringable',
+                ['text' => new StringableObject('my-string')],
+                '/test-stringable',
+            ];
         }
 
         $router = PatternRouter::createDefault();
@@ -252,11 +302,28 @@ class PatternRouterTest extends TestBase
         ];
     }
 
-    private function getEmptyRouters()
+    /**
+     * @dataProvider providerInvalidExtraParams
+     *
+     * @param $param
+     */
+    public function testInvalidExtraParams($param)
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessageRegExp(
+            '#Additional parameters can contain only scalar or null values, ".*" given#'
+        );
+        $this->expectExceptionCode(0);
+
+        $router = PatternRouter::createDefault();
+        $router->get('/', 'home', [$param]);
+    }
+
+    public function providerInvalidExtraParams()
     {
         return [
-            new PatternRouter(Patterns::createDefault(), PatternRouter::STRATEGY_SEQUENTIALLY),
-            new PatternRouter(Patterns::createDefault(), PatternRouter::STRATEGY_TREE),
+            [tmpfile()],
+            [new \stdClass()],
         ];
     }
 
@@ -272,5 +339,42 @@ class PatternRouterTest extends TestBase
             ->get('/article-{{ id :uint }}', 'getPostArticle')
             ->post('/article-{{ id :uint }}', 'getPostArticle')
             ->any('/any', 'showAny');
+    }
+
+    public function testRegisterRouteWithObjects()
+    {
+        $router = PatternRouter::createDefault();
+        $extraParamsBooks = [
+            'data' => new \ArrayObject(['categoryId' => new StringableObject('15')]),
+        ];
+        $router->get('/category-books', 'showCategory', $extraParamsBooks);
+        foreach (['15', 15, new StringableObject('15')] as $categoryId) {
+            $this->assertSame(
+                '/category-books',
+                (string) $router->linkTo('showCategory')->withParam('data', ['categoryId' => $categoryId])
+            );
+        }
+    }
+
+    /**
+     * @dataProvider providerMethodAlias
+     *
+     * @param string $httpMethod
+     * @param string $phpMethod
+     */
+    public function testMethodAlias(string $httpMethod, string $phpMethod)
+    {
+        $router = PatternRouter::createDefault();
+        $router->$phpMethod('/show-something', 'showSomething');
+        $this->assertSame('showSomething', $router->match($httpMethod, '/show-something')->getHandler());
+    }
+
+    public function providerMethodAlias()
+    {
+        return [
+            [HttpMethods::METHOD_TRACE, 'trace'],
+            [HttpMethods::METHOD_OPTIONS, 'options'],
+            [HttpMethods::METHOD_CONNECT, 'connect'],
+        ];
     }
 }

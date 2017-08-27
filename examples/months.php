@@ -36,9 +36,7 @@ $paths = [
     '/calendar/2019-dec',
 ];
 
-$output->writeln('<bg=yellow;fg=black>                </>');
 $output->writeln('<bg=yellow;fg=black>  Parsing URLs  </>');
-$output->writeln('<bg=yellow;fg=black>                </>');
 foreach ($paths as $path) {
     $route = $router->match('GET', $path);
     $year = $route->getParams()['year'];
@@ -50,15 +48,14 @@ foreach ($paths as $path) {
         $month
     ));
 }
+$output->writeln('');
 
 $paramsData = [
     ['year' => 2014, 'month' => 10],
     ['year' => 2016, 'month' => 12],
     ['year' => 2019, 'month' => 7],
 ];
-$output->writeln('<bg=yellow;fg=black>                 </>');
 $output->writeln('<bg=yellow;fg=black>  Building URLs  </>');
-$output->writeln('<bg=yellow;fg=black>                 </>');
 foreach ($paramsData as $params) {
     $output->writeln(sprintf(
         'year: <info>%d</info> month: <info>%2d</info>     => <info>%s</info>',

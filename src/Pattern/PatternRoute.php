@@ -3,6 +3,7 @@
 namespace Awesomite\Chariot\Pattern;
 
 use Awesomite\Chariot\Exceptions\InvalidArgumentException;
+use Awesomite\Chariot\Exceptions\PatternException;
 use Awesomite\Chariot\ExportableTrait;
 use Awesomite\Chariot\Link;
 use Awesomite\Chariot\LinkInterface;
@@ -24,7 +25,7 @@ class PatternRoute
     private $pattern;
 
     /**
-     * Regex, e.g. "#^/(?<controller>[^\/]*)$#"
+     * Regex, e.g. "#^/(?<controller>[^/]+)$#"
      *
      * @var string
      */
@@ -38,8 +39,8 @@ class PatternRoute
     private $simplePattern;
 
     /**
-     * [$name = [$default, $pattern], ...]
-     * e.g. ['id' => [null, '#^-?[0-9]+$#'], ...]
+     * [$name = [$default, $pattern, $patternName|null], ...]
+     * e.g. ['id' => [null, '#^-?[0-9]+$#', ':int'], ...]
      *
      * @var array
      */
@@ -101,7 +102,10 @@ class PatternRoute
                     throw new InvalidArgumentException("Invalid param name “{$name}” (source: {$originalPattern})");
                 }
 
-                $pattern = $this->patterns[$pattern] ?? $pattern;
+                if ($patternObj = $this->patterns[$pattern] ?? null) {
+                    /** @var PatternInterface $patternObj */
+                    $pattern = $patternObj->getRegex();
+                }
 
                 if (!(new RegexTester())->isRegex("#{$pattern}#")) {
                     throw new InvalidArgumentException("Invalid regex: {$pattern} (source: {$originalPattern})");
@@ -144,12 +148,21 @@ class PatternRoute
                     default:
                         // @codeCoverageIgnoreStart
                         throw new InvalidArgumentException("Invalid url pattern {$inputPattern}");
-                        // @codeCoverageIgnoreEnd
+                    // @codeCoverageIgnoreEnd
                 }
 
-                $pattern = $this->patterns[$pattern] ?? $pattern;
+                $patternName = null;
+                if ($patternObj = $this->patterns[$pattern] ?? null) {
+                    $patternName = $pattern;
+                    /** @var PatternInterface $patternObj */
+                    $pattern = $patternObj->getRegex();
+                }
 
-                $params[$name] = [$default, '#^(' . $pattern . ')$#'];
+                $params[$name] = [
+                    $default,
+                    '#^(' . $pattern . ')$#',
+                    $patternName,
+                ];
 
                 return '{{' . $name . '}}';
             },
@@ -160,34 +173,74 @@ class PatternRoute
     public function match(string $path, &$params): bool
     {
         if ($result = (bool) preg_match($this->compiledPattern, $path, $matches)) {
-            $params = array_filter(
+            $resultParams = array_filter(
                 $matches,
                 function ($key) {
                     return !is_int($key);
                 },
                 ARRAY_FILTER_USE_KEY
             );
+
+            foreach ($resultParams as $key => $value) {
+                $patternName = $this->explodedParams[$key][2];
+                if (!is_null($patternName)) {
+                    $pattern = $this->patterns[$patternName];
+                    try {
+                        $resultParams[$key] = $pattern->fromUrl($value);
+                    } catch (PatternException $exception) {
+                        return false;
+                    }
+                }
+            }
+
+            $params = $resultParams;
+
+            return true;
         }
 
-        return $result;
+        return false;
     }
 
     /**
+     * Returns false or converted params
+     *
      * @param string[] $params
      *
-     * @return bool
+     * @return bool|array
      */
-    public function matchParams(array $params): bool
+    public function matchParams(array $params)
     {
-        foreach ($this->explodedParams as $name => list($default, $pattern)) {
-            $exists = array_key_exists($name, $params);
+        $result = [];
+        foreach ($this->explodedParams as $name => list($default, $pattern, $patternName)) {
+            if (!array_key_exists($name, $params)) {
+                if (is_null($default)) {
+                    return false;
+                }
+                $currentParam = $default;
+            } else {
+                $currentParam = $params[$name];
+            }
 
-            if ((is_null($default) && !$exists) || ($exists && !preg_match($pattern, $params[$name]))) {
-                return false;
+            if (!is_null($patternName)) {
+                $patternObj = $this->patterns[$patternName];
+
+                try {
+                    $result[$name] = $patternObj->toUrl($currentParam);
+                } catch (PatternException $exception) {
+                    return false;
+                }
+            } else {
+                if (is_object($currentParam) && method_exists($currentParam, '__toString')) {
+                    $currentParam = (string) $currentParam;
+                }
+                if (!$this->pregMatchMultiType($pattern, $currentParam)) {
+                    return false;
+                }
+                $result[$name] = $currentParam;
             }
         }
 
-        return true;
+        return $result;
     }
 
     public function bindParams(array $params): LinkInterface
@@ -221,5 +274,18 @@ class PatternRoute
         }
 
         return $result;
+    }
+
+    private function pregMatchMultiType(string $pattern, $subject): int
+    {
+        if (
+            is_string($subject)
+            || is_scalar($subject)
+            || is_null($subject)
+        ) {
+            return preg_match($pattern, (string) $subject);
+        }
+
+        return 0;
     }
 }

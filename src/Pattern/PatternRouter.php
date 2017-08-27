@@ -14,7 +14,7 @@ use Awesomite\Chariot\RouterInterface;
 class PatternRouter implements RouterInterface
 {
     const STRATEGY_SEQUENTIALLY = 1;
-    const STRATEGY_TREE = 2;
+    const STRATEGY_TREE         = 2;
 
     use ExportableTrait;
 
@@ -64,6 +64,8 @@ class PatternRouter implements RouterInterface
 
     public function addRoute(string $method, string $pattern, string $handler, array $extraParams = []): PatternRouter
     {
+        $this->processExtraParams($extraParams);
+
         if (!in_array($method, HttpMethods::ALL_METHODS, true)) {
             throw new InvalidArgumentException(
                 sprintf(
@@ -104,24 +106,9 @@ class PatternRouter implements RouterInterface
         return $this;
     }
 
-    public function delete(string $pattern, string $handler, array $extraParams = []): PatternRouter
+    public function any(string $pattern, string $handler, array $extraParams = []): PatternRouter
     {
-        return $this->addRoute(HttpMethods::METHOD_DELETE, $pattern, $handler, $extraParams);
-    }
-
-    public function put(string $pattern, string $handler, array $extraParams = []): PatternRouter
-    {
-        return $this->addRoute(HttpMethods::METHOD_PUT, $pattern, $handler, $extraParams);
-    }
-
-    public function patch(string $pattern, string $handler, array $extraParams = []): PatternRouter
-    {
-        return $this->addRoute(HttpMethods::METHOD_PATCH, $pattern, $handler, $extraParams);
-    }
-
-    public function post(string $pattern, string $handler, array $extraParams = []): PatternRouter
-    {
-        return $this->addRoute(HttpMethods::METHOD_POST, $pattern, $handler, $extraParams);
+        return $this->addRoute(HttpMethods::METHOD_ANY, $pattern, $handler, $extraParams);
     }
 
     public function get(string $pattern, string $handler, array $extraParams = []): PatternRouter
@@ -129,9 +116,39 @@ class PatternRouter implements RouterInterface
         return $this->addRoute(HttpMethods::METHOD_GET, $pattern, $handler, $extraParams);
     }
 
-    public function any(string $pattern, string $handler, array $extraParams = []): PatternRouter
+    public function post(string $pattern, string $handler, array $extraParams = []): PatternRouter
     {
-        return $this->addRoute(HttpMethods::METHOD_ANY, $pattern, $handler, $extraParams);
+        return $this->addRoute(HttpMethods::METHOD_POST, $pattern, $handler, $extraParams);
+    }
+
+    public function put(string $pattern, string $handler, array $extraParams = []): PatternRouter
+    {
+        return $this->addRoute(HttpMethods::METHOD_PUT, $pattern, $handler, $extraParams);
+    }
+
+    public function delete(string $pattern, string $handler, array $extraParams = []): PatternRouter
+    {
+        return $this->addRoute(HttpMethods::METHOD_DELETE, $pattern, $handler, $extraParams);
+    }
+
+    public function patch(string $pattern, string $handler, array $extraParams = []): PatternRouter
+    {
+        return $this->addRoute(HttpMethods::METHOD_PATCH, $pattern, $handler, $extraParams);
+    }
+
+    public function connect(string $pattern, string $handler, array $extraParams = []): PatternRouter
+    {
+        return $this->addRoute(HttpMethods::METHOD_CONNECT, $pattern, $handler, $extraParams);
+    }
+
+    public function options(string $pattern, string $handler, array $extraParams = []): PatternRouter
+    {
+        return $this->addRoute(HttpMethods::METHOD_OPTIONS, $pattern, $handler, $extraParams);
+    }
+
+    public function trace(string $pattern, string $handler, array $extraParams = []): PatternRouter
+    {
+        return $this->addRoute(HttpMethods::METHOD_TRACE, $pattern, $handler, $extraParams);
     }
 
     public function match(string $method, string $path): InternalRouteInterface
@@ -145,22 +162,23 @@ class PatternRouter implements RouterInterface
         }
         // @codeCoverageIgnoreStart
     }
-        // @codeCoverageIgnoreEnd
 
-    public function getAllowedMethods(string $path): array
+    // @codeCoverageIgnoreEnd
+
+    public function getAllowedMethods(string $url): array
     {
         $allRealMethods = array_diff(HttpMethods::ALL_METHODS, [HttpMethods::METHOD_ANY]);
 
 
         switch ($this->strategy) {
             case static::STRATEGY_SEQUENTIALLY:
-                if ($this->matchSequentiallyForMethods([HttpMethods::METHOD_ANY], $path)) {
+                if ($this->matchSequentiallyForMethods([HttpMethods::METHOD_ANY], $url)) {
                     return $allRealMethods;
                 }
                 break;
 
             case static::STRATEGY_TREE:
-                if ($this->matchTreeForMethods([HttpMethods::METHOD_ANY], $path)) {
+                if ($this->matchTreeForMethods([HttpMethods::METHOD_ANY], $url)) {
                     return $allRealMethods;
                 }
                 break;
@@ -170,7 +188,7 @@ class PatternRouter implements RouterInterface
         foreach (array_diff($allRealMethods, [HttpMethods::METHOD_HEAD]) as $method) {
             switch ($this->strategy) {
                 case static::STRATEGY_SEQUENTIALLY:
-                    if ($this->matchSequentiallyForMethods([$method], $path)) {
+                    if ($this->matchSequentiallyForMethods([$method], $url)) {
                         $result[] = $method;
                         if ($method === HttpMethods::METHOD_GET) {
                             $result[] = HttpMethods::METHOD_HEAD;
@@ -179,7 +197,7 @@ class PatternRouter implements RouterInterface
                     break;
 
                 case static::STRATEGY_TREE:
-                    if ($this->matchTreeForMethods([$method], $path)) {
+                    if ($this->matchTreeForMethods([$method], $url)) {
                         $result[] = $method;
                         if ($method === HttpMethods::METHOD_GET) {
                             $result[] = HttpMethods::METHOD_HEAD;
@@ -351,5 +369,36 @@ class PatternRouter implements RouterInterface
     public function exportToExecutable(): string
     {
         return (new SourceCodeExporter())->exportPatternRouter($this);
+    }
+
+    private function processExtraParams(array &$data)
+    {
+        array_walk_recursive($data, function (&$element) {
+            if (is_scalar($element) || is_null($element)) {
+                return;
+            }
+
+            if (is_object($element)) {
+                if ($element instanceof \Traversable) {
+                    $element = iterator_to_array($element);
+                    $this->processExtraParams($element);
+
+                    return;
+                }
+
+                if (method_exists($element, '__toString')) {
+                    $element = (string) $element;
+
+                    return;
+                }
+            }
+
+            $message = sprintf(
+                'Additional parameters can contain only scalar or null values, "%s" given',
+                is_object($element) ? get_class($element) : gettype($element)
+            );
+
+            throw new InvalidArgumentException($message);
+        });
     }
 }

@@ -3,6 +3,7 @@
 namespace Awesomite\Chariot\Pattern;
 
 use Awesomite\Chariot\HttpMethods;
+use Awesomite\Chariot\RouterInterface;
 use Awesomite\Chariot\TestBase;
 
 /**
@@ -19,6 +20,7 @@ class ExportedRouterTest extends TestBase
         /** @var PatternRouter $restoredRouter */
         $restoredRouter = eval('return ' . $router->exportToExecutable() . ';');
 
+        $this->assertInstanceOf(RouterInterface::class, $restoredRouter);
         $this->assertNotSame($router, $restoredRouter);
         $link = (string) $restoredRouter->linkTo('handleBar');
         $this->assertSame('/bar', $link);

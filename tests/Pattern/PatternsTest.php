@@ -21,6 +21,60 @@ class PatternsTest extends TestBase
         }
     }
 
+    /**
+     * @dataProvider providerInvalidName
+     *
+     * @param string $paramName
+     */
+    public function testInvalidName(string $paramName)
+    {
+        $this->expectException(LogicException::class);
+        $message = sprintf(
+            'Method %s::addPattern() requires first parameter prefixed by ":", "%s" given',
+            Patterns::class,
+            $paramName
+        );
+        $this->expectExceptionMessage($message);
+        $patterns = new Patterns();
+        $patterns->addPattern($paramName, Patterns::REGEX_INT);
+    }
+
+    public function providerInvalidName()
+    {
+        return [
+            ['name'],
+            [''],
+        ];
+    }
+
+    /**
+     * @dataProvider providerInvalidPatternArgument
+     *
+     * @param        $invalidPattern
+     * @param string $typeOfPattern
+     */
+    public function testInvalidPatternArgument($invalidPattern, string $typeOfPattern)
+    {
+        $this->expectExceptionMessage(InvalidArgumentException::class);
+        $message = sprintf(
+            'Method %s::addPattern() expects string or %s, %s given',
+            Patterns::class,
+            PatternInterface::class,
+            $typeOfPattern
+        );
+        $this->expectExceptionMessage($message);
+        (new Patterns())->addPattern(':foo', $invalidPattern);
+    }
+
+    public function providerInvalidPatternArgument()
+    {
+        return [
+            [new \stdClass(), 'stdClass'],
+            [null, 'NULL'],
+            [tmpfile(), 'resource'],
+        ];
+    }
+
     public function testInvalidPattern()
     {
         $this->expectException(InvalidArgumentException::class);
@@ -45,7 +99,7 @@ class PatternsTest extends TestBase
     {
         $patterns = new Patterns();
         $patterns->addPattern($name, $pattern);
-        $this->assertSame($pattern, $patterns[$name]);
+        $this->assertSame($pattern, $patterns[$name]->getRegex());
     }
 
     /**
@@ -58,7 +112,7 @@ class PatternsTest extends TestBase
     {
         $patterns = new Patterns();
         $patterns[$name] = $pattern;
-        $this->assertSame($pattern, $patterns[$name]);
+        $this->assertSame($pattern, $patterns[$name]->getRegex());
     }
 
     public function providerSetPattern()
@@ -100,7 +154,7 @@ class PatternsTest extends TestBase
     {
         $patterns = new Patterns();
         $patterns->addEnumPattern(':enum', $enum);
-        $this->assertSame($expected, $patterns[':enum']);
+        $this->assertSame($expected, $patterns[':enum']->getRegex());
     }
 
     public function providerEnumPattern()
@@ -117,5 +171,14 @@ class PatternsTest extends TestBase
         $this->expectExceptionMessage('Operation forbidden');
         $patterns = new Patterns();
         unset($patterns[':pattern']);
+    }
+
+    public function testAddEnumInConstructor()
+    {
+        $data = [
+            ':enum' => ['hello', 'world'],
+        ];
+        $patterns = new Patterns($data);
+        $this->assertSame('hello|world', $patterns[':enum']->getRegex());
     }
 }

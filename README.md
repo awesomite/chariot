@@ -7,6 +7,8 @@
 Just another routing library. Makes human-friendly URLs and programmer-friendly code.
 Uses trees for the best performance.
 
+[github.com/awesomite/chariot](https://github.com/awesomite/chariot)
+
 ## Why?
 
 To simplify creating human-friendly URLs.
@@ -30,6 +32,8 @@ echo $router->linkTo('showArticle')->withParam('id', 5);
     * [Defining custom patterns](#defining-custom-patterns)
     * [Validation](#validation)
     * [Default parameters](#default-parameters)
+    * [Transforming parameters](#transforming-parameters)
+    * [Default patterns](#default-patterns)
  * [More examples](#more-examples)
  * [License](#license)
  * [Versioning](#versioning)
@@ -47,7 +51,7 @@ Parameters contains three values separated by one or more white characters.
 Second and third values are optional.
 First value is just a name.
 Second value is a regular expression or name of registered regular expression,
-default value is equal to `[^\/]+`.
+default value is equal to `[^/]+`.
 Third value contains default value of parameter (used for generating links).
 
 #### Examples
@@ -83,7 +87,7 @@ try {
     
     // code can be equal to 404 or 405
     if ($exception->getCode() === HttpException::HTTP_METHOD_NOT_ALLOWED) {
-        echo 'Allow: ', implode(', ', $router->getAllowedMethods($path)), "\n";
+        echo 'Allow: ', implode(', ', $router->getAllowedMethods($path)), "\n";   
     }
 }
 ```
@@ -228,6 +232,7 @@ $router = $factory->getRouter();
 <?php
 
 use Awesomite\Chariot\Pattern\PatternRouter;
+use Awesomite\Chariot\Pattern\Patterns;
 
 $categories = [
     'action',
@@ -235,7 +240,7 @@ $categories = [
     'comedy',
 ];
 
-$router = PatternRouter::createDefault();
+$router = new PatternRouter(new Patterns());
 $router->getPatterns()
     ->addPattern(':date', '[0-9]{4}-[0-9]{2}-[0-9]{2}')
     ->addEnumPattern(':category', $categories);
@@ -308,10 +313,57 @@ echo $router->linkTo('articles')->withParam('page', 2), "\n";
  */
 ```
 
+### Transforming parameters
+
+Router can transform parameter extracted from URL (and parameter passed to URL).
+Passed object to method addPattern() must implements interface PatternInterface.
+@See [PatternInterface](src/Pattern/PatternInterface.php).
+
+```php
+<?php
+
+use Awesomite\Chariot\Pattern\PatternInterface;
+use Awesomite\Chariot\Pattern\PatternRouter;
+use Awesomite\Chariot\Pattern\Patterns;
+use Awesomite\Chariot\Pattern\StdPatterns\DatePattern;
+
+$router = new PatternRouter(new Patterns());
+/*
+ * Passed object to method addPattern() must implement interface PatternInterface
+ */
+$router->getPatterns()->addPattern(':date', new DatePattern());
+$router->get('/day/{{ day :date }}', 'showDay');
+echo $router->linkTo('showDay')->withParam('day', new \DateTime('2017-07-07')), "\n";
+
+/*
+ * Output:
+ * /day/2017-07-07
+ */
+```
+
+### Default patterns
+
+Method `Awesomite\Chariot\Pattern\Patterns::createDefault()`
+returns instance of `Awesomite\Chariot\Pattern\Patterns`
+with set of standard patterns:
+
+| name      | input            | output                                | class/regex            |
+|-----------|------------------|---------------------------------------|------------------------|
+| :int      | `-5`             | `(int) -5`                            | [IntPattern]           |
+| :uint     | `5`              | `(int) 5`                             | [UnsignedIntPattern]   |
+| :float    | `-5.05`          | `(float) -5.05`                       | [FloatPattern]         |
+| :ufloat   | `5.05`           | `(float) 5.05`                        | [UnsignedFloatPattern] |
+| :date     | `2017-01-01`     | `new DateTimeImmutable("2017-01-01")` | [DatePattern]          |
+| :list     | `red,green,blue` | `(array) ["red", "green", "blue"]`    | [ListPattern]          |
+| :ip4      | `8.8.8.8`        | `(string) "8.8.8.8"`                  | [Ip4Pattern]           |
+| :alphanum | `nickname2000`   | `(string) "nickname2000"`             | `[a-zA-Z0-9]+`         |
+
 ## More examples
 
+* [Own micro framework](examples/micro-framework.php)
 * [Months](examples/months.php)
 * [Symfony integration](examples/symfony.php)
+* [Transforming parameters](examples/transform-params.php)
 
 ## License
 
@@ -320,3 +372,11 @@ MIT - [read license](LICENSE)
 ## Versioning
 
 The version numbers follow the [Semantic Versioning 2.0.0](http://semver.org/) scheme.
+
+[IntPattern]:           src/Pattern/StdPatterns/IntPattern.php
+[UnsignedIntPattern]:   src/Pattern/StdPatterns/UnsignedIntPattern.php
+[FloatPattern]:         src/Pattern/StdPatterns/FloatPattern.php
+[UnsignedFloatPattern]: src/Pattern/StdPatterns/UnsignedFloatPattern.php
+[DatePattern]:          src/Pattern/StdPatterns/DatePattern.php
+[ListPattern]:          src/Pattern/StdPatterns/ListPattern.php
+[Ip4Pattern]:           src/Pattern/StdPatterns/Ip4Pattern.php

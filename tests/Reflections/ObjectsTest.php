@@ -4,6 +4,9 @@ namespace Awesomite\Chariot\Reflections;
 
 use Awesomite\Chariot\TestBase;
 
+/**
+ * @internal
+ */
 class ObjectsTest extends TestBase
 {
     public function testGetProperty()
@@ -17,8 +20,7 @@ class ObjectsTest extends TestBase
 
     private function createClass($privateValue)
     {
-        return new class ($privateValue)
-        {
+        return new class($privateValue) {
             private $privateValue;
 
             public function __construct($privateValue)

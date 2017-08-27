@@ -47,17 +47,41 @@ class PatternLink implements LinkInterface
             /** @var PatternRoute $route */
             /** @var array $extraParams */
             foreach ($extraParams as $key => $value) {
-                if (!array_key_exists($key, $this->params) || $this->params[$key] != $value) {
+                if (!array_key_exists($key, $this->params) || $this->normalizeVar($this->params[$key]) != $value) {
                     continue 2;
                 }
                 unset($currentParams[$key]);
             }
-            if ($route->matchParams($currentParams)) {
-                return $this->prefix . (string) $route->bindParams($currentParams);
+            $convertedParams = $route->matchParams($currentParams);
+            if (is_array($convertedParams)) {
+                return $this->prefix . (string) $route->bindParams(array_replace($currentParams, $convertedParams));
             }
         }
 
         throw new CannotGenerateLinkException($this->handler, $this->params);
+    }
+
+    private function normalizeVar($var)
+    {
+        if (is_object($var)) {
+            if ($var instanceof \Traversable) {
+                return $this->normalizeVar(iterator_to_array($var));
+            }
+
+            if (method_exists($var, '__toString')) {
+                return (string) $var;
+            }
+        }
+
+        if (is_array($var)) {
+            array_walk_recursive($var, function ($element) {
+                return $this->normalizeVar($element);
+            });
+
+            return $var;
+        }
+
+        return $var;
     }
 
     private function sortIfNeed()

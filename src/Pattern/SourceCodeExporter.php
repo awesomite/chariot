@@ -13,12 +13,12 @@ class SourceCodeExporter
     {
         $template
             = <<<'TEMPLATE'
-call_user_func(function () {
-  $patterns = [[patterns]];
+\call_user_func(function () {
+  $patterns = \unserialize([[patterns]]);
 
   $routes = [[routes]];
 
-  return Awesomite\Chariot\Pattern\PatternRouter::__set_state(array(
+  return \Awesomite\Chariot\Pattern\PatternRouter::__set_state(array(
     'patterns' => $patterns,
     'keyValueRoutes' => [[keyValueRoutes]],
     'nodesTree' => [[nodesTree]],
@@ -39,14 +39,13 @@ TEMPLATE;
 
         $replace = [
             '[[routes]]'         => $exportedRoutes,
-            '[[patterns]]'       => $this->varExportFromObject($router, 'patterns'),
+            '[[patterns]]'       => var_export(serialize(Objects::getProperty($router, 'patterns')), true),
             '[[keyValueRoutes]]' => $this->varExportFromObject($router, 'keyValueRoutes'),
             '[[nodesTree]]'      => $exportedNodes,
             '[[strategy]]'       => $this->varExportFromObject($router, 'strategy'),
         ];
 
-        return str_replace(array_keys($replace), array_values($replace),
-            $template);
+        return str_replace(array_keys($replace), array_values($replace), $template);
     }
 
     private function exportRoutes(
@@ -81,7 +80,7 @@ TEMPLATE;
     {
         $template
             = <<<'TEMPLATE'
-Awesomite\Chariot\Pattern\PatternRoute::__set_state(array(
+\Awesomite\Chariot\Pattern\PatternRoute::__set_state(array(
   'pattern' => [[pattern]],
   'compiledPattern' => [[compiledPattern]],
   'simplePattern' => [[simplePattern]],

@@ -1,8 +1,10 @@
 <?php
 
-namespace Awesomite\Chariot\Speedtest;
+namespace Awesomite\Chariot\Speedtest\Commands;
 
 use Awesomite\Chariot\Pattern\PatternRouter;
+use Awesomite\Chariot\Speedtest\StringsHelper;
+use Awesomite\Chariot\Speedtest\Timer;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -37,7 +39,7 @@ DESCRIPTION;
     {
         $categories = [];
         for ($i = 1; $i <= $repetitions; $i++) {
-            $categories[$i] = $this->randomString(mt_rand(10, 40));
+            $categories[$i] = StringsHelper::getRandomString(mt_rand(10, 40));
         }
 
         $router = PatternRouter::createDefault();

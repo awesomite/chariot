@@ -4,17 +4,17 @@ namespace Awesomite\Chariot\Pattern;
 
 use Awesomite\Chariot\Exceptions\InvalidArgumentException;
 
-interface PatternsInterface extends \ArrayAccess
+interface PatternsInterface extends \ArrayAccess, \Serializable
 {
     /**
-     * @param string $name
-     * @param string $regex
+     * @param string                  $name
+     * @param string|PatternInterface $pattern
      *
      * @return PatternsInterface
      *
      * @throws InvalidArgumentException
      */
-    public function addPattern(string $name, string $regex): PatternsInterface;
+    public function addPattern(string $name, $pattern): PatternsInterface;
 
     /**
      * @param string   $name
@@ -24,19 +24,23 @@ interface PatternsInterface extends \ArrayAccess
      *
      * @throws InvalidArgumentException
      */
-    public function addEnumPattern(
-        string $name,
-        array $values
-    ): PatternsInterface;
+    public function addEnumPattern(string $name, array $values): PatternsInterface;
 
     /**
-     * @param string $pattern
+     * @param string|PatternInterface $pattern
      *
      * @return PatternsInterface
      *
      * @throws InvalidArgumentException
      */
-    public function setDefaultPattern(string $pattern): PatternsInterface;
+    public function setDefaultPattern($pattern): PatternsInterface;
 
     public function getDefaultPattern();
+
+    /**
+     * @param mixed $offset
+     *
+     * @return PatternInterface
+     */
+    public function offsetGet($offset);
 }
