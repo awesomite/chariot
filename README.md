@@ -4,10 +4,10 @@
 [![Build Status](https://travis-ci.org/awesomite/chariot.svg?branch=master)](https://travis-ci.org/awesomite/chariot)
 [![Coverage Status](https://coveralls.io/repos/github/awesomite/chariot/badge.svg?branch=master)](https://coveralls.io/github/awesomite/chariot?branch=master)
 
-[github.com/awesomite/chariot](https://github.com/awesomite/chariot)
-
 Just another routing library. Makes human-friendly URLs and programmer-friendly code.
 Uses trees for the best performance.
+
+[github.com/awesomite/chariot](https://github.com/awesomite/chariot)
 
 ## Why?
 
