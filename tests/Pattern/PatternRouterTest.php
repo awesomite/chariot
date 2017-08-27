@@ -116,27 +116,6 @@ class PatternRouterTest extends TestBase
                 '/show-page-15',
                 new InternalRoute('showPage', ['page' => 15]),
             ];
-
-            yield [
-                $router,
-                [HttpMethods::METHOD_OPTIONS],
-                '/options',
-                new InternalRoute('showOptions', []),
-            ];
-
-            yield [
-                $router,
-                [HttpMethods::METHOD_CONNECT],
-                '/connect',
-                new InternalRoute('connect', []),
-            ];
-
-            yield [
-                $router,
-                [HttpMethods::METHOD_TRACE],
-                '/trace',
-                new InternalRoute('trace', []),
-            ];
         }
     }
 
@@ -359,10 +338,7 @@ class PatternRouterTest extends TestBase
             ->delete('/comment/{{ id :int }}', 'editComment')
             ->get('/article-{{ id :uint }}', 'getPostArticle')
             ->post('/article-{{ id :uint }}', 'getPostArticle')
-            ->any('/any', 'showAny')
-            ->options('/options', 'showOptions')
-            ->trace('/trace', 'trace')
-            ->connect('/connect', 'connect');
+            ->any('/any', 'showAny');
     }
 
     public function testRegisterRouteWithObjects()
@@ -378,5 +354,27 @@ class PatternRouterTest extends TestBase
                 (string) $router->linkTo('showCategory')->withParam('data', ['categoryId' => $categoryId])
             );
         }
+    }
+
+    /**
+     * @dataProvider providerMethodAlias
+     *
+     * @param string $httpMethod
+     * @param string $phpMethod
+     */
+    public function testMethodAlias(string $httpMethod, string $phpMethod)
+    {
+        $router = PatternRouter::createDefault();
+        $router->$phpMethod('/show-something', 'showSomething');
+        $this->assertSame('showSomething', $router->match($httpMethod, '/show-something')->getHandler());
+    }
+
+    public function providerMethodAlias()
+    {
+        return [
+            [HttpMethods::METHOD_TRACE, 'trace'],
+            [HttpMethods::METHOD_OPTIONS, 'options'],
+            [HttpMethods::METHOD_CONNECT, 'connect'],
+        ];
     }
 }
