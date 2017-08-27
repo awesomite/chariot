@@ -1,6 +1,6 @@
 # Changelog
 
-### [0.2.1]
+### [0.2.1] 2017-08-27
 
 * Fixed regex `Awesomite\Chariot\Pattern\Patterns::REGEX_FLOAT`
 * Fixed regex `Awesomite\Chariot\Pattern\Patterns::REGEX_UFLOAT`
