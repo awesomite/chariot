@@ -1,5 +1,11 @@
 # Changelog
 
+### [0.2.1]
+
+* Fixed regex `Awesomite\Chariot\Pattern\Patterns::REGEX_FLOAT`
+* Fixed regex `Awesomite\Chariot\Pattern\Patterns::REGEX_UFLOAT`
+* Fixed constant `Awesomite\Chariot\Pattern\Patterns::STANDARD_PATTERNS` (invalid value for `:ufloat`)
+
 ### [0.2.0] 2017-08-27
 
 * Added `Awesomite\Chariot\Pattern\PatternInterface` - possibility to conversions url params, e.g. date in format `YYYY-mm-dd` to `DateTime` object
@@ -22,6 +28,7 @@
     
 * Initial public release
 
+[0.2.1]: https://github.com/awesomite/chariot/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/awesomite/chariot/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/awesomite/chariot/tree/v0.1.0
 [behat]: http://behat.org
