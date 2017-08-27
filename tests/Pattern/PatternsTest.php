@@ -2,8 +2,11 @@
 
 namespace Awesomite\Chariot\Pattern;
 
+use Awesomite\Chariot\Exceptions\HttpException;
 use Awesomite\Chariot\Exceptions\InvalidArgumentException;
 use Awesomite\Chariot\Exceptions\LogicException;
+use Awesomite\Chariot\HttpMethods;
+use Awesomite\Chariot\Reflections\Objects;
 use Awesomite\Chariot\TestBase;
 
 /**
@@ -180,5 +183,90 @@ class PatternsTest extends TestBase
         ];
         $patterns = new Patterns($data);
         $this->assertSame('hello|world', $patterns[':enum']->getRegex());
+    }
+
+    /**
+     * @dataProvider providerDefaultPatterns
+     *
+     * @param string $type
+     * @param array  $valid
+     * @param array  $invalid
+     */
+    public function testDefaultPatterns(string $type, array $valid, array $invalid)
+    {
+        $router = PatternRouter::createDefault();
+        $router->addRoute(HttpMethods::METHOD_GET, "/{{ value {$type} }}", 'myhandler');
+
+        foreach ($valid as $value) {
+            try {
+                $router->match(HttpMethods::METHOD_GET, '/' . $value);
+            } catch (HttpException $exception) {
+                /** @var PatternRoute $patternRoute */
+                $patternRoute = Objects::getProperty($router, 'routes')['GET']['myhandler'][0][0];
+                $regex = Objects::getProperty($patternRoute, 'compiledPattern');
+                $this->fail(sprintf('Path: %s, regex: %s', '/' . $value, $regex));
+            }
+        }
+
+        foreach ($invalid as $value) {
+            try {
+                $router->match(HttpMethods::METHOD_GET, '/' . $value);
+            } catch (HttpException $exception){
+                $this->assertSame(HttpException::HTTP_NOT_FOUND, $exception->getCode());
+                continue;
+            }
+            $this->fail();
+        }
+    }
+
+    public function providerDefaultPatterns()
+    {
+        yield [
+            ':int',
+            [-1, 0, 1, '5000'],
+            ['hello', '1.0'],
+        ];
+
+        yield [
+            ':uint',
+            [0, 1, '5000'],
+            [-1, '-1', '1.0'],
+        ];
+
+        yield [
+            ':float',
+            [1, 0, -1, -123.45, '-123.45', 500.15],
+            ['1,1', 'hello'],
+        ];
+
+        yield [
+            ':ufloat',
+            [1, 1.0, '1', '1.23', 0],
+            ['-1', 'foo'],
+        ];
+
+        yield [
+            ':date',
+            ['2017-01-01'],
+            ['2017-01-32'],
+        ];
+
+        yield [
+            ':list',
+            ['foo,bar'],
+            ['foo/bar'],
+        ];
+
+        yield [
+            ':ip4',
+            ['127.0.0.1'],
+            ['256.255.255.255'],
+        ];
+
+        yield [
+            ':alphanum',
+            ['nickname2000'],
+            ['hello/world'],
+        ];
     }
 }

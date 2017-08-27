@@ -10,14 +10,15 @@ use Awesomite\Chariot\Pattern\StdPatterns\IntPattern;
 use Awesomite\Chariot\Pattern\StdPatterns\Ip4Pattern;
 use Awesomite\Chariot\Pattern\StdPatterns\ListPattern;
 use Awesomite\Chariot\Pattern\StdPatterns\RegexPattern;
+use Awesomite\Chariot\Pattern\StdPatterns\UnsignedFloatPattern;
 use Awesomite\Chariot\Pattern\StdPatterns\UnsignedIntPattern;
 
 class Patterns implements PatternsInterface
 {
     const REGEX_INT      = '(-?[1-9][0-9]*)|0';
     const REGEX_UINT     = '([1-9][0-9]*)|0';
-    const REGEX_FLOAT    = '^((-?[1-9][0-9]*)|0)(\.[0-9]*[1-9]+)?$';
-    const REGEX_UFLOAT   = '^(([1-9][0-9]*)|0)(\.[0-9]*[1-9]+)?$';
+    const REGEX_FLOAT    = '((-?[1-9][0-9]*)|0)(\.[0-9]*[1-9]+)?';
+    const REGEX_UFLOAT   = '(([1-9][0-9]*)|0)(\.[0-9]*[1-9]+)?';
     const REGEX_ALPHANUM = '[a-zA-Z0-9]+';
     const REGEX_DATE     = '[0-9]{4}-[0-9]{2}-[0-9]{2}';
     const REGEX_IP       = '((25[0-5])|(2[0-4][0-9])|(1[0-9][0-9])|([1-9]?[0-9]))(\.((25[0-5])|(2[0-4][0-9])|(1[0-9][0-9])|([1-9]?[0-9]))){3}';
@@ -28,7 +29,7 @@ class Patterns implements PatternsInterface
             ':int'      => IntPattern::class,
             ':uint'     => UnsignedIntPattern::class,
             ':float'    => FloatPattern::class,
-            ':ufloat'   => UnsignedIntPattern::class,
+            ':ufloat'   => UnsignedFloatPattern::class,
             ':date'     => DatePattern::class,
             ':list'     => ListPattern::class,
             ':ip4'      => Ip4Pattern::class,
