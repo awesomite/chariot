@@ -25,7 +25,7 @@ class PatternRoute
     private $pattern;
 
     /**
-     * Regex, e.g. "#^/(?<controller>[^\/]*)$#"
+     * Regex, e.g. "#^/(?<controller>[^/]+)$#"
      *
      * @var string
      */
