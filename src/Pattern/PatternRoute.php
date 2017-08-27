@@ -111,7 +111,7 @@ class PatternRoute
                     throw new InvalidArgumentException("Invalid regex: {$pattern} (source: {$originalPattern})");
                 }
 
-                return is_null($name) ? "({$pattern})" : "(?<{$name}>{$pattern})";
+                return "(?<{$name}>{$pattern})";
             },
             $this->pattern
         );
