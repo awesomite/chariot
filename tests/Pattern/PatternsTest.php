@@ -211,7 +211,7 @@ class PatternsTest extends TestBase
         foreach ($invalid as $value) {
             try {
                 $router->match(HttpMethods::METHOD_GET, '/' . $value);
-            } catch (HttpException $exception){
+            } catch (HttpException $exception) {
                 $this->assertSame(HttpException::HTTP_NOT_FOUND, $exception->getCode());
                 continue;
             }
