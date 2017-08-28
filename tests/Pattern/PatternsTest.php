@@ -188,9 +188,9 @@ class PatternsTest extends TestBase
     /**
      * @dataProvider providerDefaultPatterns
      *
-     * @param string $type
-     * @param array  $valid
-     * @param array  $invalid
+     * @param string   $type
+     * @param string[] $valid
+     * @param string[] $invalid
      */
     public function testDefaultPatterns(string $type, array $valid, array $invalid)
     {
@@ -223,26 +223,26 @@ class PatternsTest extends TestBase
     {
         yield [
             ':int',
-            [-1, 0, 1, '5000'],
+            ['-1', '0', '1', '5000'],
             ['hello', '1.0'],
         ];
 
         yield [
             ':uint',
-            [0, 1, '5000'],
-            [-1, '-1', '1.0'],
+            ['0', '1', '5000'],
+            ['-1', '-1', '1.0', '1.1'],
         ];
 
         yield [
             ':float',
-            [1, 0, -1, -123.45, '-123.45', 500.15],
-            ['1,1', 'hello'],
+            ['1', '0', '-1', '-123.45', '-123.45', '500.15'],
+            ['1,1', 'hello', '1.0'],
         ];
 
         yield [
             ':ufloat',
-            [1, 1.0, '1', '1.23', 0],
-            ['-1', 'foo'],
+            ['1', '1.1', '1.23', '0'],
+            ['-1', 'foo', '1.0', '1.20', '-1.1'],
         ];
 
         yield [
