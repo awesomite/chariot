@@ -57,23 +57,18 @@ class PatternRoute
         $this->patterns = $patterns;
         $this->compilePattern();
         $this->extractParams();
-
-        if (!(new RegexTester())->isRegex($this->compiledPattern)) {
-            throw new InvalidArgumentException(sprintf(
-                '%s is not valid regular expression, source pattern is equal to %s',
-                $this->compiledPattern,
-                $this->pattern
-            ));
-        }
     }
 
     private function compilePattern()
     {
         $originalPattern = $this->pattern;
 
-        $this->compiledPattern = preg_replace_callback(
+        /** @var array $preProcessedParams [['{{ id \d+ }}', '(?<id>\d+)'], ...] */
+        $preProcessedParams = [];
+
+        preg_replace_callback(
             static::PATTERN_VAR,
-            function ($matches) use ($originalPattern) {
+            function ($matches) use ($originalPattern, &$preProcessedParams) {
                 $str = substr($matches[0], 2, -2);
                 $arr = array_filter(preg_split('/\\s+/', $str), function ($a) {
                     return trim($a) !== '';
@@ -111,12 +106,27 @@ class PatternRoute
                     throw new InvalidArgumentException("Invalid regex: {$pattern} (source: {$originalPattern})");
                 }
 
-                return "(?<{$name}>{$pattern})";
+                $preProcessedParams[] = [$matches[0], "(?<{$name}>{$pattern})"];
+
+                return $matches[0];
             },
             $this->pattern
         );
 
-        $this->compiledPattern = "#^{$this->compiledPattern}$#";
+        $uriPattern = $this->pattern;
+        $resultParts = [];
+
+        foreach ($preProcessedParams as list($original, $replacement)) {
+            $exploded = explode($original, $uriPattern, 2);
+            $resultParts[] = preg_quote($exploded[0], '#');
+            $resultParts[] = $replacement;
+            $uriPattern = $exploded[1];
+        }
+        if ('' !== $uriPattern) {
+            $resultParts[] = preg_quote($uriPattern, '#');
+        }
+
+        $this->compiledPattern = '#^' . implode('', $resultParts) . '$#';
     }
 
     private function extractParams()

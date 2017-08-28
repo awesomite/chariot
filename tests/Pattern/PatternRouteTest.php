@@ -47,7 +47,7 @@ class PatternRouteTest extends TestBase
         yield [
             $patterns,
             '/get-item-{{ id :id }}',
-            '#^/get-item-(?<id>[0-9]+)$#',
+            '#^/get\-item\-(?<id>[0-9]+)$#',
             '/get-item-{{id}}',
         ];
         yield [
@@ -55,6 +55,12 @@ class PatternRouteTest extends TestBase
             '/{{ name }}',
             '#^/(?<name>' . Patterns::REGEX_DEFAULT . ')$#',
             '/{{name}}',
+        ];
+        yield [
+            $patterns,
+            '/{{ id :id }}-article',
+            '#^/(?<id>[0-9]+)\-article$#',
+            '/{{id}}-article'
         ];
     }
 
@@ -150,14 +156,6 @@ class PatternRouteTest extends TestBase
             $fifthParams,
             '/year-2022/month-02?a[0]=1&a[1]=b&b[foo]=bar',
         ];
-    }
-
-    public function testInvalidConstructor()
-    {
-        $patterns = Patterns::createDefault();
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessageRegExp('#^.* is not valid regular expression, source pattern is equal to .*$#');
-        new PatternRoute('#', $patterns);
     }
 
     /**
