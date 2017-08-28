@@ -1,12 +1,12 @@
 # Changelog
 
-### [0.2.1] 2017-08-27
+### [0.2.1] - 2017-08-27
 
 * Fixed regex `Awesomite\Chariot\Pattern\Patterns::REGEX_FLOAT`
 * Fixed regex `Awesomite\Chariot\Pattern\Patterns::REGEX_UFLOAT`
 * Fixed constant `Awesomite\Chariot\Pattern\Patterns::STANDARD_PATTERNS` (invalid value for `:ufloat`)
 
-### [0.2.0] 2017-08-27
+### [0.2.0] - 2017-08-27
 
 * Added `Awesomite\Chariot\Pattern\PatternInterface` - possibility to conversions url params, e.g. date in format `YYYY-mm-dd` to `DateTime` object
 * Added [behat] tests
@@ -24,7 +24,7 @@
   | :ip4      | added           | [Ip4Pattern]           |
   | :alphanum | same as earlier | `[a-zA-Z0-9]+`         |
 
-### [0.1.0] 2017-07-20
+### [0.1.0] - 2017-07-20
     
 * Initial public release
 
