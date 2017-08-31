@@ -35,7 +35,8 @@ class Ip4Pattern extends AbstractPattern
                 return $data;
             }
 
-            if (preg_match('#^(' . Patterns::REGEX_INT . ')$#', $data)) {
+            $d = Patterns::DELIMITER;
+            if (preg_match($d . '^(' . Patterns::REGEX_INT . ')$' . $d, $data)) {
                 $data = (int) $data;
             }
         }

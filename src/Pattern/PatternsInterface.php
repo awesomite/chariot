@@ -8,7 +8,7 @@ interface PatternsInterface extends \ArrayAccess, \Serializable
 {
     /**
      * @param string                  $name
-     * @param string|PatternInterface $pattern
+     * @param string|PatternInterface $pattern Acceptable also stringable object (with method __toString)
      *
      * @return PatternsInterface
      *

@@ -15,6 +15,8 @@ use Awesomite\Chariot\Pattern\StdPatterns\UnsignedIntPattern;
 
 class Patterns implements PatternsInterface
 {
+    const DELIMITER = '#';
+
     const REGEX_INT      = '(-?[1-9][0-9]*)|0';
     const REGEX_UINT     = '([1-9][0-9]*)|0';
     const REGEX_FLOAT    = '((-?[1-9][0-9]*)|0)(\.[0-9]*[1-9]+)?';
@@ -60,14 +62,17 @@ class Patterns implements PatternsInterface
         }
 
         if (':' !== ($name[0] ?? null)) {
-            throw new LogicException(sprintf(
+            throw new InvalidArgumentException(sprintf(
                 'Method %s() requires first parameter prefixed by ":", "%s" given',
                 __METHOD__,
                 $name
             ));
         }
 
-        if (is_string($pattern)) {
+        if (
+            is_string($pattern)
+            || (is_object($pattern) && method_exists($pattern, '__toString') && !$pattern instanceof PatternInterface)
+        ) {
             $pattern = new RegexPattern((string) $pattern);
         }
 
@@ -105,7 +110,7 @@ class Patterns implements PatternsInterface
     {
         $processed = [];
         foreach ($values as $value) {
-            $processed[] = preg_quote($value, '#');
+            $processed[] = preg_quote($value, static::DELIMITER);
         }
 
         return $this->addPattern($name, implode('|', $processed));

@@ -31,7 +31,7 @@ class PatternsTest extends TestBase
      */
     public function testInvalidName(string $paramName)
     {
-        $this->expectException(LogicException::class);
+        $this->expectException(InvalidArgumentException::class);
         $message = sprintf(
             'Method %s::addPattern() requires first parameter prefixed by ":", "%s" given',
             Patterns::class,

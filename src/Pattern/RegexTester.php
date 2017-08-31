@@ -7,7 +7,7 @@ namespace Awesomite\Chariot\Pattern;
  */
 class RegexTester
 {
-    public function isSubregex(string $subregex, string $delimiter = '#'): bool
+    public function isSubregex(string $subregex, string $delimiter = Patterns::DELIMITER): bool
     {
         return $this->isRegex($delimiter . $subregex . $delimiter);
     }

@@ -4,6 +4,7 @@ namespace Awesomite\Chariot\Pattern\StdPatterns;
 
 use Awesomite\Chariot\Exceptions\PatternException;
 use Awesomite\Chariot\Pattern\PatternInterface;
+use Awesomite\Chariot\Pattern\Patterns;
 
 abstract class AbstractPattern implements PatternInterface
 {
@@ -64,6 +65,8 @@ abstract class AbstractPattern implements PatternInterface
 
     protected function match(string $data): bool
     {
-        return (bool) preg_match('#^(' . $this->getRegex() . ')$#', $data);
+        $d = Patterns::DELIMITER;
+
+        return (bool) preg_match($d . '^(' . $this->getRegex() . ')$' . $d, $data);
     }
 }

@@ -102,7 +102,7 @@ class PatternRoute
                     $pattern = $patternObj->getRegex();
                 }
 
-                if (!(new RegexTester())->isRegex("#{$pattern}#")) {
+                if (!(new RegexTester())->isSubregex($pattern)) {
                     throw new InvalidArgumentException("Invalid regex: {$pattern} (source: {$originalPattern})");
                 }
 
@@ -118,15 +118,16 @@ class PatternRoute
 
         foreach ($preProcessedParams as list($original, $replacement)) {
             $exploded = explode($original, $uriPattern, 2);
-            $resultParts[] = preg_quote($exploded[0], '#');
+            $resultParts[] = preg_quote($exploded[0], Patterns::DELIMITER);
             $resultParts[] = $replacement;
             $uriPattern = $exploded[1];
         }
         if ('' !== $uriPattern) {
-            $resultParts[] = preg_quote($uriPattern, '#');
+            $resultParts[] = preg_quote($uriPattern, Patterns::DELIMITER);
         }
 
-        $this->compiledPattern = '#^' . implode('', $resultParts) . '$#';
+        $d = Patterns::DELIMITER;
+        $this->compiledPattern = $d . '^' . implode('', $resultParts) . '$' . $d;
     }
 
     private function extractParams()
@@ -170,7 +171,7 @@ class PatternRoute
 
                 $params[$name] = [
                     $default,
-                    '#^(' . $pattern . ')$#',
+                    Patterns::DELIMITER . '^(' . $pattern . ')$' . Patterns::DELIMITER,
                     $patternName,
                 ];
 

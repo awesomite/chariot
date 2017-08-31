@@ -1,5 +1,15 @@
 # Changelog
 
+### ?.?.? - ????-??-??
+
+ * Changed - method `Awesomite\Chariot\Pattern\Patterns::addPattern()`
+   throws `Awesomite\Chariot\Exceptions\InvalidArgumentException`
+   instead of `Awesomite\Chariot\Exceptions\LogicException` when argument `$name` is not prefixed by `:`
+ * Changed - method `Awesomite\Chariot\Pattern\Patterns::addPattern()`
+   accepts stringable object (with method `__toString`) as argument `$pattern`
+ * Changed - everything outside `{{` double brackets `}}` is transformed by `preg_quote()` function.
+ * Constant `Awesomite\Chariot\Pattern\Patterns::DELIMITER` instead of hardcoded value `#`
+
 ### [0.2.1] - 2017-08-27
 
 * Fixed regex `Awesomite\Chariot\Pattern\Patterns::REGEX_FLOAT`
