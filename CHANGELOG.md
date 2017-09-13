@@ -1,6 +1,6 @@
 # Changelog
 
-### ?.?.? - ????-??-??
+### 0.3.0 - 2017-09-13
 
  * Changed - method `Awesomite\Chariot\Pattern\Patterns::addPattern()`
    throws `Awesomite\Chariot\Exceptions\InvalidArgumentException`
