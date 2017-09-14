@@ -1,6 +1,6 @@
 # Changelog
 
-### 0.3.0 - 2017-09-13
+### [0.3.0] - 2017-09-13
 
  * Changed - method `Awesomite\Chariot\Pattern\Patterns::addPattern()`
    throws `Awesomite\Chariot\Exceptions\InvalidArgumentException`
@@ -38,6 +38,7 @@
     
 * Initial public release
 
+[0.3.0]: https://github.com/awesomite/chariot/compare/v0.2.1...v0.3.0
 [0.2.1]: https://github.com/awesomite/chariot/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/awesomite/chariot/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/awesomite/chariot/tree/v0.1.0
