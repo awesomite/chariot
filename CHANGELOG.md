@@ -1,14 +1,19 @@
 # Changelog
 
+### [0.3.1] - 2017-09-17
+
+* Fixed - `Awesomite\Chariot\Pattern\PatternRouter` did not work properly when pattern was prefixed by regular expression,
+e.g. `{{ subdomain }}.local/`
+
 ### [0.3.0] - 2017-09-13
 
- * Changed - method `Awesomite\Chariot\Pattern\Patterns::addPattern()`
-   throws `Awesomite\Chariot\Exceptions\InvalidArgumentException`
-   instead of `Awesomite\Chariot\Exceptions\LogicException` when argument `$name` is not prefixed by `:`
- * Changed - method `Awesomite\Chariot\Pattern\Patterns::addPattern()`
-   accepts stringable object (with method `__toString`) as argument `$pattern`
- * Changed - everything outside `{{` double brackets `}}` is transformed by `preg_quote()` function.
- * Constant `Awesomite\Chariot\Pattern\Patterns::DELIMITER` instead of hardcoded value `#`
+* Changed - method `Awesomite\Chariot\Pattern\Patterns::addPattern()`
+  throws `Awesomite\Chariot\Exceptions\InvalidArgumentException`
+  instead of `Awesomite\Chariot\Exceptions\LogicException` when argument `$name` is not prefixed by `:`
+* Changed - method `Awesomite\Chariot\Pattern\Patterns::addPattern()`
+  accepts stringable object (with method `__toString`) as argument `$pattern`
+* Changed - everything outside `{{` double brackets `}}` is transformed by `preg_quote()` function.
+* Constant `Awesomite\Chariot\Pattern\Patterns::DELIMITER` instead of hardcoded value `#`
 
 ### [0.2.1] - 2017-08-27
 
@@ -38,6 +43,7 @@
     
 * Initial public release
 
+[0.3.1]: https://github.com/awesomite/chariot/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/awesomite/chariot/compare/v0.2.1...v0.3.0
 [0.2.1]: https://github.com/awesomite/chariot/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/awesomite/chariot/compare/v0.1.0...v0.2.0

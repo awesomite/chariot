@@ -79,7 +79,7 @@ class PatternRouter implements RouterInterface
         $route = new PatternRoute($pattern, $this->patterns);
         $this->routes[$method][$handler][] = [$route, $extraParams];
 
-        if (strpos($pattern, '{{') == false) {
+        if (strpos($pattern, '{{') === false) {
             $this->keyValueRoutes[$method][$pattern] = [$handler, $extraParams];
         } elseif ($this->strategy === static::STRATEGY_TREE) {
             $currentNode = &$this->nodesTree;
