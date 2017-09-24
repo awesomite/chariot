@@ -81,7 +81,7 @@ class CoreContext implements Context
      */
     public function routerShouldAllowForMethodsForUrl($methods, $url)
     {
-        $explodedMethods = $methods === '' ? [] : preg_split('#,\\s*#', $methods);
+        $explodedMethods = '' === $methods ? [] : preg_split('#,\\s*#', $methods);
         $this->assertArraysWithSameElements($explodedMethods, $this->patternRouter->getAllowedMethods($url));
     }
 

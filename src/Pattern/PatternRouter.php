@@ -79,7 +79,7 @@ class PatternRouter implements RouterInterface
         $route = new PatternRoute($pattern, $this->patterns);
         $this->routes[$method][$handler][] = [$route, $extraParams];
 
-        if (strpos($pattern, '{{') === false) {
+        if (false === strpos($pattern, '{{')) {
             $this->keyValueRoutes[$method][$pattern] = [$handler, $extraParams];
         } elseif ($this->strategy === static::STRATEGY_TREE) {
             $currentNode = &$this->nodesTree;
@@ -190,7 +190,7 @@ class PatternRouter implements RouterInterface
                 case static::STRATEGY_SEQUENTIALLY:
                     if ($this->matchSequentiallyForMethods([$method], $url)) {
                         $result[] = $method;
-                        if ($method === HttpMethods::METHOD_GET) {
+                        if (HttpMethods::METHOD_GET === $method) {
                             $result[] = HttpMethods::METHOD_HEAD;
                         }
                     }
@@ -199,7 +199,7 @@ class PatternRouter implements RouterInterface
                 case static::STRATEGY_TREE:
                     if ($this->matchTreeForMethods([$method], $url)) {
                         $result[] = $method;
-                        if ($method === HttpMethods::METHOD_GET) {
+                        if (HttpMethods::METHOD_GET === $method) {
                             $result[] = HttpMethods::METHOD_HEAD;
                         }
                     }

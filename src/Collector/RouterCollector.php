@@ -29,7 +29,7 @@ class RouterCollector implements RouterInterface
             try {
                 return $router->match($method, $path);
             } catch (HttpException $exception) {
-                if ($exception->getCode() === HttpException::HTTP_METHOD_NOT_ALLOWED) {
+                if (HttpException::HTTP_METHOD_NOT_ALLOWED === $exception->getCode()) {
                     $errorCode = HttpException::HTTP_METHOD_NOT_ALLOWED;
                 }
             }

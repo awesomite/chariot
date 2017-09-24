@@ -119,7 +119,7 @@ class ObjectPatternTest extends TestBase
     {
         $this->expectException(PatternException::class);
         $class = get_class($pattern);
-        if (mb_strpos($class, 'class@') === 0) {
+        if (0 === mb_strpos($class, 'class@')) {
             $class = 'class@';
         }
         $this->expectExceptionMessage(sprintf(

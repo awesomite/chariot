@@ -84,7 +84,7 @@ try {
     (new MyController())->dispatch($route);
 } catch (HttpException $exception) {
     http_response_code($exception->getCode());
-    if ($exception->getCode() === HttpException::HTTP_METHOD_NOT_ALLOWED) {
+    if (HttpException::HTTP_METHOD_NOT_ALLOWED === $exception->getCode()) {
         header('Allow: ' . implode(', ', $router->getAllowedMethods($url)));
     }
     echo $exception->getMessage(), "\n";

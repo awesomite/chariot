@@ -71,7 +71,7 @@ class PatternRoute
             function ($matches) use ($originalPattern, &$preProcessedParams) {
                 $str = substr($matches[0], 2, -2);
                 $arr = array_filter(preg_split('/\\s+/', $str), function ($a) {
-                    return trim($a) !== '';
+                    return '' !== trim($a);
                 });
                 $arr = array_values($arr);
                 switch (count($arr)) {
@@ -140,7 +140,7 @@ class PatternRoute
             function ($matches) use (&$params, $inputPattern) {
                 $str = substr($matches[0], 2, -2);
                 $arr = array_filter(preg_split('/\\s+/', $str), function ($a) {
-                    return trim($a) !== '';
+                    return '' !== trim($a);
                 });
                 $arr = array_values($arr);
                 switch (count($arr)) {
@@ -275,7 +275,7 @@ class PatternRoute
         $pattern = $this->pattern;
 
         while (strlen($pattern) > 0) {
-            if (substr($pattern, 0, 2) === '{{') {
+            if ('{{' === substr($pattern, 0, 2)) {
                 $result[] = new PatternRouteNode($pattern, true);
                 break;
             }

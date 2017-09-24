@@ -19,6 +19,6 @@ class RegexTester
         $test = @preg_match($regex, '');
         restore_error_handler();
 
-        return $test !== false;
+        return false !== $test;
     }
 }

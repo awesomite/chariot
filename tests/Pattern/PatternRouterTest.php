@@ -243,7 +243,7 @@ class PatternRouterTest extends TestBase
         $generatedLink = (string) $link;
         $this->assertSame($expectedLink, $generatedLink);
 
-        if ($generatedLink === LinkInterface::ERROR_CANNOT_GENERATE_LINK) {
+        if (LinkInterface::ERROR_CANNOT_GENERATE_LINK === $generatedLink) {
             $this->expectException(CannotGenerateLinkException::class);
             $this->expectExceptionMessageRegExp('#^' . preg_quote('Cannot generate link for ', '.*#') . '#');
         }
