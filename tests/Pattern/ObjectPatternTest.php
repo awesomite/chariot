@@ -133,7 +133,7 @@ class ObjectPatternTest extends TestBase
 
     public function providerInvalidToUrl()
     {
-        $pattern = new class () extends AbstractPattern {
+        $pattern = new class() extends AbstractPattern {
             public function getRegex(): string
             {
                 return 'foo';
