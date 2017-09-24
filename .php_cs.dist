@@ -13,6 +13,7 @@ return PhpCsFixer\Config::create()
         '@PSR2' => true,
         'strict_param' => false,
         'array_syntax' => ['syntax' => 'short'],
+        'unused_use' => true,
     ])
     ->setFinder($finder)
 ;
