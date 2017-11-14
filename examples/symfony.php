@@ -20,7 +20,7 @@ function handleSymfonyRequest(Request $request, RouterInterface $router)
     $path = explode('?', $request->getUri())[0];
 
     $route = $router->match($request->getMethod(), $path);
-    $request->query->add($route->getParams());
+    $request->attributes->add($route->getParams());
 
     return $route->getHandler();
 }
@@ -40,7 +40,7 @@ $handler = handleSymfonyRequest($request, $router);
 echo 'Uri:        ', $request->getUri(), "\n";
 echo 'Handler:    ', $handler, "\n";
 echo "Parameters: \n";
-foreach ($request->query as $key => $value) {
+foreach ($request->attributes as $key => $value) {
     echo "\t{$key}\t{$value}\n";
 }
 
