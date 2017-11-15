@@ -28,7 +28,7 @@ class Ip4PatternTest extends AbstractPatternTest
 
     public function providerInvalidToUrl()
     {
-        if (PHP_INT_SIZE > 4294967295) {
+        if (PHP_INT_MAX > 4294967295) {
             yield [PHP_INT_MAX];
         }
         yield [-1];
