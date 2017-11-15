@@ -15,7 +15,7 @@ class PatternRoute
 {
     use ExportableTrait;
 
-    const PATTERN_VAR = '/{{.*?}}/';
+    const PATTERN_VAR = '/{{.*?}?}}/';
 
     /**
      * Human-friendly pattern, i.e. "/{{ controller }}"

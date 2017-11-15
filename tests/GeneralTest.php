@@ -93,7 +93,7 @@ class GeneralTest extends TestBase
             ['lang' => 'pl', 'month' => '7'],
         ];
 
-        $router->get('/year-{{year \d+}}', 'showYear');
+        $router->get('/year-{{year \d{4}}}', 'showYear');
         yield [
             $router,
             HttpMethods::METHOD_GET,
