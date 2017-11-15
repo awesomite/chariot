@@ -21,7 +21,7 @@ class ListPattern extends AbstractPattern
             return $normalized;
         }
 
-        if (is_array($normalized) && !empty($normalized)) {
+        if (!empty($normalized)) {
             $result = implode(',', $normalized);
             if ($this->match($result)) {
                 return $result;
@@ -36,6 +36,11 @@ class ListPattern extends AbstractPattern
         return explode(',', $param);
     }
 
+    /**
+     * @param $data
+     *
+     * @return array|string
+     */
     private function normalizeToUrl($data)
     {
         if (is_object($data)) {
