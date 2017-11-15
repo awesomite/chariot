@@ -93,6 +93,15 @@ class GeneralTest extends TestBase
             ['lang' => 'pl', 'month' => '7'],
         ];
 
+        $router->get('/year-{{year \d+}}', 'showYear');
+        yield [
+            $router,
+            HttpMethods::METHOD_GET,
+            '/year-2000',
+            'showYear',
+            ['year' => '2000']
+        ];
+
         $customRouter = new PatternRouter(new Patterns());
         $customRouter->getPatterns()->addPattern(':month', '[1-9]|1[0-2]');
         $customRouter->addRoute(HttpMethods::METHOD_GET, '/month/{{ month :month }}', 'showMonth');
