@@ -6,6 +6,8 @@ use Awesomite\Chariot\Pattern\Patterns;
 
 class Ip4Pattern extends AbstractPattern
 {
+    private static $maxIp4Int = 4294967295;
+
     private $options = FILTER_FLAG_IPV4;
 
     public function __construct(bool $allowPrivateRange = true, bool $allowReservedRange = true)
@@ -42,7 +44,7 @@ class Ip4Pattern extends AbstractPattern
         }
 
         if (is_int($data)) {
-            if ($data >= 0 && $data <= 4294967295 && $this->match($result = long2ip($data))) {
+            if ($data >= 0 && $data <= self::$maxIp4Int && $this->match($result = long2ip($data))) {
                 return $result;
             }
         }

@@ -18,6 +18,7 @@ class Ip4PatternTest extends AbstractPatternTest
             ['0.0.0.0', '0.0.0.0'],
             [new StringableObject('0'), '0.0.0.0'],
             ['127.0.0.1', '127.0.0.1'],
+            [4294967295, '255.255.255.255'],
         ];
     }
 
@@ -28,8 +29,11 @@ class Ip4PatternTest extends AbstractPatternTest
 
     public function providerInvalidToUrl()
     {
-        if (PHP_INT_MAX > 4294967295) {
-            yield [PHP_INT_MAX];
+        $maxIntIp = 4294967295;
+        if (PHP_INT_MAX > $maxIntIp) {
+            yield [$maxIntIp + 1];
+            yield [$maxIntIp + 2];
+            yield [$maxIntIp + 3];
         }
         yield [-1];
         yield [new \stdClass()];
