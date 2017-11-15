@@ -209,11 +209,11 @@ class PatternRouteTest extends TestBase
      *
      * @param PatternRoute $route
      * @param array        $params
-     * @param bool         $expected
+     * @param array|bool   $expected
      */
-    public function testMatchParams(PatternRoute $route, array $params, bool $expected)
+    public function testMatchParams(PatternRoute $route, array $params, $expected)
     {
-        $this->assertSame($expected, (bool) $route->matchParams($params));
+        $this->assertSame($expected, $route->matchParams($params));
     }
 
     public function providerMatchParams()
@@ -225,12 +225,12 @@ class PatternRouteTest extends TestBase
         yield [
             $route,
             ['categoryId' => 1, 'itemId' => 1],
-            true,
+            ['categoryId' => '1', 'itemId' => '1'],
         ];
         yield [
             $route,
             ['categoryId' => '1', 'itemId' => 1],
-            true,
+            ['categoryId' => '1', 'itemId' => '1'],
         ];
         yield [
             $route,
@@ -241,6 +241,12 @@ class PatternRouteTest extends TestBase
             $route,
             [],
             false,
+        ];
+
+        yield [
+            new PatternRoute('/my-name-is-{{ name [a-zA-Z]{3,20} }}', $patterns),
+            ['name' => 'xy'],
+            false
         ];
     }
 
