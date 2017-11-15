@@ -33,7 +33,7 @@ script:
   - php examples/months.php
   - php examples/symfony.php
   - php examples/transform-params.php
-  - php ${PHP_ARGS} vendor/bin/humbug
+  - bin/humbug.sh
 
 after_script:
   - travis_retry bin/coveralls.sh
