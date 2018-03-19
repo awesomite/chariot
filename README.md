@@ -354,6 +354,9 @@ Let's imagine the following scenario:
 
 You can just change URL pattern and add code `withParam('title', $title)` wherever application generates url to item.
 Chariot allows resolve such issues better and faster. The following code explains how to use providers.
+See:
+* [ContextInterface](src/ParamDecorators/ContextInterface.php)
+* [ParamDecoratorInterface](src/ParamDecorators/ParamDecoratorInterface.php)
 
 ```php
 <?php
