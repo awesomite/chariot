@@ -26,7 +26,7 @@ before_script:
   - if [[ "$DEPENDENCIES" = 'low' ]]; then export PHP_ARGS=$(php -r "echo '-d error_reporting=', E_ALL ^ (E_DEPRECATED | E_USER_DEPRECATED);"); else export PHP_ARGS=''; fi
 
 script:
-  - if [[ "$TRAVIS_ALLOW_FAILURE" = 'false' ]]; then php -n ${PHP_CS_FIXER} --diff --dry-run -v fix; fi
+  - if [[ "$TRAVIS_ALLOW_FAILURE" = 'false' ]]; then php -n ${PHP_CS_FIXER} --diff --dry-run -v --allow-risky=yes fix; fi
   - php ${PHP_ARGS} vendor/bin/phpunit
   - php ${PHP_ARGS} vendor/bin/behat
   - php -n ${PHP_ARGS} speedtest/console.php test-links
