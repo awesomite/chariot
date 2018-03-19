@@ -362,9 +362,6 @@ use Awesomite\Chariot\ParamDecorators\ParamDecoratorInterface;
 use Awesomite\Chariot\Pattern\PatternRouter;
 use Awesomite\Chariot\ParamDecorators\ContextInterface;
 
-/**
- * @internal
- */
 class TitleProvider implements ParamDecoratorInterface
 {
     private $mapping;
