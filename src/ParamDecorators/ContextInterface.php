@@ -19,7 +19,7 @@ interface ContextInterface
     public function getMethod(): string;
 
     /**
-     * e.g. ['id' => 5, 'name' => 'awesomite']
+     * e.g. ['id' => 5, 'name' => 'chariot']
      *
      * @return array
      */
@@ -30,7 +30,7 @@ interface ContextInterface
     public function removeParam(string $key): self;
 
     /**
-     * e.g. ['id', 'title']
+     * e.g. ['id', 'name']
      *
      * @return array
      */
