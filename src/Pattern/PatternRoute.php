@@ -58,6 +58,11 @@ class PatternRoute
         $this->compilePattern();
         $this->extractParams();
     }
+    
+    public function getRequiredParams(): array
+    {
+        return array_keys($this->explodedParams);
+    }
 
     private function compilePattern()
     {

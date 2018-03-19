@@ -27,7 +27,7 @@ DESCRIPTION;
     {
         /** @var Timer[] $timers */
         $timers = [];
-        $this->testSameHandler(1); // warm up
+        $this->testDifferentHandlers(1); // warm up
         foreach ($numbers as $number) {
             $timers[$number] = $this->testDifferentHandlers($number);
         }

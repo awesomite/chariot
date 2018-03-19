@@ -319,4 +319,16 @@ class GeneralTest extends TestBase
             }
         }
     }
+
+    /**
+     * @expectedException \Awesomite\Chariot\Exceptions\LogicException
+     * @expectedExceptionMessage Router is frozen, cannot add new routes
+     */
+    public function testFrozen()
+    {
+        $router = PatternRouter::createDefault();
+        /** @var PatternRouter $router */
+        $router = eval('return ' . $router->exportToExecutable() . ';');
+        $router->get('/', 'home');
+    }
 }

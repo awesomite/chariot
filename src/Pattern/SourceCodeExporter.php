@@ -24,6 +24,8 @@ class SourceCodeExporter
     'nodesTree' => [[nodesTree]],
     'strategy' => [[strategy]],
     'routes' => $routes,
+    'requiredParams' => [[requiredParams]],
+    'frozen' => true,
   ));
 })
 
@@ -43,6 +45,7 @@ TEMPLATE;
             '[[keyValueRoutes]]' => $this->varExportFromObject($router, 'keyValueRoutes'),
             '[[nodesTree]]'      => $exportedNodes,
             '[[strategy]]'       => $this->varExportFromObject($router, 'strategy'),
+            '[[requiredParams]]' => $this->varExportFromObject($router, 'requiredParams'),
         ];
 
         return str_replace(array_keys($replace), array_values($replace), $template);

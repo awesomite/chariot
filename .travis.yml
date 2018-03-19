@@ -29,8 +29,12 @@ script:
   - php ${PHP_ARGS} vendor/bin/phpunit
   - php ${PHP_ARGS} vendor/bin/behat
   - php -n ${PHP_ARGS} speedtest/console.php test-links
+  - php -n ${PHP_ARGS} speedtest/console.php test-providers
   - php examples/micro-framework.php
   - php examples/months.php
+  - php examples/param-decorator.php
+  - php examples/param-decorator2.php
+  - php examples/param-decorator-item.php
   - php examples/symfony.php
   - php examples/transform-params.php
   - bin/humbug.sh

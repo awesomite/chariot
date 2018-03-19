@@ -5,6 +5,8 @@ namespace Awesomite\Chariot\Pattern;
 use Awesomite\Chariot\Exceptions\CannotGenerateLinkException;
 use Awesomite\Chariot\LinkInterface;
 use Awesomite\Chariot\LinkParamsTrait;
+use Awesomite\Chariot\ParamDecorators\Context;
+use Awesomite\Chariot\ParamDecorators\ParamDecoratorInterface;
 
 /**
  * @internal
@@ -12,6 +14,8 @@ use Awesomite\Chariot\LinkParamsTrait;
 class PatternLink implements LinkInterface
 {
     use LinkParamsTrait;
+    
+    private $method;
 
     private $handler;
 
@@ -24,10 +28,20 @@ class PatternLink implements LinkInterface
 
     private $sorted = false;
 
-    public function __construct(string $handler, array $routes)
+    /**
+     * @var \SplObjectStorage|ParamDecoratorInterface[]
+     */
+    private $paramDecorators;
+    
+    private $required;
+
+    public function __construct(string $method, string $handler, array $routes, \SplObjectStorage $paramDecorators, array $required)
     {
+        $this->method = $method;
         $this->handler = $handler;
         $this->routes = $routes;
+        $this->paramDecorators = $paramDecorators;
+        $this->required = $required;
     }
 
     public function __toString(): string
@@ -42,6 +56,7 @@ class PatternLink implements LinkInterface
     public function toString(): string
     {
         $this->sortIfNeed();
+        $this->handleDecorators();
         foreach ($this->routes as list($route, $extraParams)) {
             $currentParams = $this->params;
             /** @var PatternRoute $route */
@@ -59,6 +74,15 @@ class PatternLink implements LinkInterface
         }
 
         throw new CannotGenerateLinkException($this->handler, $this->params);
+    }
+    
+    private function handleDecorators()
+    {
+        foreach ($this->paramDecorators as $decorator) {
+            $context = new Context($this->handler, $this->method, $this->params, $this->required);
+            $decorator->decorate($context);
+            $this->params = $context->getParams();
+        }
     }
 
     private function normalizeVar($var)

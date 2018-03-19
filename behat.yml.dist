@@ -2,6 +2,6 @@ default:
     suites:
         core_features:
             paths:
-                - %paths.base%/features/core
+                - "%paths.base%/features/core"
             contexts:
                 - CoreContext

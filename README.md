@@ -33,6 +33,7 @@ echo $router->linkTo('showArticle')->withParam('id', 5);
     * [Validation](#validation)
     * [Default parameters](#default-parameters)
     * [Transforming parameters](#transforming-parameters)
+    * [Providers](#providers)
     * [Default patterns](#default-patterns)
  * [More examples](#more-examples)
  * [License](#license)
@@ -224,6 +225,8 @@ $factory = new RouterFactory(__DIR__ . DIRECTORY_SEPARATOR . 'router.cache');
 // Executing this function once is enough, e.g. during warmup
 $factory->rebuildRouter();
 $router = $factory->getRouter();
+// decorators are not cacheable, you must add them each time
+// $router->addParamDecorator(new MyParamDecorator());
 ```
 
 ### Defining custom patterns
@@ -338,6 +341,80 @@ echo $router->linkTo('showDay')->withParam('day', new \DateTime('2017-07-07')), 
 /*
  * Output:
  * /day/2017-07-07
+ */
+```
+
+### Providers
+
+Let's imagine the following scenario:
+
+1) You have prepared big web-application.
+2) Application is using the following pattern to display items `/items/{{ id :int }}`.
+3) Next goal is add title of item to url (`/items/{{ id :int }}-{{ title }}`).
+
+You can just change URL pattern and add code `withParam('title', $title)` wherever application generates url to item.
+Chariot allows resolve such issues better and faster. The following code explains how to use providers.
+
+```php
+<?php
+
+use Awesomite\Chariot\ParamDecorators\ParamDecoratorInterface;
+use Awesomite\Chariot\Pattern\PatternRouter;
+use Awesomite\Chariot\ParamDecorators\ContextInterface;
+
+/**
+ * @internal
+ */
+class TitleProvider implements ParamDecoratorInterface
+{
+    private $mapping;
+    
+    public function __construct(array $mapping)
+    {
+        $this->mapping = $mapping;
+    }
+
+    public function decorate(ContextInterface $context)
+    {
+        if ('showItem' !== $context->getHandler()) {
+            return;
+        }
+        
+        $id = $context->getParams()['id'] ?? null;
+        $title = $this->mapping[$id] ?? null;
+        
+        if (null !== $title) {
+            $context->setParam('title', $title);
+        }
+    }
+}
+
+$titleMapping = [
+    1 => 'my-first-item',
+    2 => 'my-second-item',
+    3 => 'my-third-item',
+];
+$router = PatternRouter::createDefault();
+$router->get('/items/{{ id :int }}-{{ title }}', 'showItem');
+
+/*
+ * Error, because title is not defined
+ */
+echo 'Without provider: ';
+echo $router->linkTo('showItem')->withParam('id', 1), PHP_EOL;
+
+/*
+ * Valid URL, because title will be provided automatically
+ */
+$router->addParamDecorator(new TitleProvider($titleMapping));
+echo 'With provider: ';
+echo $router->linkTo('showItem')->withParam('id', 1), PHP_EOL;
+
+/*
+ * Output:
+ * 
+ * Without provider: __ERROR_CANNOT_GENERATE_LINK
+ * With provider: /items/1-my-first-item
  */
 ```
 

@@ -4,11 +4,13 @@ namespace Awesomite\Chariot\Pattern;
 
 use Awesomite\Chariot\Exceptions\HttpException;
 use Awesomite\Chariot\Exceptions\InvalidArgumentException;
+use Awesomite\Chariot\Exceptions\LogicException;
 use Awesomite\Chariot\ExportableTrait;
 use Awesomite\Chariot\HttpMethods;
 use Awesomite\Chariot\InternalRoute;
 use Awesomite\Chariot\InternalRouteInterface;
 use Awesomite\Chariot\LinkInterface;
+use Awesomite\Chariot\ParamDecorators\ParamDecoratorInterface;
 use Awesomite\Chariot\RouterInterface;
 
 class PatternRouter implements RouterInterface
@@ -42,6 +44,10 @@ class PatternRouter implements RouterInterface
      * @var PatternsInterface
      */
     private $patterns;
+    
+    private $paramDecorators;
+    
+    private $frozen = false;
 
     public function __construct(PatternsInterface $patterns, int $strategy = self::STRATEGY_TREE)
     {
@@ -52,7 +58,7 @@ class PatternRouter implements RouterInterface
         $this->strategy = $strategy;
     }
 
-    public static function createDefault()
+    public static function createDefault(): self
     {
         return new static(Patterns::createDefault());
     }
@@ -61,9 +67,79 @@ class PatternRouter implements RouterInterface
     {
         return $this->patterns;
     }
+    
+    public function addParamDecorator(ParamDecoratorInterface $decorator): PatternRouter
+    {
+        $this->getParamDecorators()->attach($decorator);
+        
+        return $this;
+    }
+    
+    private $requiredParams = [];
+    
+    private function getDiff(array $a, array $b)
+    {
+        $diff = [];
+        foreach ($a as $el) {
+            if (!in_array($el, $b)) {
+                $diff[] = '-' . $el;
+            }
+        }
+        foreach ($b as $el) {
+            if (!in_array($el, $a)) {
+                $diff[] = '+' . $el;
+            }
+        }
+
+        return $diff;
+    }
+    
+    private function validateRouteParams(PatternRoute $route, string $method, string $pattern, string $handler, array $extraParams)
+    {
+        $requiredParams = array_merge($route->getRequiredParams(), array_keys($extraParams));
+        if (!isset($this->requiredParams[$handler])) {
+            $this->requiredParams[$handler] = [$method, $requiredParams, $pattern, $extraParams];
+            return;
+        }
+        
+        list($oldMethod, $oldRequiredParams, $oldPattern, $oldExtraParams) = $this->requiredParams[$handler];
+        $diff = $this->getDiff($oldRequiredParams, $requiredParams);
+        if ($diff) {
+            $message = <<<'ERROR'
+Each route associated with the same handler must contain the same parameters
+
+1) %s `%s`%s
+   [%s]
+2) %s `%s`%s
+   [%s]
+
+Diff: %s
+ERROR;
+
+            throw new InvalidArgumentException(sprintf(
+                $message,
+
+                $oldMethod,
+                $oldPattern,
+                $oldExtraParams ?  ' [' . http_build_query($oldExtraParams) . ']' : '',
+                implode(', ', $oldRequiredParams),
+
+                $method,
+                $pattern,
+                $extraParams ? ' [' . http_build_query($extraParams) . ']' : '',
+                implode(', ', $requiredParams),
+
+                implode(', ', $diff)
+            ));
+        }
+    }
 
     public function addRoute(string $method, string $pattern, string $handler, array $extraParams = []): PatternRouter
     {
+        if ($this->frozen) {
+            throw new LogicException('Router is frozen, cannot add new routes');
+        }
+        
         $this->processExtraParams($extraParams);
 
         if (!in_array($method, HttpMethods::ALL_METHODS, true)) {
@@ -77,6 +153,7 @@ class PatternRouter implements RouterInterface
         }
 
         $route = new PatternRoute($pattern, $this->patterns);
+        $this->validateRouteParams($route, $method, $pattern, $handler, $extraParams);
         $this->routes[$method][$handler][] = [$route, $extraParams];
 
         if (false === strpos($pattern, '{{')) {
@@ -354,7 +431,8 @@ class PatternRouter implements RouterInterface
             $routes = array_merge($routes, $this->routes[$currentMethod][$handler] ?? []);
         }
 
-        return new PatternLink($handler, $routes);
+        list(, $required) = $this->requiredParams[$handler] ?? [null, []];
+        return new PatternLink($method, $handler, $routes, $this->getParamDecorators(), $required);
     }
 
     /**
@@ -369,6 +447,11 @@ class PatternRouter implements RouterInterface
     public function exportToExecutable(): string
     {
         return (new SourceCodeExporter())->exportPatternRouter($this);
+    }
+    
+    private function getParamDecorators(): \SplObjectStorage
+    {
+        return $this->paramDecorators ?? $this->paramDecorators = new \SplObjectStorage();
     }
 
     private function processExtraParams(array &$data)

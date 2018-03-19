@@ -14,8 +14,10 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class LinksCommand extends Command
 {
+    use XdebugTrait;
     use LinksSameHandlerTrait;
     use LinksDifferentHandlerTrait;
+    use GlobalTimerTrait;
 
     protected function configure()
     {
@@ -28,9 +30,7 @@ class LinksCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->checkXdebug();
-
-        $globalTimer = new Timer();
-        $globalTimer->start();
+        $this->startGlobalTimer();
 
         $numbers = $input->getOption('fast')
             ? [10, 20, 50, 100, 150, 200]
@@ -42,15 +42,7 @@ class LinksCommand extends Command
         $this->executeDifferentHandlerTests($output, $numbers);
 
         $output->writeln('');
-        $globalTimer->stop();
-        $output->writeln(sprintf('Executed in %.2fs', $globalTimer->getTime()));
-    }
-
-    private function checkXdebug()
-    {
-        if (extension_loaded('xdebug')) {
-            throw new \RuntimeException('Do not execute performance tests with enabled xdebug (add -n option)');
-        }
+        $this->printGlobalTimerFooter($output);
     }
 
     /**
