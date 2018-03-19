@@ -33,7 +33,7 @@ class ProvidersCommands extends Command
         $this->startGlobalTimer();
         $this->warmUp();
         
-        $number = $input->getOption('fast') ? 10000 : 500000;
+        $number = $input->getOption('fast') ? 10000 : 100000;
         $timer1 = $this->handleWithProvider($number);
         $timer2 = $this->handleWithoutProvider($number);
         
