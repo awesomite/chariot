@@ -1,0 +1,6 @@
+{
+  "require": {
+    "php-coveralls/php-coveralls": "^2.0.0",
+    "friendsofphp/php-cs-fixer": "@stable"
+  }
+}

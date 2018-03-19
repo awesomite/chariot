@@ -8,12 +8,10 @@
     },
     "require-dev": {
         "phpunit/phpunit": "^6.5.7",
-        "satooshi/php-coveralls": "^1.0.1",
         "symfony/console": "^3.3.5",
         "symfony/http-foundation": "^3.3.5",
         "symfony/finder": "^3.3.5",
-        "behat/behat": "^3.4.3",
-        "humbug/humbug": "^1.0@RC"
+        "behat/behat": "^3.4.3"
     },
     "minimum-stability": "RC",
     "prefer-stable": true,

@@ -19,8 +19,8 @@ install:
   - if [[ "$DEPENDENCIES" = 'high' ]]; then travis_retry composer update --no-interaction --prefer-stable; fi
   - if [[ "$DEPENDENCIES" = 'low' ]]; then travis_retry composer update --no-interaction --prefer-stable --prefer-lowest; fi
   - composer show
-  - composer global require friendsofphp/php-cs-fixer:@stable
-  - export PHP_CS_FIXER="${HOME}/.composer/vendor/bin/php-cs-fixer"
+  - export PHP_CS_FIXER="./dev-tools/vendor/bin/php-cs-fixer"
+  - cd dev-tools; travis_retry composer update; cd ..
 
 before_script:
   - if [[ "$DEPENDENCIES" = 'low' ]]; then export PHP_ARGS=$(php -r "echo '-d error_reporting=', E_ALL ^ (E_DEPRECATED | E_USER_DEPRECATED);"); else export PHP_ARGS=''; fi
@@ -29,6 +29,13 @@ script:
   - if [[ "$TRAVIS_ALLOW_FAILURE" = 'false' ]]; then php -n ${PHP_CS_FIXER} --diff --dry-run -v --allow-risky=yes fix; fi
   - php ${PHP_ARGS} vendor/bin/phpunit
   - php ${PHP_ARGS} vendor/bin/behat
+
+  - travis_retry wget https://github.com/infection/infection/releases/download/0.8.1/infection.phar
+  - travis_retry wget https://github.com/infection/infection/releases/download/0.8.1/infection.phar.pubkey
+  - chmod +x infection.phar
+  - travis-retry ./infection.phar self-update
+  - ./infection.phar
+
   - php -n ${PHP_ARGS} speedtest/console.php test-links
   - php -n ${PHP_ARGS} speedtest/console.php test-providers
   - php examples/micro-framework.php
@@ -38,7 +45,6 @@ script:
   - php examples/param-decorator-item.php
   - php examples/symfony.php
   - php examples/transform-params.php
-  - bin/humbug.sh
 
 after_script:
   - travis_retry bin/coveralls.sh

@@ -6,6 +6,6 @@
     ]
   },
   "logs": {
-    "text": "build/logs/humbuglog.txt"
+    "text": "infection-log.txt"
   }
 }
