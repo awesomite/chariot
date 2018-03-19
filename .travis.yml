@@ -29,13 +29,7 @@ script:
   - if [[ "$TRAVIS_ALLOW_FAILURE" = 'false' ]]; then php -n ${PHP_CS_FIXER} --diff --dry-run -v --allow-risky=yes fix; fi
   - php ${PHP_ARGS} vendor/bin/phpunit
   - php ${PHP_ARGS} vendor/bin/behat
-
-  - travis_retry wget https://github.com/infection/infection/releases/download/0.8.1/infection.phar -q
-  - travis_retry wget https://github.com/infection/infection/releases/download/0.8.1/infection.phar.pubkey -q
-  - chmod +x infection.phar
-  - travis_retry ./infection.phar self-update
-  - ./infection.phar
-
+  - bin/infection.sh
   - php -n ${PHP_ARGS} speedtest/console.php test-links
   - php -n ${PHP_ARGS} speedtest/console.php test-providers
   - php examples/micro-framework.php
