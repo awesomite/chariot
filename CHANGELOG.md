@@ -6,6 +6,7 @@
 see examples:
   * `examples/param-decorator.php`
   * `examples/param-decorator2.php`
+  * `examples/param-decorator-item.php`
 * Changed - cannot add route after restoring router from cache
 ```php
 <?php
