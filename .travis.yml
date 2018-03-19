@@ -33,7 +33,7 @@ script:
   - travis_retry wget https://github.com/infection/infection/releases/download/0.8.1/infection.phar
   - travis_retry wget https://github.com/infection/infection/releases/download/0.8.1/infection.phar.pubkey
   - chmod +x infection.phar
-  - travis-retry ./infection.phar self-update
+  - travis_retry ./infection.phar self-update
   - ./infection.phar
 
   - php -n ${PHP_ARGS} speedtest/console.php test-links
