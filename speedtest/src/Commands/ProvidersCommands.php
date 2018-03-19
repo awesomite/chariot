@@ -72,7 +72,7 @@ class ProvidersCommands extends Command
     private function handleWithProvider(int $number): Timer
     {
         $router = PatternRouter::createDefault();
-        $router->addParamDecorator(new class implements ParamDecoratorInterface {
+        $router->addParamDecorator(new class() implements ParamDecoratorInterface {
             private $mapping = [
                 1 => 'first',
                 2 => 'second',
@@ -108,7 +108,7 @@ class ProvidersCommands extends Command
     private function handleWithoutProvider(int $number): Timer
     {
         $router = PatternRouter::createDefault();
-        $router->get( '/items/{{ id :int }}-{{ title }}', 'showItem');
+        $router->get('/items/{{ id :int }}-{{ title }}', 'showItem');
 
         $timer = new Timer();
         for ($i = 0; $i < $number; $i++) {

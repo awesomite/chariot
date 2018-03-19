@@ -31,7 +31,7 @@ interface ContextInterface
 
     /**
      * e.g. ['id', 'title']
-     * 
+     *
      * @return array
      */
     public function getRequiredParams(): array;

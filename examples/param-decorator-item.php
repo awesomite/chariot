@@ -56,7 +56,7 @@ echo $router->linkTo('showItem')->withParam('id', 1), PHP_EOL;
 
 /*
  * Output:
- * 
+ *
  * Without provider: __ERROR_CANNOT_GENERATE_LINK
  * With provider: /items/1-my-first-item
  */
