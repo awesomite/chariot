@@ -49,6 +49,22 @@ class Patterns implements PatternsInterface
 
     private $defaultPattern;
 
+    /**
+     * @internal
+     * @param string $name
+     */
+    public static function validatePatternName(string $name)
+    {
+        $max = 32;
+        if (\strlen($name) > $max) {
+            throw new InvalidArgumentException(\sprintf(
+                'Compilation failed: subpattern name is too long (maximum %d characters) [%s]',
+                $max,
+                $name
+            ));
+        }
+    }
+
     public function __construct(array $patterns = [], string $defaultPattern = null)
     {
         foreach ($patterns as $name => $pattern) {
@@ -64,6 +80,8 @@ class Patterns implements PatternsInterface
 
     public function addPattern(string $name, $pattern): PatternsInterface
     {
+        static::validatePatternName($name);
+
         if (isset($this[$name])) {
             throw new LogicException(\sprintf('Pattern %s is already added', $name));
         }

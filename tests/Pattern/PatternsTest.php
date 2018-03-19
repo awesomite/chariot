@@ -276,4 +276,32 @@ class PatternsTest extends TestBase
             ['hello/world'],
         ];
     }
+
+    /**
+     * @dataProvider providerTooLong
+     *
+     * @param $length
+     */
+    public function testTooLong($length)
+    {
+        $name = \implode(\array_fill(0, $length, 'q'));
+        if ($length > 32) {
+            $this->expectException(InvalidArgumentException::class);
+        }
+        Patterns::validatePatternName($name);
+        $this->assertTrue(true);
+    }
+
+    public function providerTooLong()
+    {
+        return [
+            [29],
+            [30],
+            [31],
+            [32],
+            [33],
+            [34],
+            [35],
+        ];
+    }
 }

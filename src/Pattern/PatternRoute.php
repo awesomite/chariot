@@ -109,6 +109,8 @@ class PatternRoute
                     throw new InvalidArgumentException("Invalid param name “{$name}” (source: {$originalPattern})");
                 }
 
+                Patterns::validatePatternName($name);
+
                 if ($patternObj = $this->patterns[$pattern] ?? null) {
                     /** @var PatternInterface $patternObj */
                     $pattern = $patternObj->getRegex();
