@@ -1,5 +1,12 @@
 <?php
 
+/*
+ * This file is part of the awesomite/chariot package.
+ * (c) Bartłomiej Krukowski <bartlomiej@krukowski.me>
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
+ */
+
 namespace Awesomite\Chariot\Pattern;
 
 use Awesomite\Chariot\Exceptions\HttpException;
@@ -52,7 +59,7 @@ class PatternRouter implements RouterInterface
     public function __construct(PatternsInterface $patterns, int $strategy = self::STRATEGY_TREE)
     {
         $this->patterns = $patterns;
-        if (!in_array($strategy, [static::STRATEGY_TREE, static::STRATEGY_SEQUENTIALLY], true)) {
+        if (!\in_array($strategy, [static::STRATEGY_TREE, static::STRATEGY_SEQUENTIALLY], true)) {
             throw new InvalidArgumentException("Invalid strategy: {$strategy}");
         }
         $this->strategy = $strategy;
@@ -81,12 +88,12 @@ class PatternRouter implements RouterInterface
     {
         $diff = [];
         foreach ($a as $el) {
-            if (!in_array($el, $b)) {
+            if (!\in_array($el, $b)) {
                 $diff[] = '-' . $el;
             }
         }
         foreach ($b as $el) {
-            if (!in_array($el, $a)) {
+            if (!\in_array($el, $a)) {
                 $diff[] = '+' . $el;
             }
         }
@@ -96,7 +103,7 @@ class PatternRouter implements RouterInterface
     
     private function validateRouteParams(PatternRoute $route, string $method, string $pattern, string $handler, array $extraParams)
     {
-        $requiredParams = array_merge($route->getRequiredParams(), array_keys($extraParams));
+        $requiredParams = \array_merge($route->getRequiredParams(), \array_keys($extraParams));
         if (!isset($this->requiredParams[$handler])) {
             $this->requiredParams[$handler] = [$method, $requiredParams, $pattern, $extraParams];
             return;
@@ -116,20 +123,20 @@ Each route associated with the same handler must contain the same parameters
 Diff: %s
 ERROR;
 
-            throw new InvalidArgumentException(sprintf(
+            throw new InvalidArgumentException(\sprintf(
                 $message,
 
                 $oldMethod,
                 $oldPattern,
-                $oldExtraParams ?  ' [' . http_build_query($oldExtraParams) . ']' : '',
-                implode(', ', $oldRequiredParams),
+                $oldExtraParams ?  ' [' . \http_build_query($oldExtraParams) . ']' : '',
+                \implode(', ', $oldRequiredParams),
 
                 $method,
                 $pattern,
-                $extraParams ? ' [' . http_build_query($extraParams) . ']' : '',
-                implode(', ', $requiredParams),
+                $extraParams ? ' [' . \http_build_query($extraParams) . ']' : '',
+                \implode(', ', $requiredParams),
 
-                implode(', ', $diff)
+                \implode(', ', $diff)
             ));
         }
     }
@@ -142,12 +149,12 @@ ERROR;
         
         $this->processExtraParams($extraParams);
 
-        if (!in_array($method, HttpMethods::ALL_METHODS, true)) {
+        if (!\in_array($method, HttpMethods::ALL_METHODS, true)) {
             throw new InvalidArgumentException(
-                sprintf(
+                \sprintf(
                     'Method is equal to %s, but must be equal to one of the following: %s',
                     $method,
-                    implode(', ', HttpMethods::ALL_METHODS)
+                    \implode(', ', HttpMethods::ALL_METHODS)
                 )
             );
         }
@@ -156,7 +163,7 @@ ERROR;
         $this->validateRouteParams($route, $method, $pattern, $handler, $extraParams);
         $this->routes[$method][$handler][] = [$route, $extraParams];
 
-        if (false === strpos($pattern, '{{')) {
+        if (false === \strpos($pattern, '{{')) {
             $this->keyValueRoutes[$method][$pattern] = [$handler, $extraParams];
         } elseif ($this->strategy === static::STRATEGY_TREE) {
             $currentNode = &$this->nodesTree;
@@ -244,7 +251,7 @@ ERROR;
 
     public function getAllowedMethods(string $url): array
     {
-        $allRealMethods = array_diff(HttpMethods::ALL_METHODS, [HttpMethods::METHOD_ANY]);
+        $allRealMethods = \array_diff(HttpMethods::ALL_METHODS, [HttpMethods::METHOD_ANY]);
 
 
         switch ($this->strategy) {
@@ -262,7 +269,7 @@ ERROR;
         }
 
         $result = [];
-        foreach (array_diff($allRealMethods, [HttpMethods::METHOD_HEAD]) as $method) {
+        foreach (\array_diff($allRealMethods, [HttpMethods::METHOD_HEAD]) as $method) {
             switch ($this->strategy) {
                 case static::STRATEGY_SEQUENTIALLY:
                     if ($this->matchSequentiallyForMethods([$method], $url)) {
@@ -297,7 +304,7 @@ ERROR;
     {
         foreach ($methods as $method) {
             $keyValue = $this->keyValueRoutes[$method][$path] ?? null;
-            if (!is_null($keyValue)) {
+            if (!\is_null($keyValue)) {
                 list($handler, $extraParams) = $keyValue;
 
                 return new InternalRoute($handler, $extraParams);
@@ -333,7 +340,7 @@ ERROR;
             return $result;
         }
 
-        if ($this->matchSequentiallyForMethods(array_diff(HttpMethods::ALL_METHODS, $methods), $path)) {
+        if ($this->matchSequentiallyForMethods(\array_diff(HttpMethods::ALL_METHODS, $methods), $path)) {
             throw new HttpException($method, $path, HttpException::HTTP_METHOD_NOT_ALLOWED);
         }
 
@@ -358,7 +365,7 @@ ERROR;
                     /** @var PatternRoute $patternRoute */
                     /** @var array $extraParams */
                     if ($patternRoute->match($path, $queryParams)) {
-                        return new InternalRoute($handler, array_replace($extraParams, $queryParams));
+                        return new InternalRoute($handler, \array_replace($extraParams, $queryParams));
                     }
                 }
             }
@@ -375,7 +382,7 @@ ERROR;
             return $result;
         }
 
-        if ($this->matchTreeForMethods(array_diff(HttpMethods::ALL_METHODS, $methods), $path)) {
+        if ($this->matchTreeForMethods(\array_diff(HttpMethods::ALL_METHODS, $methods), $path)) {
             throw new HttpException($method, $path, HttpException::HTTP_METHOD_NOT_ALLOWED);
         }
 
@@ -395,26 +402,26 @@ ERROR;
         }
 
         $nodesPointer = &$this->nodesTree;
-        $chars = str_split($path);
+        $chars = \str_split($path);
 
         while (1) {
-            $candidates = array_merge(
+            $candidates = \array_merge(
                 $nodesPointer['regex'] ?? [],
                 $nodesPointer['all'] ?? []
             );
 
             foreach ($candidates as list($route, $handler, $params, $method)) {
-                if (!in_array($method, $methods, true)) {
+                if (!\in_array($method, $methods, true)) {
                     continue;
                 }
                 /** @var PatternRoute $route */
                 if ($route->match($path, $queryParams)) {
-                    return new InternalRoute($handler, array_replace($params, $queryParams));
+                    return new InternalRoute($handler, \array_replace($params, $queryParams));
                 }
             }
 
-            $char = array_shift($chars);
-            if (!is_string($char) || !isset($nodesPointer[$char])) {
+            $char = \array_shift($chars);
+            if (!\is_string($char) || !isset($nodesPointer[$char])) {
                 break;
             }
             $nodesPointer = &$nodesPointer[$char];
@@ -428,7 +435,7 @@ ERROR;
         $routes = [];
 
         foreach ($this->methodMapping($method) as $currentMethod) {
-            $routes = array_merge($routes, $this->routes[$currentMethod][$handler] ?? []);
+            $routes = \array_merge($routes, $this->routes[$currentMethod][$handler] ?? []);
         }
 
         list(, $required) = $this->requiredParams[$handler] ?? [null, []];
@@ -456,29 +463,29 @@ ERROR;
 
     private function processExtraParams(array &$data)
     {
-        array_walk_recursive($data, function (&$element) {
-            if (is_scalar($element) || is_null($element)) {
+        \array_walk_recursive($data, function (&$element) {
+            if (\is_scalar($element) || \is_null($element)) {
                 return;
             }
 
-            if (is_object($element)) {
+            if (\is_object($element)) {
                 if ($element instanceof \Traversable) {
-                    $element = iterator_to_array($element);
+                    $element = \iterator_to_array($element);
                     $this->processExtraParams($element);
 
                     return;
                 }
 
-                if (method_exists($element, '__toString')) {
+                if (\method_exists($element, '__toString')) {
                     $element = (string) $element;
 
                     return;
                 }
             }
 
-            $message = sprintf(
+            $message = \sprintf(
                 'Additional parameters can contain only scalar or null values, "%s" given',
-                is_object($element) ? get_class($element) : gettype($element)
+                \is_object($element) ? \get_class($element) : \gettype($element)
             );
 
             throw new InvalidArgumentException($message);

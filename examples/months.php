@@ -1,5 +1,12 @@
 <?php
 
+/*
+ * This file is part of the awesomite/chariot package.
+ * (c) Bartłomiej Krukowski <bartlomiej@krukowski.me>
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
+ */
+
 use Awesomite\Chariot\Pattern\PatternRouter;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
@@ -41,7 +48,7 @@ foreach ($paths as $path) {
     $route = $router->match('GET', $path);
     $year = $route->getParams()['year'];
     $month = $route->getParams()['month'];
-    $output->writeln(sprintf(
+    $output->writeln(\sprintf(
         '<info>%-20s</info>     => year: <info>%d</info> month: <info>%2d</info>',
         $path,
         $year,
@@ -57,7 +64,7 @@ $paramsData = [
 ];
 $output->writeln('<bg=yellow;fg=black>  Building URLs  </>');
 foreach ($paramsData as $params) {
-    $output->writeln(sprintf(
+    $output->writeln(\sprintf(
         'year: <info>%d</info> month: <info>%2d</info>     => <info>%s</info>',
         $params['year'],
         $params['month'],

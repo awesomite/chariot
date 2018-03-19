@@ -1,5 +1,12 @@
 <?php
 
+/*
+ * This file is part of the awesomite/chariot package.
+ * (c) Bartłomiej Krukowski <bartlomiej@krukowski.me>
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
+ */
+
 use Awesomite\Chariot\ParamDecorators\ParamDecoratorInterface;
 use Awesomite\Chariot\Pattern\PatternRouter;
 use Awesomite\Chariot\ParamDecorators\ContextInterface;
@@ -25,12 +32,12 @@ class MyCategoryDecorator implements ParamDecoratorInterface
         }
         
         $params = $context->getParams();
-        if (!array_key_exists('id', $params)) {
+        if (!\array_key_exists('id', $params)) {
             return;
         }
         
         $id = $params['id'];
-        if (array_key_exists($id, $this->mapping)) {
+        if (\array_key_exists($id, $this->mapping)) {
             $context->setParam('name', $this->mapping[$id]);
         }
     }

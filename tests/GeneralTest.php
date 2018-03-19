@@ -1,5 +1,12 @@
 <?php
 
+/*
+ * This file is part of the awesomite/chariot package.
+ * (c) Bartłomiej Krukowski <bartlomiej@krukowski.me>
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
+ */
+
 namespace Awesomite\Chariot;
 
 use Awesomite\Chariot\Collector\RouterCollector;
@@ -228,7 +235,7 @@ class GeneralTest extends TestBase
             $data[0] = (new RouterCollector())->addRouter($router);
             yield $data;
 
-            $data[0] = unserialize(serialize($router));
+            $data[0] = \unserialize(\serialize($router));
             yield $data;
         }
     }
@@ -302,7 +309,7 @@ class GeneralTest extends TestBase
                 [$router, '/ping', [HttpMethods::METHOD_GET, HttpMethods::METHOD_HEAD, HttpMethods::METHOD_POST]],
                 [$router, '/new-article', [HttpMethods::METHOD_PUT]],
                 [$router, '/patch', [HttpMethods::METHOD_PATCH]],
-                [$router, '/any', array_diff(HttpMethods::ALL_METHODS, [HttpMethods::METHOD_ANY])],
+                [$router, '/any', \array_diff(HttpMethods::ALL_METHODS, [HttpMethods::METHOD_ANY])],
             ];
 
             foreach ($data as $row) {
@@ -314,7 +321,7 @@ class GeneralTest extends TestBase
                 $row[0] = (new RouterCollector())->addRouter($router);
                 yield $row;
 
-                $row[0] = unserialize(serialize($router));
+                $row[0] = \unserialize(\serialize($router));
                 yield $row;
             }
         }

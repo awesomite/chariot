@@ -1,5 +1,12 @@
 <?php
 
+/*
+ * This file is part of the awesomite/chariot package.
+ * (c) Bartłomiej Krukowski <bartlomiej@krukowski.me>
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
+ */
+
 namespace Awesomite\Chariot\Pattern;
 
 use Awesomite\Chariot\Exceptions\CannotGenerateLinkException;
@@ -62,14 +69,14 @@ class PatternLink implements LinkInterface
             /** @var PatternRoute $route */
             /** @var array $extraParams */
             foreach ($extraParams as $key => $value) {
-                if (!array_key_exists($key, $this->params) || $this->normalizeVar($this->params[$key]) != $value) {
+                if (!\array_key_exists($key, $this->params) || $this->normalizeVar($this->params[$key]) != $value) {
                     continue 2;
                 }
                 unset($currentParams[$key]);
             }
             $convertedParams = $route->matchParams($currentParams);
-            if (is_array($convertedParams)) {
-                return $this->prefix . (string) $route->bindParams(array_replace($currentParams, $convertedParams));
+            if (\is_array($convertedParams)) {
+                return $this->prefix . (string) $route->bindParams(\array_replace($currentParams, $convertedParams));
             }
         }
 
@@ -87,18 +94,18 @@ class PatternLink implements LinkInterface
 
     private function normalizeVar($var)
     {
-        if (is_object($var)) {
+        if (\is_object($var)) {
             if ($var instanceof \Traversable) {
-                return $this->normalizeVar(iterator_to_array($var));
+                return $this->normalizeVar(\iterator_to_array($var));
             }
 
-            if (method_exists($var, '__toString')) {
+            if (\method_exists($var, '__toString')) {
                 return (string) $var;
             }
         }
 
-        if (is_array($var)) {
-            array_walk_recursive($var, function ($element) {
+        if (\is_array($var)) {
+            \array_walk_recursive($var, function ($element) {
                 return $this->normalizeVar($element);
             });
 
@@ -114,8 +121,8 @@ class PatternLink implements LinkInterface
             return;
         }
 
-        usort($this->routes, function ($left, $right) {
-            return count($right[1]) <=> count($left[1]);
+        \usort($this->routes, function ($left, $right) {
+            return \count($right[1]) <=> \count($left[1]);
         });
         $this->sorted = true;
     }

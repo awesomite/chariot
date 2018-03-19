@@ -1,5 +1,12 @@
 <?php
 
+/*
+ * This file is part of the awesomite/chariot package.
+ * (c) Bartłomiej Krukowski <bartlomiej@krukowski.me>
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
+ */
+
 namespace Awesomite\Chariot\Speedtest\Commands;
 
 use Awesomite\Chariot\ParamDecorators\ContextInterface;
@@ -61,12 +68,12 @@ class ProvidersCommands extends Command
     
     private function formatTime(float $time)
     {
-        return sprintf('% 10.4f', $time * 1000);
+        return \sprintf('% 10.4f', $time * 1000);
     }
     
     private function formatDiff(float $f1, float $f2)
     {
-        return sprintf('% 8.2f', ($f1 - $f2)/$f2 * 100);
+        return \sprintf('% 8.2f', ($f1 - $f2)/$f2 * 100);
     }
     
     private function handleWithProvider(int $number): Timer

@@ -1,5 +1,12 @@
 <?php
 
+/*
+ * This file is part of the awesomite/chariot package.
+ * (c) Bartłomiej Krukowski <bartlomiej@krukowski.me>
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
+ */
+
 namespace Awesomite\Chariot\Pattern;
 
 use Awesomite\Chariot\Exceptions\InvalidArgumentException;
@@ -61,7 +68,7 @@ class PatternRoute
     
     public function getRequiredParams(): array
     {
-        return array_keys($this->explodedParams);
+        return \array_keys($this->explodedParams);
     }
 
     private function compilePattern()
@@ -71,25 +78,25 @@ class PatternRoute
         /** @var array $preProcessedParams [['{{ id \d+ }}', '(?<id>\d+)'], ...] */
         $preProcessedParams = [];
 
-        preg_replace_callback(
+        \preg_replace_callback(
             static::PATTERN_VAR,
             function ($matches) use ($originalPattern, &$preProcessedParams) {
-                $str = substr($matches[0], 2, -2);
-                $arr = array_filter(preg_split('/\\s+/', $str), function ($a) {
-                    return '' !== trim($a);
+                $str = \substr($matches[0], 2, -2);
+                $arr = \array_filter(\preg_split('/\\s+/', $str), function ($a) {
+                    return '' !== \trim($a);
                 });
-                $arr = array_values($arr);
-                switch (count($arr)) {
+                $arr = \array_values($arr);
+                switch (\count($arr)) {
                     case 1:
                     case 2:
                     case 3:
-                        while (count($arr) < 2) {
+                        while (\count($arr) < 2) {
                             $arr[] = null;
                         }
 
                         list($name, $pattern) = $arr;
 
-                        if (is_null($pattern)) {
+                        if (\is_null($pattern)) {
                             $pattern = $this->patterns->getDefaultPattern();
                         }
                         break;
@@ -98,7 +105,7 @@ class PatternRoute
                         throw new InvalidArgumentException("Invalid url pattern {$originalPattern}");
                 }
 
-                if (!preg_match('/^[a-zA-Z0-9_]+$/', $name)) {
+                if (!\preg_match('/^[a-zA-Z0-9_]+$/', $name)) {
                     throw new InvalidArgumentException("Invalid param name “{$name}” (source: {$originalPattern})");
                 }
 
@@ -122,17 +129,17 @@ class PatternRoute
         $resultParts = [];
 
         foreach ($preProcessedParams as list($original, $replacement)) {
-            $exploded = explode($original, $uriPattern, 2);
-            $resultParts[] = preg_quote($exploded[0], Patterns::DELIMITER);
+            $exploded = \explode($original, $uriPattern, 2);
+            $resultParts[] = \preg_quote($exploded[0], Patterns::DELIMITER);
             $resultParts[] = $replacement;
             $uriPattern = $exploded[1];
         }
         if ('' !== $uriPattern) {
-            $resultParts[] = preg_quote($uriPattern, Patterns::DELIMITER);
+            $resultParts[] = \preg_quote($uriPattern, Patterns::DELIMITER);
         }
 
         $d = Patterns::DELIMITER;
-        $this->compiledPattern = $d . '^' . implode('', $resultParts) . '$' . $d;
+        $this->compiledPattern = $d . '^' . \implode('', $resultParts) . '$' . $d;
     }
 
     private function extractParams()
@@ -140,23 +147,23 @@ class PatternRoute
         $params = &$this->explodedParams;
         $params = [];
         $inputPattern = $this->pattern;
-        $this->simplePattern = preg_replace_callback(
+        $this->simplePattern = \preg_replace_callback(
             static::PATTERN_VAR,
             function ($matches) use (&$params, $inputPattern) {
-                $str = substr($matches[0], 2, -2);
-                $arr = array_filter(preg_split('/\\s+/', $str), function ($a) {
-                    return '' !== trim($a);
+                $str = \substr($matches[0], 2, -2);
+                $arr = \array_filter(\preg_split('/\\s+/', $str), function ($a) {
+                    return '' !== \trim($a);
                 });
-                $arr = array_values($arr);
-                switch (count($arr)) {
+                $arr = \array_values($arr);
+                switch (\count($arr)) {
                     case 1:
                     case 2:
                     case 3:
-                        while (count($arr) < 3) {
+                        while (\count($arr) < 3) {
                             $arr[] = null;
                         }
                         list($name, $pattern, $default) = $arr;
-                        if (is_null($pattern)) {
+                        if (\is_null($pattern)) {
                             $pattern = $this->patterns->getDefaultPattern();
                         }
                         break;
@@ -188,18 +195,18 @@ class PatternRoute
 
     public function match(string $path, &$params): bool
     {
-        if ($result = (bool) preg_match($this->compiledPattern, $path, $matches)) {
-            $resultParams = array_filter(
+        if ($result = (bool) \preg_match($this->compiledPattern, $path, $matches)) {
+            $resultParams = \array_filter(
                 $matches,
                 function ($key) {
-                    return !is_int($key);
+                    return !\is_int($key);
                 },
                 ARRAY_FILTER_USE_KEY
             );
 
             foreach ($resultParams as $key => $value) {
                 $patternName = $this->explodedParams[$key][2];
-                if (!is_null($patternName)) {
+                if (!\is_null($patternName)) {
                     $pattern = $this->patterns[$patternName];
                     try {
                         $resultParams[$key] = $pattern->fromUrl($value);
@@ -228,8 +235,8 @@ class PatternRoute
     {
         $result = [];
         foreach ($this->explodedParams as $name => list($default, $pattern, $patternName)) {
-            if (!array_key_exists($name, $params)) {
-                if (is_null($default)) {
+            if (!\array_key_exists($name, $params)) {
+                if (\is_null($default)) {
                     return false;
                 }
                 $currentParam = $default;
@@ -237,7 +244,7 @@ class PatternRoute
                 $currentParam = $params[$name];
             }
 
-            if (!is_null($patternName)) {
+            if (!\is_null($patternName)) {
                 $patternObj = $this->patterns[$patternName];
 
                 try {
@@ -246,7 +253,7 @@ class PatternRoute
                     return false;
                 }
             } else {
-                if (is_object($currentParam) && method_exists($currentParam, '__toString')) {
+                if (\is_object($currentParam) && \method_exists($currentParam, '__toString')) {
                     $currentParam = (string) $currentParam;
                 }
                 if (!$this->pregMatchMultiType($pattern, $currentParam)) {
@@ -264,7 +271,7 @@ class PatternRoute
         $result = $this->simplePattern;
         foreach ($this->explodedParams as $name => list($default)) {
             $value = $params[$name] ?? $default;
-            $result = str_replace('{{' . $name . '}}', $value, $result);
+            $result = \str_replace('{{' . $name . '}}', $value, $result);
             unset($params[$name]);
         }
 
@@ -279,14 +286,14 @@ class PatternRoute
         $result = [];
         $pattern = $this->pattern;
 
-        while (strlen($pattern) > 0) {
-            if ('{{' === substr($pattern, 0, 2)) {
+        while (\strlen($pattern) > 0) {
+            if ('{{' === \substr($pattern, 0, 2)) {
                 $result[] = new PatternRouteNode($pattern, true);
                 break;
             }
 
-            $result[] = new PatternRouteNode(substr($pattern, 0, 1), false);
-            $pattern = substr($pattern, 1);
+            $result[] = new PatternRouteNode(\substr($pattern, 0, 1), false);
+            $pattern = \substr($pattern, 1);
         }
 
         return $result;
@@ -295,11 +302,11 @@ class PatternRoute
     private function pregMatchMultiType(string $pattern, $subject): int
     {
         if (
-            is_string($subject)
-            || is_scalar($subject)
-            || is_null($subject)
+            \is_string($subject)
+            || \is_scalar($subject)
+            || \is_null($subject)
         ) {
-            return preg_match($pattern, (string) $subject);
+            return \preg_match($pattern, (string) $subject);
         }
 
         return 0;

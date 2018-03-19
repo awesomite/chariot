@@ -1,5 +1,12 @@
 <?php
 
+/*
+ * This file is part of the awesomite/chariot package.
+ * (c) Bartłomiej Krukowski <bartlomiej@krukowski.me>
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
+ */
+
 namespace Awesomite\Chariot\Pattern;
 
 use Awesomite\Chariot\Exceptions\InvalidArgumentException;
@@ -169,7 +176,7 @@ class PatternRouteTest extends TestBase
         $patterns = Patterns::createDefault();
         $route = new PatternRoute($pattern, $patterns);
         $nodes = $route->getNodes();
-        $this->assertSame(count($expectedNodes), count($nodes));
+        $this->assertSame(\count($expectedNodes), \count($nodes));
         foreach ($nodes as $key => $node) {
             list($expectedKey, $expectedIsRegex) = $expectedNodes[$key];
             $this->assertSame($expectedKey, $node->getKey());

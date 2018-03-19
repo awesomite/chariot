@@ -1,5 +1,12 @@
 <?php
 
+/*
+ * This file is part of the awesomite/chariot package.
+ * (c) Bartłomiej Krukowski <bartlomiej@krukowski.me>
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
+ */
+
 namespace Awesomite\Chariot\Speedtest\Commands;
 
 use Awesomite\Chariot\Pattern\PatternRouter;
@@ -39,7 +46,7 @@ DESCRIPTION;
     {
         $pages = [];
         for ($i = 1; $i <= $numberOfCategories; $i++) {
-            $pages[$i] = StringsHelper::getRandomString(mt_rand(10, 20));
+            $pages[$i] = StringsHelper::getRandomString(\mt_rand(10, 20));
         }
 
         $router = PatternRouter::createDefault();

@@ -1,5 +1,12 @@
 <?php
 
+/*
+ * This file is part of the awesomite/chariot package.
+ * (c) Bartłomiej Krukowski <bartlomiej@krukowski.me>
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
+ */
+
 namespace Awesomite\Chariot\Speedtest\Commands;
 
 use Awesomite\Chariot\Speedtest\Timer;
@@ -52,7 +59,7 @@ class LinksCommand extends Command
     private function printTableOfTimes(OutputInterface $output, array $timers)
     {
         $table = new Table($output);
-        $table->setHeaders(array_merge(['time \ number of paths (X)'], array_keys($timers)));
+        $table->setHeaders(\array_merge(['time \ number of paths (X)'], \array_keys($timers)));
 
         $rowMin = ['min time [ms]'];
         $rowMax = ['max time [ms]'];
@@ -67,10 +74,10 @@ class LinksCommand extends Command
                 $avgTime10 = $timer->getTime() / $number;
             }
 
-            $rowMin[] = sprintf($format, $timer->getMinTime() * 1000);
-            $rowMax[] = sprintf($format, $timer->getMaxTime() * 1000);
-            $rowAvg[] = sprintf($format, $timer->getTime() * 1000 / $number);
-            $rowTrend[] = sprintf('% 7.2f', $timer->getTime() / $number / $avgTime10);
+            $rowMin[] = \sprintf($format, $timer->getMinTime() * 1000);
+            $rowMax[] = \sprintf($format, $timer->getMaxTime() * 1000);
+            $rowAvg[] = \sprintf($format, $timer->getTime() * 1000 / $number);
+            $rowTrend[] = \sprintf('% 7.2f', $timer->getTime() / $number / $avgTime10);
         }
 
         $table->setRows([
