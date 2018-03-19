@@ -30,8 +30,8 @@ script:
   - php ${PHP_ARGS} vendor/bin/phpunit
   - php ${PHP_ARGS} vendor/bin/behat
 
-  - travis_retry wget https://github.com/infection/infection/releases/download/0.8.1/infection.phar
-  - travis_retry wget https://github.com/infection/infection/releases/download/0.8.1/infection.phar.pubkey
+  - travis_retry wget https://github.com/infection/infection/releases/download/0.8.1/infection.phar -q
+  - travis_retry wget https://github.com/infection/infection/releases/download/0.8.1/infection.phar.pubkey -q
   - chmod +x infection.phar
   - travis_retry ./infection.phar self-update
   - ./infection.phar
