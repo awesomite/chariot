@@ -17,7 +17,7 @@ use Awesomite\Chariot\Speedtest\Timer;
 /**
  * @internal
  */
-class ProvidersCommands extends BaseCompareCommand
+class ProvidersCommand extends BaseCompareCommand
 {
     const COMMAND_NAME = 'test-providers';
 
