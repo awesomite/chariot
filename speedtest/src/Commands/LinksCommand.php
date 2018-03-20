@@ -10,7 +10,6 @@
 namespace Awesomite\Chariot\Speedtest\Commands;
 
 use Awesomite\Chariot\Speedtest\Timer;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Input\InputInterface;
@@ -19,26 +18,15 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * @internal
  */
-class LinksCommand extends Command
+class LinksCommand extends BaseCommand
 {
-    use XdebugTrait;
+    const COMMAND_NAME = 'test-links';
+
     use LinksSameHandlerTrait;
     use LinksDifferentHandlerTrait;
-    use GlobalTimerTrait;
 
-    protected function configure()
+    protected function doExecute(InputInterface $input, OutputInterface $output, bool $fast)
     {
-        parent::configure();
-        $this
-            ->setName('test-links')
-            ->addOption('fast', 'f');
-    }
-
-    protected function execute(InputInterface $input, OutputInterface $output)
-    {
-        $this->checkXdebug();
-        $this->startGlobalTimer();
-
         $numbers = $input->getOption('fast')
             ? [10, 20, 50, 100, 150, 200]
             : [10, 100, 250, 500, 1000, 2000];
@@ -47,9 +35,6 @@ class LinksCommand extends Command
         $output->writeln('');
         $this->displayDifferentHandlerHeader($output);
         $this->executeDifferentHandlerTests($output, $numbers);
-
-        $output->writeln('');
-        $this->printGlobalTimerFooter($output);
     }
 
     /**

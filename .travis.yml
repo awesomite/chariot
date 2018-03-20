@@ -30,8 +30,11 @@ script:
   - php ${PHP_ARGS} vendor/bin/phpunit
   - php ${PHP_ARGS} vendor/bin/behat
   - bin/infection.sh
+
   - php -n ${PHP_ARGS} speedtest/console.php test-links
   - php -n ${PHP_ARGS} speedtest/console.php test-providers
+  - php -n ${PHP_ARGS} -d opcache.enable=1 -d opcache.enable_cli=1 speedtest/console.php test-providers
+
   - php examples/micro-framework.php
   - php examples/months.php
   - php examples/param-decorator.php

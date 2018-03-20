@@ -118,7 +118,7 @@ class Patterns implements PatternsInterface
         return $this;
     }
 
-    public static function createDefault(): Patterns
+    public static function createDefault(): self
     {
         $result = new self();
         foreach (self::STANDARD_PATTERNS as $name => $pattern) {

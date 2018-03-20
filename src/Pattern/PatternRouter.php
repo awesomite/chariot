@@ -75,7 +75,7 @@ class PatternRouter implements RouterInterface
         return $this->patterns;
     }
     
-    public function addParamDecorator(ParamDecoratorInterface $decorator): PatternRouter
+    public function addParamDecorator(ParamDecoratorInterface $decorator): self
     {
         $this->getParamDecorators()->attach($decorator);
         
@@ -141,7 +141,7 @@ ERROR;
         }
     }
 
-    public function addRoute(string $method, string $pattern, string $handler, array $extraParams = []): PatternRouter
+    public function addRoute(string $method, string $pattern, string $handler, array $extraParams = []): self
     {
         if ($this->frozen) {
             throw new LogicException('Router is frozen, cannot add new routes');
@@ -190,47 +190,47 @@ ERROR;
         return $this;
     }
 
-    public function any(string $pattern, string $handler, array $extraParams = []): PatternRouter
+    public function any(string $pattern, string $handler, array $extraParams = []): self
     {
         return $this->addRoute(HttpMethods::METHOD_ANY, $pattern, $handler, $extraParams);
     }
 
-    public function get(string $pattern, string $handler, array $extraParams = []): PatternRouter
+    public function get(string $pattern, string $handler, array $extraParams = []): self
     {
         return $this->addRoute(HttpMethods::METHOD_GET, $pattern, $handler, $extraParams);
     }
 
-    public function post(string $pattern, string $handler, array $extraParams = []): PatternRouter
+    public function post(string $pattern, string $handler, array $extraParams = []): self
     {
         return $this->addRoute(HttpMethods::METHOD_POST, $pattern, $handler, $extraParams);
     }
 
-    public function put(string $pattern, string $handler, array $extraParams = []): PatternRouter
+    public function put(string $pattern, string $handler, array $extraParams = []): self
     {
         return $this->addRoute(HttpMethods::METHOD_PUT, $pattern, $handler, $extraParams);
     }
 
-    public function delete(string $pattern, string $handler, array $extraParams = []): PatternRouter
+    public function delete(string $pattern, string $handler, array $extraParams = []): self
     {
         return $this->addRoute(HttpMethods::METHOD_DELETE, $pattern, $handler, $extraParams);
     }
 
-    public function patch(string $pattern, string $handler, array $extraParams = []): PatternRouter
+    public function patch(string $pattern, string $handler, array $extraParams = []): self
     {
         return $this->addRoute(HttpMethods::METHOD_PATCH, $pattern, $handler, $extraParams);
     }
 
-    public function connect(string $pattern, string $handler, array $extraParams = []): PatternRouter
+    public function connect(string $pattern, string $handler, array $extraParams = []): self
     {
         return $this->addRoute(HttpMethods::METHOD_CONNECT, $pattern, $handler, $extraParams);
     }
 
-    public function options(string $pattern, string $handler, array $extraParams = []): PatternRouter
+    public function options(string $pattern, string $handler, array $extraParams = []): self
     {
         return $this->addRoute(HttpMethods::METHOD_OPTIONS, $pattern, $handler, $extraParams);
     }
 
-    public function trace(string $pattern, string $handler, array $extraParams = []): PatternRouter
+    public function trace(string $pattern, string $handler, array $extraParams = []): self
     {
         return $this->addRoute(HttpMethods::METHOD_TRACE, $pattern, $handler, $extraParams);
     }
