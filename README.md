@@ -33,7 +33,7 @@ echo $router->linkTo('showArticle')->withParam('id', 5);
     * [Validation](#validation)
     * [Default parameters](#default-parameters)
     * [Transforming parameters](#transforming-parameters)
-    * [Providers](#providers)
+    * [Providers / Decorators](#providers)
     * [Default patterns](#default-patterns)
  * [More examples](#more-examples)
  * [License](#license)
@@ -344,7 +344,7 @@ echo $router->linkTo('showDay')->withParam('day', new \DateTime('2017-07-07')), 
  */
 ```
 
-### Providers
+### Providers / Decorators
 
 Let's imagine the following scenario:
 
@@ -439,7 +439,7 @@ with set of standard patterns:
 
 * [Own micro framework](examples/micro-framework.php)
 * [Months](examples/months.php)
-* Param decorators:[example1](examples/param-decorator.php), [example2](examples/param-decorator2.php),
+* Param decorators: [example1](examples/param-decorator.php), [example2](examples/param-decorator2.php),
 [example3](examples/param-decorator-item.php)
 * [Symfony integration](examples/symfony.php)
 * [Transforming parameters](examples/transform-params.php)
