@@ -20,7 +20,7 @@ class SourceCodeExporter
     {
         $template
             = <<<'TEMPLATE'
-\call_user_func(function () {
+(function () {
   $patterns = \unserialize([[patterns]]);
 
   $routes = [[routes]];
@@ -34,7 +34,7 @@ class SourceCodeExporter
     'requiredParams' => [[requiredParams]],
     'frozen' => true,
   ));
-})
+})()
 
 TEMPLATE;
 
