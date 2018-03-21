@@ -33,9 +33,9 @@ script:
   - php ${PHP_ARGS} vendor/bin/behat
   - bin/infection.sh
 
-  - php -n ${PHP_ARGS} speedtest/console.php test-links
-  - php -n ${PHP_ARGS} speedtest/console.php test-providers
-  - php -n ${PHP_ARGS} -d opcache.enable=1 -d opcache.enable_cli=1 speedtest/console.php test-cache
+  - php ${PHP_ARGS} speedtest/console.php test-links
+  - php ${PHP_ARGS} speedtest/console.php test-providers
+  - php ${PHP_ARGS} -d opcache.enable=1 -d opcache.enable_cli=1 speedtest/console.php test-cache
 
   - php examples/micro-framework.php
   - php examples/months.php
