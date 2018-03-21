@@ -37,7 +37,9 @@ abstract class BaseCommand extends Command
         $timer->start();
         $this->doExecute($input, $output, $input->getOption('fast'));
         $timer->stop();
-        $output->writeln(\sprintf('Executed in %.2fs', $timer->getTime()));
+        $output->writeln(\sprintf('Executed in %.2f s', $timer->getTime()));
+        $output->writeln(\sprintf('Memory peak %.2f MB', memory_get_peak_usage(false)/1024/1024));
+        $output->writeln(\sprintf('Real memory peak %.2f MB', memory_get_peak_usage(true)/1024/1024));
     }
 
     abstract protected function doExecute(InputInterface $input, OutputInterface $output, bool $fast);
