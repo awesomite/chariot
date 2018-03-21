@@ -439,6 +439,8 @@ with set of standard patterns:
 
 * [Own micro framework](examples/micro-framework.php)
 * [Months](examples/months.php)
+* Param decorators:[example1](examples/param-decorator.php), [example2](examples/param-decorator2.php),
+[example3](examples/param-decorator-item.php)
 * [Symfony integration](examples/symfony.php)
 * [Transforming parameters](examples/transform-params.php)
 
