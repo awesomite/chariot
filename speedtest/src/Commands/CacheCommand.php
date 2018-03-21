@@ -64,11 +64,11 @@ class CacheCommand extends BaseCompareCommand
 
     protected function warmUp()
     {
-        foreach (['opcache.enable', 'opcache.enable_cli'] as $conf) {
-            if (!\ini_get($conf)) {
-                throw new \RuntimeException(\sprintf('%s must be enabled', $conf));
-            }
-        }
+//        foreach (['opcache.enable', 'opcache.enable_cli'] as $conf) {
+//            if (!\ini_get($conf)) {
+//                throw new \RuntimeException(\sprintf('%s must be enabled', $conf));
+//            }
+//        }
 
         $this->fileName = __FILE__ . '.cache';
         \file_put_contents($this->fileName, '<?php return ' . $this->getExampleRouter()->exportToExecutable() . ';');
