@@ -15,6 +15,10 @@ env:
     - DEPENDENCIES="high"
     - DEPENDENCIES="low"
 
+before_install:
+  - echo 'opcache.enable=1' >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - echo 'opcache.enable_cli=1' >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+
 install:
   - if [[ "$DEPENDENCIES" = 'high' ]]; then travis_retry composer update --no-interaction --prefer-stable; fi
   - if [[ "$DEPENDENCIES" = 'low' ]]; then travis_retry composer update --no-interaction --prefer-stable --prefer-lowest; fi
@@ -33,7 +37,6 @@ script:
 
   - php -n ${PHP_ARGS} speedtest/console.php test-links
   - php -n ${PHP_ARGS} speedtest/console.php test-providers
-  - echo "opcache.enable=1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - php -n ${PHP_ARGS} -d opcache.enable=1 -d opcache.enable_cli=1 speedtest/console.php test-cache
 
   - php examples/micro-framework.php
