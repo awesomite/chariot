@@ -23,6 +23,8 @@ install:
   - cd dev-tools; travis_retry composer update; cd ..
 
 before_script:
+  - php --ini
+  - php -r 'var_dump(ini_get("opcache.enable"), ini_get("opcache.enable_cli"));'
   - if [[ "$DEPENDENCIES" = 'low' ]]; then export PHP_ARGS=$(php -r "echo '-d error_reporting=', E_ALL ^ (E_DEPRECATED | E_USER_DEPRECATED);"); else export PHP_ARGS=''; fi
 
 script:
