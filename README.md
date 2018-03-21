@@ -33,7 +33,7 @@ echo $router->linkTo('showArticle')->withParam('id', 5);
     * [Validation](#validation)
     * [Default parameters](#default-parameters)
     * [Transforming parameters](#transforming-parameters)
-    * [Providers / Decorators](##providers--decorators)
+    * [Providers / Decorators](#providers--decorators)
     * [Default patterns](#default-patterns)
  * [More examples](#more-examples)
  * [License](#license)
