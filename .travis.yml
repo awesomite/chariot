@@ -15,12 +15,6 @@ env:
     - DEPENDENCIES="high"
     - DEPENDENCIES="low"
 
-before_install:
-  - phpize
-  - ./configure --enable-opcache
-  - make clean
-  - make
-
 install:
   - if [[ "$DEPENDENCIES" = 'high' ]]; then travis_retry composer update --no-interaction --prefer-stable; fi
   - if [[ "$DEPENDENCIES" = 'low' ]]; then travis_retry composer update --no-interaction --prefer-stable --prefer-lowest; fi
