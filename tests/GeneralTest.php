@@ -14,6 +14,7 @@ use Awesomite\Chariot\Exceptions\CannotGenerateLinkException;
 use Awesomite\Chariot\Exceptions\HttpException;
 use Awesomite\Chariot\Pattern\PatternRouter;
 use Awesomite\Chariot\Pattern\Patterns;
+use Awesomite\Chariot\Pattern\StdPatterns\RegexPattern;
 
 /**
  * @internal
@@ -162,15 +163,23 @@ class GeneralTest extends TestBase
     private function providerLinkTo()
     {
         $router = PatternRouter::createDefault();
+        $router->getPatterns()->addPattern(':az', new RegexPattern('[a-z]+'));
 
         $router->addRoute(HttpMethods::METHOD_GET, '/', 'home', ['lang' => 'en']);
         $router->addRoute(HttpMethods::METHOD_GET, '/pl', 'home', ['lang' => 'pl']);
         $router->addRoute(HttpMethods::METHOD_GET, '/category-{{ categoryId \\d+ }}', 'showCategory');
+        $router->addRoute(HttpMethods::METHOD_GET, '/date-{{ date :date }}', 'showDate');
+        $router->addRoute(HttpMethods::METHOD_GET, '/date-{{ date :date }}', 'showDate');
+        $router->addRoute(HttpMethods::METHOD_GET, '/user-{{ name :az }}', 'showUser');
+
         yield [$router, 'home', ['lang' => 'en'], '/'];
         yield [$router, 'home', ['lang' => 'pl'], '/pl'];
         yield [$router, 'showCategory', ['categoryId' => new StringableObject('15')], '/category-15'];
         yield [$router, 'showCategory', ['categoryId' => '15'], '/category-15'];
         yield [$router, 'showCategory', ['categoryId' => 15], '/category-15'];
+        yield [$router, 'showDate', ['date' => '2018-01-01'], '/date-2018-01-01'];
+        yield [$router, 'showDate', ['date' => '2018-02-01'], '/date-2018-02-01'];
+        yield [$router, 'showUser', ['name' => 'jane'], '/user-jane'];
     }
 
     /**
