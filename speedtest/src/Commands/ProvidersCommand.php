@@ -23,7 +23,7 @@ class ProvidersCommand extends BaseCompareCommand
 
     protected function getNumber(bool $fast): int
     {
-        return $fast ? 100000 : 1000;
+        return $fast ? 1000 : 100000;
     }
 
     protected function warmUp()

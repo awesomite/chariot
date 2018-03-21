@@ -35,7 +35,7 @@ abstract class BaseCommand extends Command
         $this->handleXdebug();
         $timer = new Timer();
         $timer->start();
-        $this->doExecute($input, $output, $input->hasOption('fast'));
+        $this->doExecute($input, $output, $input->getOption('fast'));
         $timer->stop();
         $output->writeln(\sprintf('Executed in %.2fs', $timer->getTime()));
     }
