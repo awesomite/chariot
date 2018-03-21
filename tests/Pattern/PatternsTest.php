@@ -304,4 +304,16 @@ class PatternsTest extends TestBase
             [35],
         ];
     }
+
+    /**
+     * @expectedException \Awesomite\Chariot\Exceptions\LogicException
+     * @expectedExceptionMessage Object `Awesomite\Chariot\Pattern\PatternRouter` is frozen, cannot add new routes
+     */
+    public function testFrozen()
+    {
+        $router = PatternRouter::createDefault();
+        /** @var PatternRouter $router */
+        $router = eval('return ' . $router->exportToExecutable() . ';');
+        $router->get('/', 'home');
+    }
 }

@@ -338,7 +338,7 @@ class GeneralTest extends TestBase
 
     /**
      * @expectedException \Awesomite\Chariot\Exceptions\LogicException
-     * @expectedExceptionMessage Router is frozen, cannot add new routes
+     * @expectedExceptionMessage Object `Awesomite\Chariot\Pattern\PatternRouter` is frozen, cannot add new routes
      */
     public function testFrozen()
     {

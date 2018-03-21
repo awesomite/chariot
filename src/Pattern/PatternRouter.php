@@ -144,7 +144,7 @@ ERROR;
     public function addRoute(string $method, string $pattern, string $handler, array $extraParams = []): self
     {
         if ($this->frozen) {
-            throw new LogicException('Router is frozen, cannot add new routes');
+            throw new LogicException(sprintf('Object `%s` is frozen, cannot add new routes', static::class));
         }
         
         $this->processExtraParams($extraParams);

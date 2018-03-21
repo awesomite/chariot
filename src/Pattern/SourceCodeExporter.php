@@ -96,6 +96,7 @@ TEMPLATE;
   'simplePattern' => [[simplePattern]],
   'explodedParams' => [[explodedParams]],
   'patterns' => [[patterns]],
+  'frozen' => true,
 ))
 TEMPLATE;
         $template = \str_replace("\n", "\n{$indent}", $template);

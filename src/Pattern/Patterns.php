@@ -49,6 +49,8 @@ class Patterns implements PatternsInterface
 
     private $defaultPattern;
 
+    private $frozen = false;
+
     /**
      * @internal
      * @param string $name
@@ -80,6 +82,10 @@ class Patterns implements PatternsInterface
 
     public function addPattern(string $name, $pattern): PatternsInterface
     {
+        if ($this->frozen) {
+            throw new LogicException(sprintf('Object `%s` is frozen, cannot add new patterns', static::class));
+        }
+
         static::validatePatternName($name);
 
         if (isset($this[$name])) {
