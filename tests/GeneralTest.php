@@ -12,6 +12,7 @@ namespace Awesomite\Chariot;
 use Awesomite\Chariot\Collector\RouterCollector;
 use Awesomite\Chariot\Exceptions\CannotGenerateLinkException;
 use Awesomite\Chariot\Exceptions\HttpException;
+use Awesomite\Chariot\Exceptions\LogicException;
 use Awesomite\Chariot\Pattern\PatternRouter;
 use Awesomite\Chariot\Pattern\Patterns;
 use Awesomite\Chariot\Pattern\StdPatterns\RegexPattern;
@@ -334,6 +335,15 @@ class GeneralTest extends TestBase
                 yield $row;
             }
         }
+    }
+
+    public function testRedeclared()
+    {
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage('Parameter id has been redeclared (source: /category-{{ id }}/item-{{ id }})');
+
+        $router = PatternRouter::createDefault();
+        $router->get('/category-{{ id }}/item-{{ id }}', 'showCategory');
     }
 
     /**

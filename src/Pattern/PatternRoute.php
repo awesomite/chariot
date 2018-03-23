@@ -10,6 +10,7 @@
 namespace Awesomite\Chariot\Pattern;
 
 use Awesomite\Chariot\Exceptions\InvalidArgumentException;
+use Awesomite\Chariot\Exceptions\LogicException;
 use Awesomite\Chariot\Exceptions\PatternException;
 use Awesomite\Chariot\ExportableTrait;
 use Awesomite\Chariot\Link;
@@ -78,7 +79,18 @@ class PatternRoute
         $compiledParts = [];
         $explodedParams = [];
 
+        $usedNames = [];
+
         foreach ($this->processTokens() as list($token, $name, $pattern, $default, $patternName)) {
+            if (\in_array($name, $usedNames, true)) {
+                throw new LogicException(\sprintf(
+                    'Parameter %s has been redeclared (source: %s)',
+                    $name,
+                    $this->pattern
+                ));
+            }
+            $usedNames[] = $name;
+
             // simple pattern /item-{{id}}
             $simplePattern = $this->replaceFirst($token, '{{' . $name . '}}', $simplePattern);
 
