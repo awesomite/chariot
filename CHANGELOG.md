@@ -4,6 +4,7 @@
 
 * Fixed - `Awesomite\Chariot\Pattern\StdPatterns\ListPattern` should not allow for bool
 * Removed unused parameters from `Awesomite\Chariot\Exceptions\CannotGenerateLinkException::__construct`
+and `Awesomite\Chariot\Exceptions\HttpException::__construct`
 * Added `Awesomite\Chariot\ParamDecorators\ParamDecoratorInterface`,
 see examples:
   * `examples/param-decorator.php`
