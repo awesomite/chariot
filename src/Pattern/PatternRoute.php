@@ -98,7 +98,7 @@ class PatternRoute
             $exploded = \explode($token, $toCompile, 2);
             $compiledParts[] = \preg_quote($exploded[0], Patterns::DELIMITER);
             $compiledParts[] = "(?<{$name}>{$pattern})";
-            $compiledParts[] = \preg_quote($exploded[1], Patterns::DELIMITER);
+            $toCompile = $exploded[1];
 
             $explodedParams[$name] = [
                 $default,
@@ -106,11 +106,10 @@ class PatternRoute
                 $patternName
             ];
         }
-
+        $compiledParts[] = \preg_quote($toCompile, Patterns::DELIMITER);
 
         if (0 === \count($compiledParts)) {
             $simplePattern = $this->pattern;
-            $compiledParts[] = \preg_quote($this->pattern, Patterns::DELIMITER);
         }
         $d = Patterns::DELIMITER;
         $compiledPattern = $d . '^' . \implode('', $compiledParts) . '$' . $d;

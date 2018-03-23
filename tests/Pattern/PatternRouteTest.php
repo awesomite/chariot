@@ -69,6 +69,12 @@ class PatternRouteTest extends TestBase
             '#^/(?<id>[0-9]+)\-article$#',
             '/{{id}}-article'
         ];
+        yield [
+            $patterns,
+            '/category-{{categoryId :int}}/item-{{itemId :int}}',
+            '#^/category\-(?<categoryId>(-?[1-9][0-9]*)|0)/item\-(?<itemId>(-?[1-9][0-9]*)|0)$#',
+            '/category-{{categoryId}}/item-{{itemId}}'
+        ];
     }
 
     /**
