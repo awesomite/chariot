@@ -62,8 +62,7 @@ class PatternRoute
     {
         $this->pattern = $pattern;
         $this->patterns = $patterns;
-        $this->compilePattern();
-        $this->extractParams();
+        $this->processPattern();
     }
     
     public function getRequiredParams(): array
@@ -71,124 +70,138 @@ class PatternRoute
         return \array_keys($this->explodedParams);
     }
 
-    private function compilePattern()
+    private function processPattern()
     {
-        $originalPattern = $this->pattern;
+        $simplePattern = $this->pattern;
 
-        /** @var array $preProcessedParams [['{{ id \d+ }}', '(?<id>\d+)'], ...] */
-        $preProcessedParams = [];
+        $toCompile = $this->pattern;
+        $compiledParts = [];
+        $explodedParams = [];
 
-        \preg_replace_callback(
-            static::PATTERN_VAR,
-            function ($matches) use ($originalPattern, &$preProcessedParams) {
-                $str = \substr($matches[0], 2, -2);
-                $arr = \array_filter(\preg_split('/\\s+/', $str), function ($a) {
-                    return '' !== \trim($a);
-                });
-                $arr = \array_values($arr);
-                switch (\count($arr)) {
-                    case 1:
-                    case 2:
-                    case 3:
-                        $name = $arr[0] ?? null;
-                        $pattern = $arr[1] ?? null;
+        foreach ($this->processTokens() as list($token, $name, $pattern, $default, $patternName)) {
+            // simple pattern /item-{{id}}
+            $simplePattern = $this->replaceFirst($token, '{{' . $name . '}}', $simplePattern);
 
-                        if (\is_null($pattern)) {
-                            $pattern = $this->patterns->getDefaultPattern();
-                        }
-                        break;
+            // compiled pattern #^/item-(?<id>([1-9][0-9]*)|0)$#"
+            $exploded = \explode($token, $toCompile, 2);
+            $compiledParts[] = \preg_quote($exploded[0], Patterns::DELIMITER);
+            $compiledParts[] = "(?<{$name}>{$pattern})";
+            $compiledParts[] = \preg_quote($exploded[1], Patterns::DELIMITER);
 
-                    default:
-                        throw new InvalidArgumentException("Invalid url pattern {$originalPattern}");
-                }
-
-                if (!\preg_match('/^[a-zA-Z0-9_]+$/', $name)) {
-                    throw new InvalidArgumentException("Invalid param name “{$name}” (source: {$originalPattern})");
-                }
-
-                Patterns::validatePatternName($name);
-
-                if ($patternObj = $this->patterns[$pattern] ?? null) {
-                    /** @var PatternInterface $patternObj */
-                    $pattern = $patternObj->getRegex();
-                }
-
-                if (!(new RegexTester())->isSubregex($pattern)) {
-                    throw new InvalidArgumentException("Invalid regex: {$pattern} (source: {$originalPattern})");
-                }
-
-                $preProcessedParams[] = [$matches[0], "(?<{$name}>{$pattern})"];
-
-                return $matches[0];
-            },
-            $this->pattern
-        );
-
-        $uriPattern = $this->pattern;
-        $resultParts = [];
-
-        foreach ($preProcessedParams as list($original, $replacement)) {
-            $exploded = \explode($original, $uriPattern, 2);
-            $resultParts[] = \preg_quote($exploded[0], Patterns::DELIMITER);
-            $resultParts[] = $replacement;
-            $uriPattern = $exploded[1];
-        }
-        if ('' !== $uriPattern) {
-            $resultParts[] = \preg_quote($uriPattern, Patterns::DELIMITER);
+            $explodedParams[$name] = [
+                $default,
+                Patterns::DELIMITER . '^(' . $pattern . ')$' . Patterns::DELIMITER,
+                $patternName
+            ];
         }
 
+
+        if (0 === \count($compiledParts)) {
+            $simplePattern = $this->pattern;
+            $compiledParts[] = \preg_quote($this->pattern, Patterns::DELIMITER);
+        }
         $d = Patterns::DELIMITER;
-        $this->compiledPattern = $d . '^' . \implode('', $resultParts) . '$' . $d;
+        $compiledPattern = $d . '^' . \implode('', $compiledParts) . '$' . $d;
+
+        $this->simplePattern = $simplePattern;
+        $this->compiledPattern = $compiledPattern;
+        $this->explodedParams = $explodedParams;
     }
 
-    private function extractParams()
+    private function replaceFirst(string $search, string $replace, string $subject): string
     {
-        $params = &$this->explodedParams;
-        $params = [];
-        $inputPattern = $this->pattern;
-        $this->simplePattern = \preg_replace_callback(
+        $exploded = \explode($search, $subject, 2);
+
+        return $exploded[0] . $replace . $exploded[1];
+    }
+
+    /**
+     * Validates, change pattern name to regex and add pattern's name or null
+     *
+     * e.g. ['{{ month :int }}', 'name', '(-?[1-9][0-9]*)|0', null, ':int']
+     *
+     * @return \Generator
+     */
+    private function processTokens()
+    {
+        foreach ($this->getTokensStream() as list($string, $name, $pattern, $default)) {
+            if (!\preg_match('/^[a-zA-Z0-9_]+$/', $name)) {
+                throw new InvalidArgumentException("Invalid param name “{$name}” (source: {$this->pattern})");
+            }
+
+            Patterns::validatePatternName($name);
+
+            $patternName = null;
+            if ($patternObj = $this->patterns[$pattern] ?? null) {
+                $patternName = $pattern;
+                /** @var PatternInterface $patternObj */
+                $pattern = $patternObj->getRegex();
+            }
+
+            if (!(new RegexTester())->isSubregex($pattern)) {
+                throw new InvalidArgumentException("Invalid regex: {$pattern} (source: {$this->pattern})");
+            }
+
+            yield [
+                $string,
+                $name,
+                $pattern,
+                $default,
+                $patternName,
+            ];
+        }
+    }
+
+    /**
+     * e.g. [
+     *     // [text,            name,    pattern,  default]
+     *     ['{{ month :int }}', 'month', ':int', null],
+     * ]
+     *
+     * @return array
+     */
+    private function getTokensStream(): array
+    {
+        $preProcessed = [];
+        \preg_replace_callback(
             static::PATTERN_VAR,
-            function ($matches) use (&$params, $inputPattern) {
-                $str = \substr($matches[0], 2, -2);
-                $arr = \array_filter(\preg_split('/\\s+/', $str), function ($a) {
-                    return '' !== \trim($a);
-                });
-                $arr = \array_values($arr);
-                switch (\count($arr)) {
-                    case 1:
-                    case 2:
-                    case 3:
-                        $name = $arr[0] ?? null;
-                        $pattern = $arr[1] ?? null;
-                        $default = $arr[2] ?? null;
-                        if (\is_null($pattern)) {
-                            $pattern = $this->patterns->getDefaultPattern();
-                        }
-                        break;
+            function ($matches) use (&$preProcessed) {
+                $arr = $this->paramStrToArr($matches[0]);
 
-                    default:
-                        // @codeCoverageIgnoreStart
-                        throw new InvalidArgumentException("Invalid url pattern {$inputPattern}");
-                    // @codeCoverageIgnoreEnd
+                if (\count($arr) > 3) {
+                    throw new InvalidArgumentException("Invalid url pattern {$this->pattern}");
                 }
 
-                $patternName = null;
-                if ($patternObj = $this->patterns[$pattern] ?? null) {
-                    $patternName = $pattern;
-                    /** @var PatternInterface $patternObj */
-                    $pattern = $patternObj->getRegex();
-                }
+                $name = $arr[0];
+                $pattern = $arr[1] ?? $this->patterns->getDefaultPattern();
+                $default = $arr[2] ?? null;
 
-                $params[$name] = [
-                    $default,
-                    Patterns::DELIMITER . '^(' . $pattern . ')$' . Patterns::DELIMITER,
-                    $patternName,
+                $preProcessed[] = [
+                    $matches[0],
+                    $name,
+                    $pattern,
+                    $default
                 ];
-
-                return '{{' . $name . '}}';
             },
             $this->pattern
         );
+
+        return $preProcessed;
+    }
+
+    /**
+     * @param string $paramString e.g. {{ id :int }}
+     *
+     * @return string[] e.g. ['id', 'int']
+     */
+    private function paramStrToArr(string $paramString)
+    {
+        $str = \substr($paramString, 2, -2);
+        $result = \array_filter(\preg_split('/\\s+/', $str), function ($a) {
+            return '' !== \trim($a);
+        });
+
+        return \array_values($result);
     }
 
     public function match(string $path, &$params): bool
