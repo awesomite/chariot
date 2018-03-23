@@ -27,7 +27,7 @@ class LinksCommand extends BaseCommand
 
     protected function doExecute(InputInterface $input, OutputInterface $output, bool $fast)
     {
-        $numbers = $input->getOption('fast')
+        $numbers = $fast
             ? [10, 20, 50, 100, 150, 200]
             : [10, 100, 250, 500, 1000, 2000];
         $this->displaySameHandlerHeader($output);
