@@ -307,13 +307,13 @@ class PatternsTest extends TestBase
 
     /**
      * @expectedException \Awesomite\Chariot\Exceptions\LogicException
-     * @expectedExceptionMessage Object `Awesomite\Chariot\Pattern\PatternRouter` is frozen, cannot add new routes
+     * @expectedExceptionMessage Object `Awesomite\Chariot\Pattern\Patterns` is frozen, cannot add new patterns
      */
     public function testFrozen()
     {
         $router = PatternRouter::createDefault();
         /** @var PatternRouter $router */
         $router = eval('return ' . $router->exportToExecutable() . ';');
-        $router->get('/', 'home');
+        $router->getPatterns()[':any'] = '.+';
     }
 }

@@ -195,5 +195,6 @@ class Patterns implements PatternsInterface
         $data = \unserialize($serialized);
         $this->patterns = $data['patterns'];
         $this->defaultPattern = $data['defaultPattern'];
+        $this->frozen = true;
     }
 }
