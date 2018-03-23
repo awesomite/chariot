@@ -1,5 +1,12 @@
 <?php
 
+/*
+ * This file is part of the awesomite/chariot package.
+ * (c) Bartłomiej Krukowski <bartlomiej@krukowski.me>
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
+ */
+
 namespace Awesomite\Chariot\Pattern\StdPatterns;
 
 use Awesomite\Chariot\Exceptions\PatternException;
@@ -21,12 +28,12 @@ class DatePattern extends AbstractPattern
 
     public function serialize()
     {
-        return serialize($this->timezone);
+        return \serialize($this->timezone);
     }
 
     public function unserialize($serialized)
     {
-        $this->timezone = unserialize($serialized);
+        $this->timezone = \unserialize($serialized);
     }
 
     public function getRegex(): string
@@ -47,15 +54,15 @@ class DatePattern extends AbstractPattern
     {
         $data = $this->processRawData($rawData);
 
-        if (is_object($data) && $data instanceof \DateTimeInterface) {
+        if (\is_object($data) && $data instanceof \DateTimeInterface) {
             return $data->format(static::DATE_FORMAT);
         }
 
-        if (is_int($data)) {
+        if (\is_int($data)) {
             return (new \DateTime())->setTimestamp($data)->format(static::DATE_FORMAT);
         }
 
-        if (is_string($data) && $this->match($data)) {
+        if (\is_string($data) && $this->match($data)) {
             $sData = (string) $data;
             if ($this->checkDate($sData)) {
                 return $sData;
@@ -67,18 +74,18 @@ class DatePattern extends AbstractPattern
 
     private function processRawData($data)
     {
-        if (is_object($data)) {
+        if (\is_object($data)) {
             if ($data instanceof \DateTimeInterface) {
                 return $data;
             }
 
-            if (method_exists($data, '__toString')) {
+            if (\method_exists($data, '__toString')) {
                 $data = (string) $data;
             }
         }
 
         $d = Patterns::DELIMITER;
-        if (is_string($data) && preg_match($d . '^(' . Patterns::REGEX_INT . ')$' . $d, $data)) {
+        if (\is_string($data) && \preg_match($d . '^(' . Patterns::REGEX_INT . ')$' . $d, $data)) {
             return (int) $data;
         }
 
@@ -105,8 +112,8 @@ class DatePattern extends AbstractPattern
 
     private function checkDate(string &$input): bool
     {
-        list($year, $month, $day) = explode('-', $input);
+        list($year, $month, $day) = \explode('-', $input);
 
-        return checkdate((int) $month, (int) $day, (int) $year);
+        return \checkdate((int) $month, (int) $day, (int) $year);
     }
 }

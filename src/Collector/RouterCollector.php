@@ -1,5 +1,12 @@
 <?php
 
+/*
+ * This file is part of the awesomite/chariot package.
+ * (c) Bartłomiej Krukowski <bartlomiej@krukowski.me>
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
+ */
+
 namespace Awesomite\Chariot\Collector;
 
 use Awesomite\Chariot\Exceptions\HttpException;
@@ -42,10 +49,10 @@ class RouterCollector implements RouterInterface
     {
         $result = [];
         foreach ($this->routers as $router) {
-            $result = array_merge($result, $router->getAllowedMethods($url));
+            $result = \array_merge($result, $router->getAllowedMethods($url));
         }
 
-        return array_unique($result);
+        return \array_unique($result);
     }
 
     public function linkTo(string $handler, string $method = HttpMethods::METHOD_ANY): LinkInterface

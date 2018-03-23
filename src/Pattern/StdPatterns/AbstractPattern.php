@@ -1,5 +1,12 @@
 <?php
 
+/*
+ * This file is part of the awesomite/chariot package.
+ * (c) Bartłomiej Krukowski <bartlomiej@krukowski.me>
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
+ */
+
 namespace Awesomite\Chariot\Pattern\StdPatterns;
 
 use Awesomite\Chariot\Exceptions\PatternException;
@@ -24,28 +31,28 @@ abstract class AbstractPattern implements PatternInterface
      */
     protected function newInvalidToUrl($data)
     {
-        switch (gettype($data)) {
+        switch (\gettype($data)) {
             case 'string':
-                $type = sprintf('(string) %s', var_export($data, true));
+                $type = \sprintf('(string) %s', \var_export($data, true));
                 break;
 
             case 'object':
-                $type = sprintf('(object) %s', get_class($data));
+                $type = \sprintf('(object) %s', \get_class($data));
                 break;
 
             case 'integer':
             case 'double':
             case 'float':
-                $type = sprintf('(%s) %s', gettype($data), var_export($data, true));
+                $type = \sprintf('(%s) %s', \gettype($data), \var_export($data, true));
                 break;
 
             default:
-                $type = gettype($data);
+                $type = \gettype($data);
                 break;
         }
 
         return new PatternException(
-            sprintf('Value %s cannot be converted to url param (%s)', $type, static::class),
+            \sprintf('Value %s cannot be converted to url param (%s)', $type, static::class),
             PatternException::CODE_TO_URL
         );
     }
@@ -58,7 +65,7 @@ abstract class AbstractPattern implements PatternInterface
     protected function newInvalidFromUrl(string $param)
     {
         return new PatternException(
-            sprintf('Value %s is invalid (%s)', $param, static::class),
+            \sprintf('Value %s is invalid (%s)', $param, static::class),
             PatternException::CODE_FROM_URL
         );
     }
@@ -67,6 +74,6 @@ abstract class AbstractPattern implements PatternInterface
     {
         $d = Patterns::DELIMITER;
 
-        return (bool) preg_match($d . '^(' . $this->getRegex() . ')$' . $d, $data);
+        return (bool) \preg_match($d . '^(' . $this->getRegex() . ')$' . $d, $data);
     }
 }

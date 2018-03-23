@@ -1,5 +1,12 @@
 <?php
 
+/*
+ * This file is part of the awesomite/chariot package.
+ * (c) Bartłomiej Krukowski <bartlomiej@krukowski.me>
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
+ */
+
 namespace Awesomite\Chariot\Pattern;
 
 use Awesomite\Chariot\Exceptions\HttpException;
@@ -32,7 +39,7 @@ class PatternsTest extends TestBase
     public function testInvalidName(string $paramName)
     {
         $this->expectException(InvalidArgumentException::class);
-        $message = sprintf(
+        $message = \sprintf(
             'Method %s::addPattern() requires first parameter prefixed by ":", "%s" given',
             Patterns::class,
             $paramName
@@ -59,7 +66,7 @@ class PatternsTest extends TestBase
     public function testInvalidPatternArgument($invalidPattern, string $typeOfPattern)
     {
         $this->expectExceptionMessage(InvalidArgumentException::class);
-        $message = sprintf(
+        $message = \sprintf(
             'Method %s::addPattern() expects string or %s, %s given',
             Patterns::class,
             PatternInterface::class,
@@ -74,7 +81,7 @@ class PatternsTest extends TestBase
         return [
             [new \stdClass(), 'stdClass'],
             [null, 'NULL'],
-            [tmpfile(), 'resource'],
+            [\tmpfile(), 'resource'],
         ];
     }
 
@@ -204,7 +211,7 @@ class PatternsTest extends TestBase
                 /** @var PatternRoute $patternRoute */
                 $patternRoute = Objects::getProperty($router, 'routes')['GET']['myhandler'][0][0];
                 $regex = Objects::getProperty($patternRoute, 'compiledPattern');
-                $this->fail(sprintf('Path: %s, regex: %s', '/' . $value, $regex));
+                $this->fail(\sprintf('Path: %s, regex: %s', '/' . $value, $regex));
             }
         }
 
@@ -268,5 +275,45 @@ class PatternsTest extends TestBase
             ['nickname2000'],
             ['hello/world'],
         ];
+    }
+
+    /**
+     * @dataProvider providerTooLong
+     *
+     * @param $length
+     */
+    public function testTooLong($length)
+    {
+        $name = \implode(\array_fill(0, $length, 'q'));
+        if ($length > 32) {
+            $this->expectException(InvalidArgumentException::class);
+        }
+        Patterns::validatePatternName($name);
+        $this->assertTrue(true);
+    }
+
+    public function providerTooLong()
+    {
+        return [
+            [29],
+            [30],
+            [31],
+            [32],
+            [33],
+            [34],
+            [35],
+        ];
+    }
+
+    /**
+     * @expectedException \Awesomite\Chariot\Exceptions\LogicException
+     * @expectedExceptionMessage Object `Awesomite\Chariot\Pattern\Patterns` is frozen, cannot add new patterns
+     */
+    public function testFrozen()
+    {
+        $router = PatternRouter::createDefault();
+        /** @var PatternRouter $router */
+        $router = eval('return ' . $router->exportToExecutable() . ';');
+        $router->getPatterns()[':any'] = '.+';
     }
 }

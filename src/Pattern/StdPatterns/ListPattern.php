@@ -1,5 +1,12 @@
 <?php
 
+/*
+ * This file is part of the awesomite/chariot package.
+ * (c) Bartłomiej Krukowski <bartlomiej@krukowski.me>
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
+ */
+
 namespace Awesomite\Chariot\Pattern\StdPatterns;
 
 class ListPattern extends AbstractPattern
@@ -13,7 +20,7 @@ class ListPattern extends AbstractPattern
     {
         $normalized = $this->normalizeToUrl($data);
 
-        if (is_string($normalized)) {
+        if (\is_string($normalized)) {
             if (!$this->match($normalized)) {
                 throw $this->newInvalidToUrl($data);
             }
@@ -22,7 +29,7 @@ class ListPattern extends AbstractPattern
         }
 
         if (!empty($normalized)) {
-            $result = implode(',', $normalized);
+            $result = \implode(',', $normalized);
             if ($this->match($result)) {
                 return $result;
             }
@@ -33,7 +40,7 @@ class ListPattern extends AbstractPattern
 
     public function fromUrl(string $param)
     {
-        return explode(',', $param);
+        return \explode(',', $param);
     }
 
     /**
@@ -43,21 +50,21 @@ class ListPattern extends AbstractPattern
      */
     private function normalizeToUrl($data)
     {
-        if (is_object($data)) {
+        if (\is_object($data)) {
             if ($data instanceof \Traversable) {
-                return iterator_to_array($data);
+                return \iterator_to_array($data);
             }
 
-            if (method_exists($data, '__toString')) {
+            if (\method_exists($data, '__toString')) {
                 return (string) $data;
             }
         }
 
-        if (is_array($data)) {
+        if (\is_array($data)) {
             return $data;
         }
 
-        if (is_scalar($data)) {
+        if (\is_scalar($data) && !\is_bool($data)) {
             return (string) $data;
         }
 

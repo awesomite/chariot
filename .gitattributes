@@ -7,6 +7,7 @@
 
 # Ignore these files in GitHub dists and `git archive` actions.
 /bin export-ignore
+/dev-tools export-ignore
 /examples export-ignore
 /features export-ignore
 /speedtest export-ignore
@@ -16,6 +17,7 @@
 /.gitignore export-ignore
 /.php_cs.dist export-ignore
 /.travis.yml export-ignore
+/_config.yml export-ignore
 /behat.yml.dist export-ignore
-/humbug.json.dist export-ignore
+/infection.json.dist export-ignore
 /phpunit.xml.dist export-ignore

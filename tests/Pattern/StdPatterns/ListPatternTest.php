@@ -1,5 +1,12 @@
 <?php
 
+/*
+ * This file is part of the awesomite/chariot package.
+ * (c) Bartłomiej Krukowski <bartlomiej@krukowski.me>
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
+ */
+
 namespace Awesomite\Chariot\Pattern\StdPatterns;
 
 use Awesomite\Chariot\Exceptions\PatternException;
@@ -34,7 +41,7 @@ class ListPatternTest extends TestBase
         return [
             'int'               => [1, false],
             \stdClass::class    => [new \stdClass(), true],
-            'resource'          => [tmpfile(), true],
+            'resource'          => [\tmpfile(), true],
             'emptyArray'        => [[], true],
             'emptyTraversable'  => [new \ArrayObject(), true],
             'array'             => [['foo'], false],
@@ -44,14 +51,17 @@ class ListPatternTest extends TestBase
             'invalidString'     => ['', true],
             'string'            => ['foo', false],
             'invalidCharacters' => [['foo/', 'bar'], true],
+            'invalidBool'       => [true, true],
+            'invalidBool2'      => [false, true],
+            'invalidNull'       => [null, true],
         ];
     }
 
     /**
      * @dataProvider providerToUrl
      *
-     * @param             $data
-     * @param string      $expected
+     * @param        $data
+     * @param string $expected
      */
     public function testToUrl($data, string $expected)
     {

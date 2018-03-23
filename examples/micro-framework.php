@@ -6,6 +6,13 @@
  */
 declare(strict_types=1);
 
+/*
+ * This file is part of the awesomite/chariot package.
+ * (c) Bartłomiej Krukowski <bartlomiej@krukowski.me>
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
+ */
+
 use Awesomite\Chariot\Exceptions\HttpException;
 use Awesomite\Chariot\InternalRouteInterface;
 use Awesomite\Chariot\Pattern\PatternRouter;
@@ -34,7 +41,7 @@ class MyController
 
     private function showItem(int $itemId, string $itemName)
     {
-        echo sprintf('Show item (%d) «%s»', $itemId, $itemName), "\n";
+        echo \sprintf('Show item (%d) «%s»', $itemId, $itemName), "\n";
     }
 
     public function dispatch(InternalRouteInterface $route)
@@ -55,7 +62,7 @@ class MyController
                 return $this->showCategories(...$route->getParams()['names']);
 
             default:
-                throw new \RuntimeException(sprintf('Invalid handler «%s»', $route->getHandler()));
+                throw new \RuntimeException(\sprintf('Invalid handler «%s»', $route->getHandler()));
         }
     }
 }
@@ -83,9 +90,9 @@ try {
     $route = $router->match($method, $url);
     (new MyController())->dispatch($route);
 } catch (HttpException $exception) {
-    http_response_code($exception->getCode());
+    \http_response_code($exception->getCode());
     if (HttpException::HTTP_METHOD_NOT_ALLOWED === $exception->getCode()) {
-        header('Allow: ' . implode(', ', $router->getAllowedMethods($url)));
+        \header('Allow: ' . \implode(', ', $router->getAllowedMethods($url)));
     }
     echo $exception->getMessage(), "\n";
 }

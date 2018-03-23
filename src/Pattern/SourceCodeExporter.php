@@ -1,5 +1,12 @@
 <?php
 
+/*
+ * This file is part of the awesomite/chariot package.
+ * (c) Bartłomiej Krukowski <bartlomiej@krukowski.me>
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
+ */
+
 namespace Awesomite\Chariot\Pattern;
 
 use Awesomite\Chariot\Reflections\Objects;
@@ -13,7 +20,7 @@ class SourceCodeExporter
     {
         $template
             = <<<'TEMPLATE'
-\call_user_func(function () {
+(function () {
   $patterns = \unserialize([[patterns]]);
 
   $routes = [[routes]];
@@ -24,8 +31,10 @@ class SourceCodeExporter
     'nodesTree' => [[nodesTree]],
     'strategy' => [[strategy]],
     'routes' => $routes,
+    'requiredParams' => [[requiredParams]],
+    'frozen' => true,
   ));
-})
+})()
 
 TEMPLATE;
 
@@ -39,13 +48,14 @@ TEMPLATE;
 
         $replace = [
             '[[routes]]'         => $exportedRoutes,
-            '[[patterns]]'       => var_export(serialize(Objects::getProperty($router, 'patterns')), true),
+            '[[patterns]]'       => \var_export(\serialize(Objects::getProperty($router, 'patterns')), true),
             '[[keyValueRoutes]]' => $this->varExportFromObject($router, 'keyValueRoutes'),
             '[[nodesTree]]'      => $exportedNodes,
             '[[strategy]]'       => $this->varExportFromObject($router, 'strategy'),
+            '[[requiredParams]]' => $this->varExportFromObject($router, 'requiredParams'),
         ];
 
-        return str_replace(array_keys($replace), array_values($replace), $template);
+        return \str_replace(\array_keys($replace), \array_values($replace), $template);
     }
 
     private function exportRoutes(
@@ -57,17 +67,17 @@ TEMPLATE;
         $result .= "{$indent}array(\n";
         foreach ($routes as $key => $value) {
             $result .= "{$indent}  ";
-            $result .= is_int($key) ? $key : var_export((string) $key, true);
+            $result .= \is_int($key) ? $key : \var_export((string) $key, true);
             $result .= ' => ';
-            if (is_array($value)) {
+            if (\is_array($value)) {
                 $result .= "\n";
                 $this->exportRoutes($value, $patternsName, $result, $indent . '  ');
             } else {
-                if (is_object($value) && $value instanceof PatternRoute) {
+                if (\is_object($value) && $value instanceof PatternRoute) {
                     $result .= $this->exportRoute($value, $patternsName, $indent . '  ');
                 } else {
                     // @codeCoverageIgnoreStart
-                    $result .= var_export($value, true);
+                    $result .= \var_export($value, true);
                     // codeCoverageIgnoreEnd
                 }
             }
@@ -86,9 +96,10 @@ TEMPLATE;
   'simplePattern' => [[simplePattern]],
   'explodedParams' => [[explodedParams]],
   'patterns' => [[patterns]],
+  'frozen' => true,
 ))
 TEMPLATE;
-        $template = str_replace("\n", "\n{$indent}", $template);
+        $template = \str_replace("\n", "\n{$indent}", $template);
 
         $data = [
             '[[pattern]]'         => $this->varExportFromObject($route, 'pattern'),
@@ -98,11 +109,11 @@ TEMPLATE;
             '[[patterns]]'        => $patternsName,
         ];
 
-        return str_replace(array_keys($data), array_values($data), $template);
+        return \str_replace(\array_keys($data), \array_values($data), $template);
     }
 
     private function varExportFromObject($object, string $propertyName): string
     {
-        return var_export(Objects::getProperty($object, $propertyName), true);
+        return \var_export(Objects::getProperty($object, $propertyName), true);
     }
 }

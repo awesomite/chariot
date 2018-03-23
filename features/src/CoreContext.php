@@ -1,9 +1,17 @@
 <?php
 
+/*
+ * This file is part of the awesomite/chariot package.
+ * (c) Bartłomiej Krukowski <bartlomiej@krukowski.me>
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
+ */
+
 use Awesomite\Chariot\Exceptions\CannotGenerateLinkException;
 use Awesomite\Chariot\Exceptions\HttpException;
+use Awesomite\Chariot\ParamDecorators\ContextInterface;
+use Awesomite\Chariot\ParamDecorators\ParamDecoratorInterface;
 use Awesomite\Chariot\Pattern\PatternRouter;
-use Awesomite\Chariot\RouterInterface;
 use Behat\Behat\Context\Context;
 use PHPUnit\Framework\Assert;
 
@@ -16,9 +24,9 @@ class CoreContext implements Context
      * @var PatternRouter
      */
     private $patternRouter;
-    
+
     /**
-     * @var RouterInterface
+     * @var PatternRouter
      */
     private $testedRouter;
 
@@ -40,7 +48,7 @@ class CoreContext implements Context
      */
     public function iRegisterUrlWithMethodForRoute($url, $method, $handler, $jsonParams)
     {
-        $this->patternRouter->addRoute($method, $url, $handler, json_decode($jsonParams, true));
+        $this->patternRouter->addRoute($method, $url, $handler, \json_decode($jsonParams, true));
     }
 
     /**
@@ -58,7 +66,7 @@ class CoreContext implements Context
     {
         $route = $this->testedRouter->match($method, $url);
         Assert::assertSame($handler, $route->getHandler());
-        Assert::assertSame(json_decode($jsonParams, true), $route->getParams());
+        Assert::assertSame(\json_decode($jsonParams, true), $route->getParams());
     }
 
     /**
@@ -67,12 +75,13 @@ class CoreContext implements Context
     public function routerShouldThrowFor($code, $method, $url)
     {
         try {
-            $this->patternRouter->match($method, $url);
+            $this->testedRouter->match($method, $url);
         } catch (HttpException $exception) {
-            Assert::assertSame((int) $code, $exception->getCode());
+            Assert::assertSame((int)$code, $exception->getCode());
+
             return;
         }
-        
+
         Assert::fail('Router should throw an exception');
     }
 
@@ -81,8 +90,8 @@ class CoreContext implements Context
      */
     public function routerShouldAllowForMethodsForUrl($methods, $url)
     {
-        $explodedMethods = '' === $methods ? [] : preg_split('#,\\s*#', $methods);
-        $this->assertArraysWithSameElements($explodedMethods, $this->patternRouter->getAllowedMethods($url));
+        $explodedMethods = '' === $methods ? [] : \preg_split('#,\\s*#', $methods);
+        $this->assertArraysWithSameElements($explodedMethods, $this->testedRouter->getAllowedMethods($url));
     }
 
     /**
@@ -98,13 +107,13 @@ class CoreContext implements Context
      */
     public function routerShouldNotGenerateUrlForMethodWithHandlerAndParams($method, $handler, $params)
     {
-        $arrayParams = json_decode($params, true);
+        $arrayParams = \json_decode($params, true);
         try {
             $this->testedRouter->linkTo($handler, $method)->withParams($arrayParams)->toString();
         } catch (CannotGenerateLinkException $exception) {
             return;
         }
-        
+
         Assert::fail('Router should not generate URL for given data');
     }
 
@@ -113,8 +122,8 @@ class CoreContext implements Context
      */
     public function routerShouldGenerateUrlForMethodForHandlerWithParams($url, $method, $handler, $params)
     {
-        $arrayParams = json_decode($params, true);
-        $generatedUrl = (string) $this->testedRouter->linkTo($handler, $method)->withParams($arrayParams);
+        $arrayParams = \json_decode($params, true);
+        $generatedUrl = (string)$this->testedRouter->linkTo($handler, $method)->withParams($arrayParams);
         Assert::assertSame($url, $generatedUrl, $generatedUrl);
     }
 
@@ -136,8 +145,8 @@ class CoreContext implements Context
 
     private function assertArraysWithSameElements(array $expected, array $actual, string $message = '')
     {
-        sort($expected);
-        sort($actual);
+        \sort($expected);
+        \sort($actual);
         Assert::assertSame($expected, $actual, $message);
     }
 
@@ -155,5 +164,28 @@ class CoreContext implements Context
     public function iRestoreRouterFromCache()
     {
         $this->testedRouter = eval('return ' . $this->cache . ';');
+    }
+
+    /**
+     * @When I add decorator LowerCaseDecorator for param :param
+     */
+    public function iAddDecoratorSeodecoratorForParam(string $param)
+    {
+        $this->testedRouter->addParamDecorator(new class($param) implements ParamDecoratorInterface {
+            private $param;
+
+            public function __construct(string $param)
+            {
+                $this->param = $param;
+            }
+
+            public function decorate(ContextInterface $context)
+            {
+                $value = $context->getParams()[$this->param] ?? null;
+                if (null !== $value) {
+                    $context->setParam($this->param, \strtolower($value));
+                }
+            }
+        });
     }
 }

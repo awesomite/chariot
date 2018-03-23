@@ -1,5 +1,42 @@
 # Changelog
 
+### [?.?.?] - ????-??-??
+
+* Fixed - `Awesomite\Chariot\Pattern\StdPatterns\ListPattern` should not allow for bool
+* Removed unused parameters from `Awesomite\Chariot\Exceptions\CannotGenerateLinkException::__construct`
+and `Awesomite\Chariot\Exceptions\HttpException::__construct`
+* Added `Awesomite\Chariot\ParamDecorators\ParamDecoratorInterface`,
+see examples:
+  * `examples/param-decorator.php`
+  * `examples/param-decorator2.php`
+  * `examples/param-decorator-item.php`
+* Changed - cannot add pattern after unserialize `Awesomite\Chariot\Pattern\Patterns`
+* Changed - cannot add route after restoring router from cache
+```php
+<?php
+
+use Awesomite\Chariot\Pattern\PatternRouter;
+
+// the following code will not work
+
+$router = PatternRouter::createDefault();
+
+$router = eval('return ' . $router->exportToExecutable() . ';');
+$router->get('/', 'home');
+```
+* Added restriction - each route for the same `handler` must contain the same list of parameters, e.g.:
+```php
+<?php
+
+use Awesomite\Chariot\Pattern\PatternRouter;
+
+$router = PatternRouter::createDefault();
+
+$router->get('/article-{{ id :int }}-{{ name }}', 'showArticle');
+// hidden parameter 'name' = null is required
+$router->get('/article-{{ id :int }}', 'showArticle', ['name' => null]);
+```
+
 ### [0.3.1] - 2017-09-17
 
 * Fixed - `Awesomite\Chariot\Pattern\PatternRouter` did not work properly when pattern was prefixed by regular expression,

@@ -1,5 +1,12 @@
 <?php
 
+/*
+ * This file is part of the awesomite/chariot package.
+ * (c) Bartłomiej Krukowski <bartlomiej@krukowski.me>
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
+ */
+
 namespace Awesomite\Chariot\Pattern;
 
 use Awesomite\Chariot\Exceptions\CannotGenerateLinkException;
@@ -132,7 +139,7 @@ class PatternRouterTest extends TestBase
         $this->assertArraysWithSameElements($allowedMethods, $router->getAllowedMethods($path));
 
         $this->expectException(HttpException::class);
-        $this->expectExceptionMessage(sprintf('405 Method Not Allowed: %s %s', $method, $path));
+        $this->expectExceptionMessage(\sprintf('405 Method Not Allowed: %s %s', $method, $path));
         $this->expectExceptionCode(HttpException::HTTP_METHOD_NOT_ALLOWED);
         $router->match($method, $path);
     }
@@ -174,7 +181,7 @@ class PatternRouterTest extends TestBase
     {
         $this->expectException(HttpException::class);
         $this->expectExceptionCode(HttpException::HTTP_NOT_FOUND);
-        $this->expectExceptionMessage(sprintf('404 Not Found: %s %s', $method, $path));
+        $this->expectExceptionMessage(\sprintf('404 Not Found: %s %s', $method, $path));
         $router->match($method, $path);
     }
 
@@ -207,7 +214,7 @@ class PatternRouterTest extends TestBase
     public function testAllAllowedMethods(PatternRouter $router, $path)
     {
         $this->assertArraysWithSameElements(
-            array_diff(HttpMethods::ALL_METHODS, [HttpMethods::METHOD_ANY]),
+            \array_diff(HttpMethods::ALL_METHODS, [HttpMethods::METHOD_ANY]),
             $router->getAllowedMethods($path)
         );
     }
@@ -234,7 +241,7 @@ class PatternRouterTest extends TestBase
      */
     public function testLinkTo(PatternRouter $router, $method, string $handler, array $params, string $expectedLink)
     {
-        $link = is_null($method)
+        $link = \is_null($method)
             ? $router->linkTo($handler)
             : $router->linkTo($handler, $method);
         $this->assertInstanceOf(LinkInterface::class, $link);
@@ -245,7 +252,7 @@ class PatternRouterTest extends TestBase
 
         if (LinkInterface::ERROR_CANNOT_GENERATE_LINK === $generatedLink) {
             $this->expectException(CannotGenerateLinkException::class);
-            $this->expectExceptionMessageRegExp('#^' . preg_quote('Cannot generate link for ', '.*#') . '#');
+            $this->expectExceptionMessageRegExp('#^' . \preg_quote('Cannot generate link for ', '.*#') . '#');
         }
 
         $this->assertSame($expectedLink, $link->toString());
@@ -322,7 +329,7 @@ class PatternRouterTest extends TestBase
     public function providerInvalidExtraParams()
     {
         return [
-            [tmpfile()],
+            [\tmpfile()],
             [new \stdClass()],
         ];
     }

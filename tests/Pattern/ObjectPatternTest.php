@@ -1,5 +1,12 @@
 <?php
 
+/*
+ * This file is part of the awesomite/chariot package.
+ * (c) Bartłomiej Krukowski <bartlomiej@krukowski.me>
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
+ */
+
 namespace Awesomite\Chariot\Pattern;
 
 use Awesomite\Chariot\Exceptions\HttpException;
@@ -45,13 +52,13 @@ class ObjectPatternTest extends TestBase
         $this->assertTrue($thrown);
 
         $dates = [
-            strtotime('2017-01-01'),
+            \strtotime('2017-01-01'),
             '2017-01-01',
             new \DateTime('2017-01-01'),
             new \DateTimeImmutable('2017-01-01'),
             $this->createStringable('2017-01-01'),
-            $this->createStringable(strtotime('2017-01-01')),
-            $this->createStringable(strtotime('2017-01-01')),
+            $this->createStringable(\strtotime('2017-01-01')),
+            $this->createStringable(\strtotime('2017-01-01')),
         ];
         foreach ($dates as $date) {
             $currentLink = (string) $router->linkTo('showDay')->withParam('day', $date);
@@ -118,11 +125,11 @@ class ObjectPatternTest extends TestBase
     public function testInvalidToUrl(PatternInterface $pattern, $param, string $type)
     {
         $this->expectException(PatternException::class);
-        $class = get_class($pattern);
-        if (0 === mb_strpos($class, 'class@')) {
+        $class = \get_class($pattern);
+        if (0 === \mb_strpos($class, 'class@')) {
             $class = 'class@';
         }
-        $this->expectExceptionMessage(sprintf(
+        $this->expectExceptionMessage(\sprintf(
             'Value %s cannot be converted to url param (%s',
             $type,
             $class
@@ -158,7 +165,7 @@ class ObjectPatternTest extends TestBase
         };
 
         return [
-            [$pattern, tmpfile(), 'resource'],
+            [$pattern, \tmpfile(), 'resource'],
             [$pattern, 0, '(integer) 0'],
         ];
     }

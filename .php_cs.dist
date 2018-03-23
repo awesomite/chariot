@@ -8,6 +8,13 @@ $finder = PhpCsFixer\Finder::create()
     ->in(__DIR__ . DIRECTORY_SEPARATOR . 'speedtest')
 ;
 
+$header = <<<'HEADER'
+This file is part of the awesomite/chariot package.
+(c) Bartłomiej Krukowski <bartlomiej@krukowski.me>
+For the full copyright and license information, please view
+the LICENSE file that was distributed with this source code.
+HEADER;
+
 return PhpCsFixer\Config::create()
     ->setRules([
         '@PSR2' => true,
@@ -16,6 +23,9 @@ return PhpCsFixer\Config::create()
         'no_unused_imports' => true,
         'yoda_style' => true,
         'new_with_braces' => true,
+        'native_function_invocation' => true,
+        'header_comment' => array('header' => $header),
+        'phpdoc_align' => true,
     ])
     ->setFinder($finder)
 ;

@@ -1,5 +1,12 @@
 <?php
 
+/*
+ * This file is part of the awesomite/chariot package.
+ * (c) Bartłomiej Krukowski <bartlomiej@krukowski.me>
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
+ */
+
 namespace Awesomite\Chariot\Reflections;
 
 use Awesomite\Chariot\TestBase;
@@ -11,7 +18,7 @@ class ObjectsTest extends TestBase
 {
     public function testGetProperty()
     {
-        $value = mt_rand();
+        $value = \mt_rand();
         $this->assertSame(
             $value,
             Objects::getProperty($this->createClass($value), 'privateValue')

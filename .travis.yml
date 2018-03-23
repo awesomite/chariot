@@ -3,6 +3,7 @@ language: php
 php:
   - 7.0
   - 7.1
+  - 7.2
   - nightly
 
 matrix:
@@ -18,22 +19,29 @@ install:
   - if [[ "$DEPENDENCIES" = 'high' ]]; then travis_retry composer update --no-interaction --prefer-stable; fi
   - if [[ "$DEPENDENCIES" = 'low' ]]; then travis_retry composer update --no-interaction --prefer-stable --prefer-lowest; fi
   - composer show
-  - composer global require friendsofphp/php-cs-fixer:@stable
-  - export PHP_CS_FIXER="${HOME}/.composer/vendor/bin/php-cs-fixer"
+  - export PHP_CS_FIXER="./dev-tools/vendor/bin/php-cs-fixer"
+  - cd dev-tools; travis_retry composer update; cd ..
 
 before_script:
   - if [[ "$DEPENDENCIES" = 'low' ]]; then export PHP_ARGS=$(php -r "echo '-d error_reporting=', E_ALL ^ (E_DEPRECATED | E_USER_DEPRECATED);"); else export PHP_ARGS=''; fi
 
 script:
-  - if [[ "$TRAVIS_ALLOW_FAILURE" = 'false' ]]; then php -n ${PHP_CS_FIXER} --diff --dry-run -v fix; fi
+  - if [[ "$TRAVIS_ALLOW_FAILURE" = 'false' ]]; then php -n ${PHP_CS_FIXER} --diff --dry-run -v --allow-risky=yes fix; fi
   - php ${PHP_ARGS} vendor/bin/phpunit
   - php ${PHP_ARGS} vendor/bin/behat
-  - php -n ${PHP_ARGS} speedtest/console.php test-links
+  - bin/infection.sh
+
+  - php ${PHP_ARGS} speedtest/console.php test-links
+  - php ${PHP_ARGS} speedtest/console.php test-providers
+  - php ${PHP_ARGS} -d opcache.enable=1 -d opcache.enable_cli=1 speedtest/console.php test-cache
+
   - php examples/micro-framework.php
   - php examples/months.php
+  - php examples/param-decorator.php
+  - php examples/param-decorator2.php
+  - php examples/param-decorator-item.php
   - php examples/symfony.php
   - php examples/transform-params.php
-  - bin/humbug.sh
 
 after_script:
   - travis_retry bin/coveralls.sh

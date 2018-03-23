@@ -1,5 +1,12 @@
 <?php
 
+/*
+ * This file is part of the awesomite/chariot package.
+ * (c) Bartłomiej Krukowski <bartlomiej@krukowski.me>
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
+ */
+
 namespace Awesomite\Chariot\Pattern\StdPatterns;
 
 use Awesomite\Chariot\Pattern\Patterns;
@@ -28,23 +35,23 @@ class Ip4Pattern extends AbstractPattern
 
     public function toUrl($data): string
     {
-        if (is_object($data) && method_exists($data, '__toString')) {
+        if (\is_object($data) && \method_exists($data, '__toString')) {
             $data = (string) $data;
         }
 
-        if (is_string($data)) {
+        if (\is_string($data)) {
             if ($this->match($data)) {
                 return $data;
             }
 
             $d = Patterns::DELIMITER;
-            if (preg_match($d . '^(' . Patterns::REGEX_INT . ')$' . $d, $data)) {
+            if (\preg_match($d . '^(' . Patterns::REGEX_INT . ')$' . $d, $data)) {
                 $data = (int) $data;
             }
         }
 
-        if (is_int($data)) {
-            if ($data >= 0 && $data <= self::$maxIp4Int && $this->match($result = long2ip($data))) {
+        if (\is_int($data)) {
+            if ($data >= 0 && $data <= self::$maxIp4Int && $this->match($result = \long2ip($data))) {
                 return $result;
             }
         }
@@ -63,17 +70,17 @@ class Ip4Pattern extends AbstractPattern
 
     public function serialize()
     {
-        return serialize($this->options);
+        return \serialize($this->options);
     }
 
     public function unserialize($serialized)
     {
-        $this->options = unserialize($serialized);
+        $this->options = \unserialize($serialized);
     }
 
     protected function match(string $data): bool
     {
-        if (false === filter_var($data, FILTER_VALIDATE_IP, $this->options)) {
+        if (false === \filter_var($data, FILTER_VALIDATE_IP, $this->options)) {
             return false;
         }
 

@@ -1,5 +1,12 @@
 <?php
 
+/*
+ * This file is part of the awesomite/chariot package.
+ * (c) Bartłomiej Krukowski <bartlomiej@krukowski.me>
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
+ */
+
 namespace Awesomite\Chariot\Pattern\StdPatterns;
 
 use Awesomite\Chariot\Pattern\Patterns;
@@ -19,7 +26,7 @@ class FloatPattern extends AbstractPattern
             return $this->convertFloatToString($normalized);
         }
 
-        if (is_string($normalized) && $this->match($normalized)) {
+        if (\is_string($normalized) && $this->match($normalized)) {
             return $normalized;
         }
 
@@ -33,13 +40,13 @@ class FloatPattern extends AbstractPattern
 
     protected function isValidFloat($data): bool
     {
-        return is_float($data);
+        return \is_float($data);
     }
 
     private function rtrimRedundantZeros(string $float): string
     {
-        if (false !== strpos($float, '.')) {
-            return rtrim(rtrim($float, '0'), '.');
+        if (false !== \strpos($float, '.')) {
+            return \rtrim(\rtrim($float, '0'), '.');
         }
 
         return $float;
@@ -47,11 +54,11 @@ class FloatPattern extends AbstractPattern
 
     private function normalizeInput($input)
     {
-        if (is_string($input) || (is_object($input) && method_exists($input, '__toString'))) {
+        if (\is_string($input) || (\is_object($input) && \method_exists($input, '__toString'))) {
             return $this->rtrimRedundantZeros((string) $input);
         }
 
-        if (is_int($input) || is_float($input)) {
+        if (\is_int($input) || \is_float($input)) {
             return (float) $input;
         }
 
@@ -60,6 +67,6 @@ class FloatPattern extends AbstractPattern
 
     private function convertFloatToString(float $input): string
     {
-        return $this->rtrimRedundantZeros(sprintf('%.20f', $input));
+        return $this->rtrimRedundantZeros(\sprintf('%.20f', $input));
     }
 }
