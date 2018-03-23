@@ -51,6 +51,9 @@ class ListPatternTest extends TestBase
             'invalidString'     => ['', true],
             'string'            => ['foo', false],
             'invalidCharacters' => [['foo/', 'bar'], true],
+            'invalidBool'       => [true, true],
+            'invalidBool2'      => [false, true],
+            'invalidNull'       => [null, true],
         ];
     }
 

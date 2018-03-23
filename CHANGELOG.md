@@ -2,6 +2,7 @@
 
 ### [?.?.?] - ????-??-??
 
+* Fixed - `Awesomite\Chariot\Pattern\StdPatterns\ListPattern` should not allow for bool
 * Removed unused parameters from `Awesomite\Chariot\Exceptions\CannotGenerateLinkException::__construct`
 * Added `Awesomite\Chariot\ParamDecorators\ParamDecoratorInterface`,
 see examples:

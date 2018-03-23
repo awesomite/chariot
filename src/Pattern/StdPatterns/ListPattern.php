@@ -64,7 +64,7 @@ class ListPattern extends AbstractPattern
             return $data;
         }
 
-        if (\is_scalar($data)) {
+        if (\is_scalar($data) && !\is_bool($data)) {
             return (string) $data;
         }
 
