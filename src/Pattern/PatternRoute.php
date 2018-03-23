@@ -90,11 +90,8 @@ class PatternRoute
                     case 1:
                     case 2:
                     case 3:
-                        while (\count($arr) < 2) {
-                            $arr[] = null;
-                        }
-
-                        list($name, $pattern) = $arr;
+                        $name = $arr[0] ?? null;
+                        $pattern = $arr[1] ?? null;
 
                         if (\is_null($pattern)) {
                             $pattern = $this->patterns->getDefaultPattern();
@@ -161,10 +158,9 @@ class PatternRoute
                     case 1:
                     case 2:
                     case 3:
-                        while (\count($arr) < 3) {
-                            $arr[] = null;
-                        }
-                        list($name, $pattern, $default) = $arr;
+                        $name = $arr[0] ?? null;
+                        $pattern = $arr[1] ?? null;
+                        $default = $arr[2] ?? null;
                         if (\is_null($pattern)) {
                             $pattern = $this->patterns->getDefaultPattern();
                         }

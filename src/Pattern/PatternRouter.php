@@ -404,7 +404,7 @@ ERROR;
         $nodesPointer = &$this->nodesTree;
         $chars = \str_split($path);
 
-        while (1) {
+        while (true) {
             $candidates = \array_merge(
                 $nodesPointer['regex'] ?? [],
                 $nodesPointer['all'] ?? []
