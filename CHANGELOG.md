@@ -1,6 +1,6 @@
 # Changelog
 
-### [4.0.0] - 2018-03-23
+### [0.4.0] - 2018-03-23
 
 * Fixed - `Awesomite\Chariot\Pattern\StdPatterns\ListPattern` should not allow for bool
 * Removed unused parameters from `Awesomite\Chariot\Exceptions\CannotGenerateLinkException::__construct`
