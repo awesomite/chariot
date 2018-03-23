@@ -107,10 +107,6 @@ class PatternRoute
             ];
         }
         $compiledParts[] = \preg_quote($toCompile, Patterns::DELIMITER);
-
-        if (0 === \count($compiledParts)) {
-            $simplePattern = $this->pattern;
-        }
         $d = Patterns::DELIMITER;
         $compiledPattern = $d . '^' . \implode('', $compiledParts) . '$' . $d;
 
