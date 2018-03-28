@@ -1,6 +1,6 @@
 # Changelog
 
-### [?.?.?] - ????-??-??
+### [0.5.0] - 2018-03-28
 
 * Changed - white space between first and second parameter is not required,
 if second parameter begins with `:`, e.g. `{{id:uint}}`
@@ -86,6 +86,7 @@ e.g. `{{ subdomain }}.local/`
     
 * Initial public release
 
+[0.5.0]: https://github.com/awesomite/chariot/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/awesomite/chariot/compare/v0.3.1...v0.4.0
 [0.3.1]: https://github.com/awesomite/chariot/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/awesomite/chariot/compare/v0.2.1...v0.3.0
