@@ -165,35 +165,30 @@ class PatternRoute
      *     ['{{ month :int }}', 'month', ':int', null],
      * ]
      *
-     * @return array
+     * @return \Generator
      */
-    private function getTokensStream(): array
+    private function getTokensStream()
     {
-        $preProcessed = [];
-        \preg_replace_callback(
-            static::PATTERN_VAR,
-            function ($matches) use (&$preProcessed) {
-                $arr = $this->paramStrToArr($matches[0]);
+        $matches = [];
+        \preg_match_all(static::PATTERN_VAR, $this->pattern, $matches);
+        foreach ($matches[0] ?? [] as $match) {
+            $arr = $this->paramStrToArr($match);
 
-                if (\count($arr) > 3) {
-                    throw new InvalidArgumentException("Invalid url pattern {$this->pattern}");
-                }
+            if (\count($arr) > 3) {
+                throw new InvalidArgumentException("Invalid url pattern {$this->pattern}");
+            }
 
-                $name = $arr[0];
-                $pattern = $arr[1] ?? $this->patterns->getDefaultPattern();
-                $default = $arr[2] ?? null;
+            $name = $arr[0];
+            $pattern = $arr[1] ?? $this->patterns->getDefaultPattern();
+            $default = $arr[2] ?? null;
 
-                $preProcessed[] = [
-                    $matches[0],
-                    $name,
-                    $pattern,
-                    $default
-                ];
-            },
-            $this->pattern
-        );
-
-        return $preProcessed;
+            yield [
+                $match,
+                $name,
+                $pattern,
+                $default
+            ];
+        }
     }
 
     /**
@@ -207,8 +202,16 @@ class PatternRoute
         $result = \array_filter(\preg_split('/\\s+/', $str), function ($a) {
             return '' !== \trim($a);
         });
+        $result = \array_values($result);
 
-        return \array_values($result);
+        if (!\in_array(\strpos($result[0], ':'), [0, false], true)) {
+            $first = \array_shift($result);
+            list($a, $b) = \explode(':', $first, 2);
+            $b = ':' . $b;
+            \array_unshift($result, $a, $b);
+        }
+
+        return $result;
     }
 
     public function match(string $path, &$params): bool

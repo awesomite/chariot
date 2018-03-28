@@ -17,30 +17,30 @@ interface PatternsInterface extends \ArrayAccess, \Serializable
      * @param string                  $name
      * @param string|PatternInterface $pattern Acceptable also stringable object (with method __toString)
      *
-     * @return PatternsInterface
+     * @return self
      *
      * @throws InvalidArgumentException
      */
-    public function addPattern(string $name, $pattern): PatternsInterface;
+    public function addPattern(string $name, $pattern): self;
 
     /**
      * @param string   $name
      * @param string[] $values
      *
-     * @return PatternsInterface
+     * @return self
      *
      * @throws InvalidArgumentException
      */
-    public function addEnumPattern(string $name, array $values): PatternsInterface;
+    public function addEnumPattern(string $name, array $values): self;
 
     /**
      * @param string|PatternInterface $pattern
      *
-     * @return PatternsInterface
+     * @return self
      *
      * @throws InvalidArgumentException
      */
-    public function setDefaultPattern($pattern): PatternsInterface;
+    public function setDefaultPattern($pattern): self;
 
     public function getDefaultPattern();
 

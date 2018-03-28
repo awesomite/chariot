@@ -15,9 +15,9 @@ interface LinkInterface
 {
     const ERROR_CANNOT_GENERATE_LINK = '__ERROR_CANNOT_GENERATE_LINK';
 
-    public function withParam(string $key, $value): LinkInterface;
+    public function withParam(string $key, $value): self;
 
-    public function withParams(array $params): LinkInterface;
+    public function withParams(array $params): self;
 
     /**
      * Works same as __toString() method with one exception:
@@ -40,5 +40,5 @@ interface LinkInterface
      */
     public function __toString(): string;
 
-    public function withPrefix(string $prefix): LinkInterface;
+    public function withPrefix(string $prefix): self;
 }
