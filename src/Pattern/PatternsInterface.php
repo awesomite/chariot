@@ -47,7 +47,7 @@ interface PatternsInterface extends \ArrayAccess, \Serializable
     /**
      * @param mixed $offset
      *
-     * @return self
+     * @return PatternInterface
      */
     public function offsetGet($offset);
 }
