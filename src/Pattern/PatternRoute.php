@@ -165,35 +165,30 @@ class PatternRoute
      *     ['{{ month :int }}', 'month', ':int', null],
      * ]
      *
-     * @return array
+     * @return \Generator
      */
-    private function getTokensStream(): array
+    private function getTokensStream()
     {
-        $preProcessed = [];
-        \preg_replace_callback(
-            static::PATTERN_VAR,
-            function ($matches) use (&$preProcessed) {
-                $arr = $this->paramStrToArr($matches[0]);
+        $matches = [];
+        \preg_match_all(static::PATTERN_VAR, $this->pattern, $matches);
+        foreach ($matches[0] ?? [] as $match) {
+            $arr = $this->paramStrToArr($match);
 
-                if (\count($arr) > 3) {
-                    throw new InvalidArgumentException("Invalid url pattern {$this->pattern}");
-                }
+            if (\count($arr) > 3) {
+                throw new InvalidArgumentException("Invalid url pattern {$this->pattern}");
+            }
 
-                $name = $arr[0];
-                $pattern = $arr[1] ?? $this->patterns->getDefaultPattern();
-                $default = $arr[2] ?? null;
+            $name = $arr[0];
+            $pattern = $arr[1] ?? $this->patterns->getDefaultPattern();
+            $default = $arr[2] ?? null;
 
-                $preProcessed[] = [
-                    $matches[0],
-                    $name,
-                    $pattern,
-                    $default
-                ];
-            },
-            $this->pattern
-        );
-
-        return $preProcessed;
+            yield [
+                $match,
+                $name,
+                $pattern,
+                $default
+            ];
+        }
     }
 
     /**
