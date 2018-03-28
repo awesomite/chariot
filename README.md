@@ -60,6 +60,7 @@ Third value contains default value of parameter (used for generating links).
 I believe that the best documentation are examples from the real world. The following patterns should help you to understand how does it work.
 
 * `/page/{{ page :uint }}`
+* `/page/{{page:uint}}` (white space between first and second parameter is not required, if second parameter begins with `:`)
 * `/page/{{page \d+ 1}}`
 * `/categories/{{ name [a-zA-Z0-9-]+ }}`
 * `/categories/{{ categoryName }}/item-{{ itemId :uint }}`
