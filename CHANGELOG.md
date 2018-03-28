@@ -4,6 +4,7 @@
 
 * Changed - white space between first and second parameter is not required,
 if second parameter begins with `:`, e.g. `{{id:uint}}`
+* Replaced `: class` with `: self` wherever it was possible
 
 ### [0.4.0] - 2018-03-23
 

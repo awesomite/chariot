@@ -22,7 +22,7 @@ class RouterCollector implements RouterInterface
      */
     private $routers = [];
 
-    public function addRouter(RouterInterface $router): RouterCollector
+    public function addRouter(RouterInterface $router): self
     {
         $this->routers[] = $router;
 
