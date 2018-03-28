@@ -100,6 +100,13 @@ class Patterns implements PatternsInterface
             ));
         }
 
+        if (\substr_count($name, ':') > 1) {
+            throw new InvalidArgumentException(\sprintf(
+                'Pattern\'s name cannot contain `:`, except first character, given `%s`',
+                $name
+            ));
+        }
+
         if (
             \is_string($pattern)
             || (\is_object($pattern) && \method_exists($pattern, '__toString') && !$pattern instanceof PatternInterface)

@@ -1,5 +1,10 @@
 # Changelog
 
+### [?.?.?] - ????-??-??
+
+* Added validation to `Awesomite\Chariot\Pattern\Patterns::addPattern` - pattern's name cannot contain `:`,
+except first character
+
 ### [0.5.0] - 2018-03-28
 
 * Changed - white space between first and second parameter is not required,

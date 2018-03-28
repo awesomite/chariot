@@ -13,6 +13,7 @@ use Awesomite\Chariot\Exceptions\HttpException;
 use Awesomite\Chariot\Exceptions\InvalidArgumentException;
 use Awesomite\Chariot\Exceptions\LogicException;
 use Awesomite\Chariot\HttpMethods;
+use Awesomite\Chariot\Pattern\StdPatterns\IntPattern;
 use Awesomite\Chariot\Reflections\Objects;
 use Awesomite\Chariot\TestBase;
 
@@ -21,6 +22,29 @@ use Awesomite\Chariot\TestBase;
  */
 class PatternsTest extends TestBase
 {
+    /**
+     * @dataProvider providerNameWithColon
+     *
+     * @param string $name
+     * @param string $expectedException
+     */
+    public function testNameWithColon(string $name, string $expectedException)
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage($expectedException);
+
+        $patterns = new Patterns();
+        $patterns->addPattern($name, new IntPattern());
+    }
+
+    public function providerNameWithColon()
+    {
+        return [
+            [':na:me', 'Pattern\'s name cannot contain `:`, except first character, given `:na:me`'],
+            [':category:name', 'Pattern\'s name cannot contain `:`, except first character, given `:category:name`'],
+        ];
+    }
+
     public function testDuplicatedPattern()
     {
         $this->expectException(LogicException::class);
