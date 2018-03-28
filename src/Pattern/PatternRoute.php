@@ -207,8 +207,16 @@ class PatternRoute
         $result = \array_filter(\preg_split('/\\s+/', $str), function ($a) {
             return '' !== \trim($a);
         });
+        $result = \array_values($result);
 
-        return \array_values($result);
+        if (!\in_array(\strpos($result[0], ':'), [0, false], true)) {
+            $first = \array_shift($result);
+            list($a, $b) = \explode(':', $first, 2);
+            $b = ':' . $b;
+            \array_unshift($result, $a, $b);
+        }
+
+        return $result;
     }
 
     public function match(string $path, &$params): bool

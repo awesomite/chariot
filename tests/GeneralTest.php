@@ -170,8 +170,7 @@ class GeneralTest extends TestBase
         $router->addRoute(HttpMethods::METHOD_GET, '/pl', 'home', ['lang' => 'pl']);
         $router->addRoute(HttpMethods::METHOD_GET, '/category-{{ categoryId \\d+ }}', 'showCategory');
         $router->addRoute(HttpMethods::METHOD_GET, '/date-{{ date :date }}', 'showDate');
-        $router->addRoute(HttpMethods::METHOD_GET, '/date-{{ date :date }}', 'showDate');
-        $router->addRoute(HttpMethods::METHOD_GET, '/user-{{ name :az }}', 'showUser');
+        $router->addRoute(HttpMethods::METHOD_GET, '/user-{{name:az}}', 'showUser');
 
         yield [$router, 'home', ['lang' => 'en'], '/'];
         yield [$router, 'home', ['lang' => 'pl'], '/pl'];

@@ -1,5 +1,10 @@
 # Changelog
 
+### [?.?.?] - ????-??-??
+
+* Changed - white space between first and second parameter is not required,
+if second parameter begins with `:`, e.g. `{{id:uint}}`
+
 ### [0.4.0] - 2018-03-23
 
 * Fixed - `Awesomite\Chariot\Pattern\StdPatterns\ListPattern` should not allow for bool
